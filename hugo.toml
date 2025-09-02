@@ -1,4 +1,4 @@
-baseURL = 'https://kfkhaznernwngts.github.io/'
+baseURL = 'https://kfkhaznernwngts.github.io/kennon/'
 languageCode = 'en-us'
 title = 'My New Hugo Site'
 theme = "PaperMod"
