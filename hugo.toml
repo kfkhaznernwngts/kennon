@@ -1,4 +1,4 @@
 baseURL = 'https://kfkhaznernwngts.github.io/kennon/'
-languageCode = 'en-us'
+languageCode = 'ja'
 title = '剣呑'
-theme = "PaperMod"
+theme = "simple-style"
