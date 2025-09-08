@@ -33,10 +33,12 @@ jobs:
               continue
             fi
 
-            first_ts=$(TZ=Asia/Tokyo git log --diff-filter=A --follow \
-              --date=format-local:'%Y-%m-%dT%H:%M:%S%:z' --format='%ad' -- "$f" | tail -n1)
-
-            [ -z "$first_ts" ] && first_ts=$(date +"%Y-%m-%dT%H:%M:%S%:z")
+            raw_ts=$(git log --diff-filter=A --follow --format='%aI' -- "$f" | tail -n1)
+            if [ -n "$raw_ts" ]; then
+              first_ts=$(TZ=Asia/Tokyo date -d "$raw_ts" +"%Y-%m-%dT%H:%M:%S%:z")
+            else
+              first_ts=$(date +"%Y-%m-%dT%H:%M:%S%:z")
+            fi
 
             if head -1 "$f" | grep -q '^---$'; then
               awk -v ts="$first_ts" 'NR==1{print;print "publishDate: " ts;next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
