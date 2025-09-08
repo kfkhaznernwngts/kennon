@@ -1,0 +1,51 @@
+[33mcommit 5374491c10a302c015beda114a1a36c7343c557f[m
+Author: kfkhaznernwngts <0505mutsuki@gmail.com>
+Date:   Mon Sep 8 14:18:14 2025 +0900
+
+    delete submodule paper
+
+[1mdiff --git a/.gitmodules b/.gitmodules[m
+[1mindex 2db01bd..7df1384 100644[m
+[1m--- a/.gitmodules[m
+[1m+++ b/.gitmodules[m
+[36m@@ -1,6 +1,3 @@[m
+[31m-[submodule "themes/PaperMod"][m
+[31m-	path = themes/PaperMod[m
+[31m-	url = https://github.com/adityatelange/hugo-PaperMod[m
+ [submodule "themes/simple-style"][m
+ 	path = themes/simple-style[m
+ 	url = https://github.com/yanlinlin82/simple-style.git[m
+
+[33mcommit ee9d0fb956b628fdfef8427153fafe45f0585017[m
+Author: root <root@localhost.localdomain>
+Date:   Mon Sep 8 11:07:47 2025 +0900
+
+    add new theme
+
+[1mdiff --git a/.gitmodules b/.gitmodules[m
+[1mindex be00b3c..2db01bd 100644[m
+[1m--- a/.gitmodules[m
+[1m+++ b/.gitmodules[m
+[36m@@ -1,3 +1,6 @@[m
+ [submodule "themes/PaperMod"][m
+ 	path = themes/PaperMod[m
+ 	url = https://github.com/adityatelange/hugo-PaperMod[m
+[32m+[m[32m[submodule "themes/simple-style"][m
+[32m+[m	[32mpath = themes/simple-style[m
+[32m+[m	[32murl = https://github.com/yanlinlin82/simple-style.git[m
+
+[33mcommit 697669b2fde31eb86958fe32c2a6d36f7988e00f[m
+Author: syunsuke <2002syunsuke@gmail.com>
+Date:   Tue Sep 2 18:03:41 2025 +0900
+
+    init
+
+[1mdiff --git a/.gitmodules b/.gitmodules[m
+[1mnew file mode 100644[m
+[1mindex 0000000..be00b3c[m
+[1m--- /dev/null[m
+[1m+++ b/.gitmodules[m
+[36m@@ -0,0 +1,3 @@[m
+[32m+[m[32m[submodule "themes/PaperMod"][m
+[32m+[m	[32mpath = themes/PaperMod[m
+[32m+[m	[32murl = https://github.com/adityatelange/hugo-PaperMod[m
