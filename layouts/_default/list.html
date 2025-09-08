@@ -1,8 +1,8 @@
 {{ define "main" }}
 <section>
   <h1>{{ .Title }}</h1>
+  {{ $tz := time.LoadLocation "Asia/Tokyo" }}
   <ul>
-    {{ $tz := time.LoadLocation "Asia/Tokyo" }}
     {{ range .Pages.ByPublishDate }}
     <li>
       <a href="{{ .RelPermalink }}">{{ .Title }}</a>
