@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
 
       - name: Install yq
         run: |
@@ -34,12 +34,13 @@ jobs:
               if [ -z "$first_ts" ]; then first_ts=$(date -Iseconds); fi
 
               if head -1 "$f" | grep -q '^---$'; then
-                # YAML
+                # YAML frontmatter
                 awk -v ts="$first_ts" 'NR==1{print;print "publishDate: " ts;next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
               elif head -1 "$f" | grep -q '^\+\+\+$'; then
-                # TOML
+                # TOML frontmatter
                 awk -v ts="$first_ts" 'NR==1{print;print "publishDate = \"" ts "\"";next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
               else
+                # No frontmatter
                 printf -- '---\npublishDate: %s\n---\n%s\n' "$first_ts" "$(cat "$f")" > "$f.tmp" && mv "$f.tmp" "$f"
               fi
               echo "Set publishDate for $f to $first_ts"
@@ -57,3 +58,4 @@ jobs:
           git add content
           git commit -m "chore: auto-fill publishDate for new posts"
           git push
+
