@@ -2,3 +2,10 @@ baseURL = 'https://kfkhaznernwngts.github.io/kennon/'
 languageCode = 'ja'
 title = '剣呑'
 theme = "simple-style"
+enableGitInfo = true
+timeZone = "Asia/Tokyo"
+
+[frontmatter]
+  lastmod = ["lastmod", ":git", ":fileModTime", "date", ":default"]
+  publishDate = ["publishDate", "date", ":filename", ":default"]
+
