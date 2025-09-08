@@ -6,6 +6,6 @@ enableGitInfo = true
 timeZone = "Asia/Tokyo"
 
 [frontmatter]
-  date        = ["date", "publishDate", ":fileModTime", ":default"]
-  publishDate = ["publishDate", "date", ":fileModTime", ":default"]
+  publishDate = ["publishDate", "date", ":filename", ":fileModTime", ":default"]
+  date        = ["date", "publishDate", ":filename", ":fileModTime", ":default"]
   lastmod     = ["lastmod", ":git", ":fileModTime", "date", ":default"]
