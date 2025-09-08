@@ -1,4 +1,4 @@
-name: Hugo with publishDate JST
+name: Hugo with publishDate JST normalize
 
 on:
   push:
@@ -26,26 +26,37 @@ jobs:
           hugo-version: '0.149.0'
           extended: true
 
-      - name: Normalize/Fill publishDate in JST
+      - name: Normalize or fill publishDate (RFC3339 +09:00)
         run: |
           set -euo pipefail
           edited=0
           files=$(git ls-files 'content/post/**/*.md' 'content/posts/**/*.md' 2>/dev/null || true)
 
-          for f in $files; do
-            if [ ! -s "$f" ]; then
-              continue
+          norm_ts() {
+            v="$1"
+            if [ -n "$v" ]; then
+              TZ=Asia/Tokyo date -d "$v" +"%Y-%m-%dT%H:%M:%S%:z" 2>/dev/null || true
             fi
+          }
 
-            raw_ts=$(git log --diff-filter=A --follow --format='%aI' -- "$f" | tail -n1 || true)
-            if [ -n "$raw_ts" ]; then
-              ts=$(TZ=Asia/Tokyo date -d "$raw_ts" +"%Y-%m-%dT%H:%M:%S%:z")
+          first_commit_ts() {
+            f="$1"
+            raw=$(git log --diff-filter=A --follow --format='%aI' -- "$f" | tail -n1 || true)
+            if [ -n "$raw" ]; then
+              TZ=Asia/Tokyo date -d "$raw" +"%Y-%m-%dT%H:%M:%S%:z"
             else
-              ts=$(date +"%Y-%m-%dT%H:%M:%S%:z")
+              date +"%Y-%m-%dT%H:%M:%S%:z"
             fi
+          }
+
+          for f in $files; do
+            [ -s "$f" ] || continue
 
             if head -1 "$f" | grep -q '^---$'; then
-              if awk 'NR==1 && $0~/^---$/ {in=1; next} in && $0~/^---$/ {in=0} in && $0~/^publishDate[[:space:]]*:/ {found=1} END{exit !found}' "$f"; then
+              cur=$(awk 'NR==1 && /^---$/ {in=1; next} in && /^---$/ {in=0} in && /^publishDate[[:space:]]*:/ {sub(/^publishDate[[:space:]]*:[[:space:]]*/,""); gsub(/^"|"$|^'"'"'|'"'"'$/,""); print; exit}' "$f")
+              if [ -n "$cur" ]; then
+                ts=$(norm_ts "$cur")
+                if [ -z "$ts" ]; then ts=$(first_commit_ts "$f"); fi
                 awk -v ts="$ts" '
                   NR==1 && /^---$/ {in=1; print; next}
                   in && /^---$/ {in=0; print; next}
@@ -54,6 +65,7 @@ jobs:
                 ' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
                 edited=1
               else
+                ts=$(first_commit_ts "$f")
                 awk -v ts="$ts" '
                   NR==1 && /^---$/ {print; print "publishDate: \"" ts "\""; next}
                   {print}
@@ -62,7 +74,10 @@ jobs:
               fi
 
             elif head -1 "$f" | grep -q '^\+\+\+$'; then
-              if awk 'NR==1 && $0~/^\+\+\+$/ {in=1; next} in && $0~/^\+\+\+$/ {in=0} in && $0~/^publishDate[[:space:]]*=/ {found=1} END{exit !found}' "$f"; then
+              cur=$(awk 'NR==1 && /^\+\+\+$/ {in=1; next} in && /^\+\+\+$/ {in=0} in && /^publishDate[[:space:]]*=/ {sub(/^publishDate[[:space:]]*=[[:space:]]*/,""); gsub(/^"|"$|^'"'"'|'"'"'$/,""); print; exit}' "$f")
+              if [ -n "$cur" ]; then
+                ts=$(norm_ts "$cur")
+                if [ -z "$ts" ]; then ts=$(first_commit_ts "$f"); fi
                 awk -v ts="$ts" '
                   NR==1 && /^\+\+\+$/ {in=1; print; next}
                   in && /^\+\+\+$/ {in=0; print; next}
@@ -71,6 +86,7 @@ jobs:
                 ' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
                 edited=1
               else
+                ts=$(first_commit_ts "$f")
                 awk -v ts="$ts" '
                   NR==1 && /^\+\+\+$/ {print; print "publishDate = \"" ts "\""; next}
                   {print}
@@ -79,6 +95,7 @@ jobs:
               fi
 
             else
+              ts=$(first_commit_ts "$f")
               printf '---\npublishDate: "%s"\n---\n%s\n' "$ts" "$(cat "$f")" > "$f.tmp" && mv "$f.tmp" "$f"
               edited=1
             fi
