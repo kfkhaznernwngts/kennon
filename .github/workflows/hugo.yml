@@ -1,10 +1,9 @@
-name: Hugo with publishDate JST normalize
+name: Hugo with publishDate
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -17,7 +16,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: recursive
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Hugo
@@ -26,86 +24,46 @@ jobs:
           hugo-version: '0.149.0'
           extended: true
 
-      - name: Normalize or fill publishDate (RFC3339 +09:00)
+      - name: Normalize publishDate
         run: |
-          set -euo pipefail
-          edited=0
           files=$(git ls-files 'content/post/**/*.md' 'content/posts/**/*.md' 2>/dev/null || true)
-
-          norm_ts() {
-            v="$1"
-            if [ -n "$v" ]; then
-              TZ=Asia/Tokyo date -d "$v" +"%Y-%m-%dT%H:%M:%S%:z" 2>/dev/null || true
-            fi
-          }
-
-          first_commit_ts() {
-            f="$1"
-            raw=$(git log --diff-filter=A --follow --format='%aI' -- "$f" | tail -n1 || true)
-            if [ -n "$raw" ]; then
-              TZ=Asia/Tokyo date -d "$raw" +"%Y-%m-%dT%H:%M:%S%:z"
-            else
-              date +"%Y-%m-%dT%H:%M:%S%:z"
-            fi
-          }
+          edited=0
 
           for f in $files; do
             [ -s "$f" ] || continue
 
-            if head -1 "$f" | grep -q '^---$'; then
-              cur=$(awk 'NR==1 && /^---$/ {in=1; next} in && /^---$/ {in=0} in && /^publishDate[[:space:]]*:/ {sub(/^publishDate[[:space:]]*:[[:space:]]*/,""); gsub(/^"|"$|^'"'"'|'"'"'$/,""); print; exit}' "$f")
-              if [ -n "$cur" ]; then
-                ts=$(norm_ts "$cur")
-                if [ -z "$ts" ]; then ts=$(first_commit_ts "$f"); fi
-                awk -v ts="$ts" '
-                  NR==1 && /^---$/ {in=1; print; next}
-                  in && /^---$/ {in=0; print; next}
-                  in && /^publishDate[[:space:]]*:/ {print "publishDate: \"" ts "\""; next}
-                  {print}
-                ' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+            cur=$(grep -i '^publishdate' "$f" | head -n1 | sed -E 's/^[Pp]ublish[Dd]ate[[:space:]]*[:=][[:space:]]*//;s/^"//;s/"$//')
+            if [ -n "$cur" ]; then
+              ts=$(TZ=Asia/Tokyo date -d "$cur" +"%Y-%m-%dT%H:%M:%S%:z" 2>/dev/null || true)
+              if [ -n "$ts" ]; then
+                sed -i -E "s/^[Pp]ublish[Dd]ate[[:space:]]*[:=].*/publishDate: $ts/" "$f"
                 edited=1
-              else
-                ts=$(first_commit_ts "$f")
-                awk -v ts="$ts" '
-                  NR==1 && /^---$/ {print; print "publishDate: \"" ts "\""; next}
-                  {print}
-                ' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
-                edited=1
+                continue
               fi
-
-            elif head -1 "$f" | grep -q '^\+\+\+$'; then
-              cur=$(awk 'NR==1 && /^\+\+\+$/ {in=1; next} in && /^\+\+\+$/ {in=0} in && /^publishDate[[:space:]]*=/ {sub(/^publishDate[[:space:]]*=[[:space:]]*/,""); gsub(/^"|"$|^'"'"'|'"'"'$/,""); print; exit}' "$f")
-              if [ -n "$cur" ]; then
-                ts=$(norm_ts "$cur")
-                if [ -z "$ts" ]; then ts=$(first_commit_ts "$f"); fi
-                awk -v ts="$ts" '
-                  NR==1 && /^\+\+\+$/ {in=1; print; next}
-                  in && /^\+\+\+$/ {in=0; print; next}
-                  in && /^publishDate[[:space:]]*=/ {print "publishDate = \"" ts "\""; next}
-                  {print}
-                ' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
-                edited=1
-              else
-                ts=$(first_commit_ts "$f")
-                awk -v ts="$ts" '
-                  NR==1 && /^\+\+\+$/ {print; print "publishDate = \"" ts "\""; next}
-                  {print}
-                ' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
-                edited=1
-              fi
-
-            else
-              ts=$(first_commit_ts "$f")
-              printf '---\npublishDate: "%s"\n---\n%s\n' "$ts" "$(cat "$f")" > "$f.tmp" && mv "$f.tmp" "$f"
-              edited=1
             fi
+
+            raw_ts=$(git log --diff-filter=A --follow --format='%aI' -- "$f" | tail -n1)
+            if [ -n "$raw_ts" ]; then
+              first_ts=$(TZ=Asia/Tokyo date -d "$raw_ts" +"%Y-%m-%dT%H:%M:%S%:z")
+            else
+              first_ts=$(date +"%Y-%m-%dT%H:%M:%S%:z")
+            fi
+
+            if head -1 "$f" | grep -q '^---$'; then
+              awk -v ts="$first_ts" 'NR==1{print;print "publishDate: " ts;next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+            elif head -1 "$f" | grep -q '^\+\+\+$'; then
+              awk -v ts="$first_ts" 'NR==1{print;print "publishDate = \"" ts "\"";next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+            else
+              printf -- '---\npublishDate: %s\n---\n%s\n' "$first_ts" "$(cat "$f")" > "$f.tmp" && mv "$f.tmp" "$f"
+            fi
+            edited=1
           done
 
           if [ "$edited" -eq 1 ]; then
             git config user.name github-actions
             git config user.email github-actions@github.com
             git add content/post/**/*.md content/posts/**/*.md || true
-            git commit -m "normalize/fill publishDate (JST RFC3339)" || true
+            git commit -m "Normalize publishDate JST" || true
             git push
           fi
 
@@ -117,3 +75,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+
