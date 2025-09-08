@@ -1,16 +1,17 @@
 {{ define "main" }}
 <main class="container">
   <h1>{{ .Title }}</h1>
+  {{ $tz := time.LoadLocation "Asia/Tokyo" }}
   <ul>
   {{ range .Pages.ByDate.Reverse }}
+    {{ $pub := (.PublishDate | default .Date).In $tz }}
     <li>
       <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-      <time datetime="{{ (.PublishDate | default .Date).Format "2006-01-02T15:04:05Z07:00" }}">
-        {{ (.PublishDate | default .Date).Format "2006-01-02 15:04" }}
+      <time datetime="{{ $pub.Format "2006-01-02T15:04:05Z07:00" }}">
+        {{ $pub.Format "2006-01-02 15:04" }}
       </time>
     </li>
   {{ end }}
   </ul>
 </main>
 {{ end }}
-
