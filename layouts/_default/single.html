@@ -2,18 +2,21 @@
 <article class="container">
   <h1>{{ .Title }}</h1>
 
+  {{ $tz := time.LoadLocation "Asia/Tokyo" }}
+  {{ $pub := (.PublishDate | default .Date).In $tz }}
+  {{ $mod := .Lastmod.In $tz }}
+
   <p class="post-meta">
     公開:
-    <time datetime="{{ (.PublishDate | default .Date).Format "2006-01-02T15:04:05Z07:00" }}">
-      {{ (.PublishDate | default .Date).Format "2006-01-02 15:04" }}
+    <time datetime="{{ $pub.Format "2006-01-02T15:04:05Z07:00" }}">
+      {{ $pub.Format "2006-01-02 15:04" }}
     </time>
     ／ 最終更新:
-    <time datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
-      {{ .Lastmod.Format "2006-01-02 15:04" }}
+    <time datetime="{{ $mod.Format "2006-01-02T15:04:05Z07:00" }}">
+      {{ $mod.Format "2006-01-02 15:04" }}
     </time>
   </p>
 
   {{ .Content }}
 </article>
 {{ end }}
-
