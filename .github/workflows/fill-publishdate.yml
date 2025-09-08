@@ -30,7 +30,7 @@ jobs:
           for f in $files; do
             has_pub=$(yq '.publishDate // .date' "$f" 2>/dev/null || true)
             if [ -z "$has_pub" ] || [ "$has_pub" = "null" ]; then
-              first_ts=$(git log --diff-filter=A --follow --format='%aI' -- "$f" | tail -n1)
+            first_ts=$(TZ=Asia/Tokyo git log --diff-filter=A --follow --format='%ad' --date=format-local:'%Y-%m-%dT%H:%M:%S%:z' -- "$f" | tail -n1)
               if [ -z "$first_ts" ]; then first_ts=$(date -Iseconds); fi
 
               if head -1 "$f" | grep -q '^---$'; then
