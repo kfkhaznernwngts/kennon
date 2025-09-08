@@ -1,0 +1,59 @@
+name: Fill publishDate on first commit
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fill-publishdate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      - name: Install yq
+        run: |
+          sudo wget -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Add publishDate to posts missing it
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=$(git ls-files 'content/post/**/*.md' 'content/posts/**/*.md' 2>/dev/null || true)
+          edited=0
+          for f in $files; do
+            has_pub=$(yq '.publishDate // .date' "$f" 2>/dev/null || true)
+            if [ -z "$has_pub" ] || [ "$has_pub" = "null" ]; then
+              first_ts=$(git log --diff-filter=A --follow --format='%aI' -- "$f" | tail -n1)
+              if [ -z "$first_ts" ]; then first_ts=$(date -Iseconds); fi
+
+              if head -1 "$f" | grep -q '^---$'; then
+                # YAML
+                awk -v ts="$first_ts" 'NR==1{print;print "publishDate: " ts;next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+              elif head -1 "$f" | grep -q '^\+\+\+$'; then
+                # TOML
+                awk -v ts="$first_ts" 'NR==1{print;print "publishDate = \"" ts "\"";next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+              else
+                printf -- '---\npublishDate: %s\n---\n%s\n' "$first_ts" "$(cat "$f")" > "$f.tmp" && mv "$f.tmp" "$f"
+              fi
+              echo "Set publishDate for $f to $first_ts"
+              edited=1
+            fi
+          done
+
+          if [ "$edited" -eq 0 ]; then
+            echo "No files needed publishDate."
+            exit 0
+          fi
+
+          git config user.name  "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add content
+          git commit -m "chore: auto-fill publishDate for new posts"
+          git push
