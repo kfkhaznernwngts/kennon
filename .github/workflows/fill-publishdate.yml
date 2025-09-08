@@ -1,26 +1,3 @@
-name: Fill publishDate on first commit
-
-on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
-
-permissions:
-  contents: write
-
-jobs:
-  fill-publishdate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Install yq
-        run: |
-          sudo wget -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
-          sudo chmod +x /usr/local/bin/yq
-
       - name: Add publishDate to posts missing it
         shell: bash
         run: |
@@ -28,10 +5,11 @@ jobs:
           files=$(git ls-files 'content/post/**/*.md' 'content/posts/**/*.md' 2>/dev/null || true)
           edited=0
           for f in $files; do
-            has_pub=$(yq '.publishDate // .date' "$f" 2>/dev/null || true)
-            if [ -z "$has_pub" ] || [ "$has_pub" = "null" ]; then
-            first_ts=$(TZ=Asia/Tokyo git log --diff-filter=A --follow --format='%ad' --date=format-local:'%Y-%m-%dT%H:%M:%S%:z' -- "$f" | tail -n1)
-              if [ -z "$first_ts" ]; then first_ts=$(date -Iseconds); fi
+            if ! grep -q '^publishDate' "$f"; then
+              first_ts=$(TZ=Asia/Tokyo git log --diff-filter=A --follow --format='%aI' -- "$f" | tail -n1)
+              if [ -z "$first_ts" ]; then
+                first_ts=$(date +"%Y-%m-%dT%H:%M:%S%:z")
+              fi
 
               if head -1 "$f" | grep -q '^---$'; then
                 # YAML frontmatter
@@ -43,6 +21,7 @@ jobs:
                 # No frontmatter
                 printf -- '---\npublishDate: %s\n---\n%s\n' "$first_ts" "$(cat "$f")" > "$f.tmp" && mv "$f.tmp" "$f"
               fi
+
               echo "Set publishDate for $f to $first_ts"
               edited=1
             fi
