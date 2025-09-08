@@ -1,9 +1,9 @@
-name: Hugo CI/CD with publishDate autofill
+name: Hugo with publishDate
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -12,52 +12,51 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: recursive
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Add publishDate to posts missing it
-        shell: bash
-        run: |
-          set -euo pipefail
-          files=$(git ls-files 'content/post/**/*.md' 'content/posts/**/*.md' 2>/dev/null || true)
-          edited=0
-          for f in $files; do
-            if ! grep -q '^publishDate' "$f"; then
-              first_ts=$(TZ=Asia/Tokyo git log --diff-filter=A --follow --format='%aI' -- "$f" | tail -n1)
-              [ -z "$first_ts" ] && first_ts=$(date +"%Y-%m-%dT%H:%M:%S%:z")
-
-              if head -1 "$f" | grep -q '^---$'; then
-                # YAML frontmatter
-                awk -v ts="$first_ts" 'NR==1{print;print "publishDate: " ts;next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
-              elif head -1 "$f" | grep -q '^\+\+\+$'; then
-                # TOML frontmatter
-                awk -v ts="$first_ts" 'NR==1{print;print "publishDate = \"" ts "\"";next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
-              else
-                # No frontmatter
-                printf -- '---\npublishDate: %s\n---\n%s\n' "$first_ts" "$(cat "$f")" > "$f.tmp" && mv "$f.tmp" "$f"
-              fi
-
-              echo "Set publishDate for $f to $first_ts"
-              edited=1
-            fi
-          done
-
-          if [ "$edited" -eq 1 ]; then
-            git config user.name  "github-actions"
-            git config user.email "github-actions@users.noreply.github.com"
-            git add content
-            git commit -m "chore: auto-fill publishDate for new posts" || true
-            git push
-          fi
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: '0.149.0'
           extended: true
+
+      - name: Fill publishDate if missing
+        run: |
+          files=$(git ls-files content/posts/*.md)
+          edited=0
+          for f in $files; do
+            if grep -q '^publishDate' "$f"; then
+              continue
+            fi
+
+            first_ts=$(TZ=Asia/Tokyo git log --diff-filter=A --follow \
+              --date=format-local:'%Y-%m-%dT%H:%M:%S%:z' --format='%ad' -- "$f" | tail -n1)
+
+            [ -z "$first_ts" ] && first_ts=$(date +"%Y-%m-%dT%H:%M:%S%:z")
+
+            if head -1 "$f" | grep -q '^---$'; then
+              awk -v ts="$first_ts" 'NR==1{print;print "publishDate: " ts;next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+            elif head -1 "$f" | grep -q '^\+\+\+$'; then
+              awk -v ts="$first_ts" 'NR==1{print;print "publishDate = \"" ts "\"";next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+            else
+              printf -- '---\npublishDate: %s\n---\n%s\n' "$first_ts" "$(cat "$f")" > "$f.tmp" && mv "$f.tmp" "$f"
+            fi
+
+            echo "Set publishDate for $f to $first_ts"
+            edited=1
+          done
+
+          if [ "$edited" -eq 1 ]; then
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add content/posts/*.md
+            git commit -m "Add publishDate automatically" || true
+            git push
+          fi
 
       - name: Build
         run: hugo --minify
