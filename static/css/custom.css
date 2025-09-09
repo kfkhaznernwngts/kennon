@@ -23,12 +23,9 @@
   padding: 8px 6px;
 }
 
-.site-header .nav-main {
-  margin-left: auto !important;
-  display: flex !important;
-  gap: 20px !important;
-}
-
-.site-header {
-  background: red !important;
+.post-dates {
+  font-size: 0.9em;
+  color: #666;
+  text-align: right;
+  margin-top: 12px;
 }
