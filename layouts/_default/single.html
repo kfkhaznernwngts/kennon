@@ -6,7 +6,9 @@
   <base href="{{ .Site.BaseURL }}">
   {{- partial "html-meta.html" . }}
   <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
-  {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
+  {{- with .Site.Params.favicon }}
+    <link rel="shortcut icon" href="{{ . }}" type="image/x-icon">
+  {{- end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
 </head>
@@ -36,6 +38,7 @@
         {{ .Content }}
       </div>
 
+      <!-- 本文の末尾に日付を表示（コメント欄の区切り線の直前） -->
       <div style="font-size:0.85em; color:#777; text-align:right; margin-top:1.5em; line-height:1.6;">
         {{ if not $pub0.IsZero }}
           {{ $pub := time.In "Asia/Tokyo" $pub0 }}
@@ -54,7 +57,7 @@
         {{ end }}
       </div>
 
-      {{< comments >}}
+      <!-- ↓ この下にコメントショートコードや区切り線を置く -->
     </article>
   </main>
   {{- partial "footer.html" . }}
