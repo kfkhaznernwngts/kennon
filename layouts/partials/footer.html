@@ -1,7 +1,12 @@
 <footer>
-  <!--
-  &copy; 2019 Linlin Yan. <a href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC-BY-4.0</a>
-  Powered by Hugo with Simple-Style
-  -->
+  <div class="footer-inner" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <p style="margin:0">© {{ .Site.Title }}</p>
+    {{ if .IsHome }}
+    <nav class="footer-nav" style="margin-left:auto">
+      {{ range .Site.Menus.main }}
+        {{ if eq .Name "About" }}<a href="{{ .URL }}" style="text-decoration:none;padding:6px 8px">About</a>{{ end }}
+      {{ end }}
+    </nav>
+    {{ end }}
+  </div>
 </footer>
-
