@@ -50,8 +50,8 @@
           <p class="comment-empty">まだコメントはありません。</p>
         {{ end }}
       </section>
-    {{ end }}
-  {{ end }}
+    {{ end }}   {{/* end .Value */}}
+  {{ end }}     {{/* end try */}}
 
   {{ $form := site.Params.comments.form }}
   {{ if $form }}
@@ -72,5 +72,5 @@
         <p class="comment-note">送信から反映まで数分かかる場合があります。</p>
       </form>
     </section>
-  {{ end }}
-{{ end }}
+  {{ end }}   {{/* end $form */}}
+{{ end }}     {{/* end $cfg.enabled */}}
