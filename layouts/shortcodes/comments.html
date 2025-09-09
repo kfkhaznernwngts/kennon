@@ -19,6 +19,7 @@
       {{ $rows := slice }}
       {{ range $i, $r := $csv }}
         {{ if eq $i 0 }}{{ continue }}{{ end }}
+        {{ if lt (len $r) 4 }}{{ continue }}{{ end }}
         {{ $rowSlug := printf "%s" (index $r 1) }}
         {{ if eq $rowSlug $slug }}
           {{ $rows = $rows | append $r }}
@@ -33,7 +34,9 @@
               {{ $ts := printf "%s" (index . 0) }}
               {{ $nameRaw := printf "%s" (index . 2) }}
               {{ $body := printf "%s" (index . 3) }}
-              {{ $name := cond (gt (len (trim $nameRaw)) 0) $nameRaw "匿名" }}
+              {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
+              {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
+
               <li class="comment-item">
                 <div class="comment-meta">
                   <span class="comment-author">{{ $name }}</span>
