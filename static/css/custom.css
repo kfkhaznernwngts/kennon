@@ -22,3 +22,9 @@
   text-decoration: none;
   padding: 8px 6px;
 }
+
+.site-header .nav-main {
+  margin-left: auto !important;
+  display: flex !important;
+  gap: 20px !important;
+}
