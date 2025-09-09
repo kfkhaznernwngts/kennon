@@ -17,9 +17,20 @@
       {{ $csv := transform.Unmarshal $opts .Content }}
 
       {{ $rows := slice }}
+
       {{ range $i, $r := $csv }}
         {{ if eq $i 0 }}{{ continue }}{{ end }}
-        {{ $rowSlug := string (index $r 1) }}
+
+        {{/* ---- セルを「必ず文字列」に直す小ワーク ---- */}}
+        {{ $mk := func ( $cell ) (string) }}
+          {{ $s := "" }}
+          {{ range $cell }}
+            {{ $s = printf "%s%c" $s . }}
+          {{ end }}
+          {{ return $s }}
+        {{ end }}
+
+        {{ $rowSlug := ($mk (index $r 1)) }}
         {{ if eq $rowSlug $slug }}
           {{ $rows = $rows | append $r }}
         {{ end }}
@@ -30,9 +41,15 @@
         {{ if gt (len $rows) 0 }}
           <ul class="comment-list">
             {{ range $rows }}
-              {{ $ts := string (index . 0) }}
-              {{ $name := string (index . 2) }}
-              {{ $body := string (index . 3) }}
+              {{ $mk := func ( $cell ) (string) }}
+                {{ $s := "" }}
+                {{ range $cell }}{{ $s = printf "%s%c" $s . }}{{ end }}
+                {{ return $s }}
+              {{ end }}
+              {{ $ts := ($mk (index . 0)) }}
+              {{ $name := ($mk (index . 2)) }}
+              {{ $body := ($mk (index . 3)) }}
+
               <li class="comment-item">
                 <div class="comment-meta">
                   <span class="comment-author">{{ cond (ne $name "") $name "匿名" }}</span>
