@@ -1,12 +1,11 @@
 <footer>
-  <div class="footer-inner" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-    <p style="margin:0">© {{ .Site.Title }}</p>
+  <div class="footer-inner" style="display:flex;justify-content:center;align-items:center;padding:8px 0">
     {{ if .IsHome }}
-    <nav class="footer-nav" style="margin-left:auto">
-      {{ range .Site.Menus.main }}
-        {{ if eq .Name "About" }}<a href="{{ .URL }}" style="text-decoration:none;padding:6px 8px">About</a>{{ end }}
-      {{ end }}
-    </nav>
+      <nav class="footer-nav">
+        {{ range .Site.Menus.main }}
+          {{ if eq .Name "About" }}<a href="{{ .URL }}" style="text-decoration:none;padding:6px 8px">About</a>{{ end }}
+        {{ end }}
+      </nav>
     {{ end }}
   </div>
 </footer>
