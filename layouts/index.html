@@ -11,11 +11,12 @@
   {{- partial "google-tag-manager-head.html" . }}
 
   <style>
-    header .nav-main a[href="/kennon/"]{display:none}
+    header .nav-main a[href="/kennon/"],
+    header .nav-main a[href="/kennon/about/"]{display:none}
     .article-list{list-style:none;margin:0;padding:0}
-    .article-item{padding:14px 0}
-    .article-title a{font-size:1.2em;text-decoration:none}
-    .article-date{font-size:.95em;color:#666;margin-top:4px}
+    .article-item{padding:6px 0}
+    .article-title a{font-size:1.2em;text-decoration:none;display:inline-block}
+    .article-date{font-size:.95em;color:#666;margin-top:6px}
   </style>
 </head>
 <body>
