@@ -22,3 +22,8 @@ header > nav a {
   text-decoration: none !important;
   padding: 8px 6px !important;
 }
+
+.site-header { display:flex; align-items:center; flex-wrap:wrap; width:100%; gap:16px; }
+.site-header .nav-parent { display:flex; gap:20px; flex:0 0 auto; }
+.site-header .site-branding { flex:1 1 auto; }
+.site-header .nav-main { display:flex; gap:20px; flex:0 0 auto; margin-left:auto; }
