@@ -10,7 +10,9 @@
 
   {{ with try (resources.GetRemote $freshUrl) }}
     {{ if .Err }}
-      <section id="comments-list" class="comment-section" style="border-top:1px solid #ccc; padding-top:16px; margin-top:24px;">
+      <section id="comments-list" class="comment-section"
+               style="border-top:1px solid #ccc; padding-top:16px; margin-top:24px;
+                      font-size:0.9em; color:#555;">
         <h2>コメント</h2>
         <p>コメントを取得できませんでした。</p>
       </section>
@@ -26,8 +28,10 @@
         {{ end }}
       {{ end }}
 
-      <section id="comments-list" class="comment-section" style="border-top:1px solid #ccc; padding-top:16px; margin-top:24px;">
-        <h2>コメント</h2>
+      <section id="comments-list" class="comment-section"
+               style="border-top:1px solid #ccc; padding-top:16px; margin-top:24px;
+                      font-size:0.9em; color:#555;">
+        <h2 style="font-size:1.1em;">コメント</h2>
         {{ if gt (len $rows) 0 }}
           <ul class="comment-list"
               style="list-style:none; padding:0; margin:0;
