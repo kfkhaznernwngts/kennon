@@ -3,7 +3,9 @@
   {{ $slug := .Page.File.BaseFileName }}
 
   {{ $sep := "?" }}
-  {{ if in $cfg.csvUrl "?" }}{{ $sep = "&" }}{{ end }}
+  {{ if in $cfg.csvUrl "?" }}
+    {{ $sep = "&" }}
+  {{ end }}
   {{ $freshUrl := printf "%s%st=%d" $cfg.csvUrl $sep (now.Unix) }}
 
   {{ with try (resources.GetRemote $freshUrl) }}
@@ -27,20 +29,26 @@
       <section id="comments-list" class="comment-section">
         <h2>コメント</h2>
         {{ if gt (len $rows) 0 }}
+          {{ $lastIndex := sub (len $rows) 1 }}
           <ul class="comment-list">
-            {{ range $rows }}
-              {{ $ts := index . "タイムスタンプ" }}
-              {{ $nameRaw := index . "名前" }}
-              {{ $body := index . "本文" }}
+            {{ range $i, $r := $rows }}
+              {{ $ts := index $r "タイムスタンプ" }}
+              {{ $nameRaw := index $r "名前" }}
+              {{ $body := index $r "本文" }}
               {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
               {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
-              <li class="comment-item">
-                <div class="comment-meta">
-                  <span class="comment-author">{{ $name }}</span>
-                  <span class="comment-date">{{ $ts }}</span>
-                </div>
-                <div class="comment-body">{{ $body }}</div>
-              </li>
+
+              {{ if eq $i $lastIndex }}
+                <li class="comment-item" style="padding:12px 0;margin:0;">
+              {{ else }}
+                <li class="comment-item" style="border-bottom:1px solid #ccc;padding:12px 0;margin:0;">
+              {{ end }}
+                  <div class="comment-meta">
+                    <span class="comment-author">{{ $name }}</span>
+                    <span class="comment-date">{{ $ts }}</span>
+                  </div>
+                  <div class="comment-body">{{ $body }}</div>
+                </li>
             {{ end }}
           </ul>
         {{ else }}
