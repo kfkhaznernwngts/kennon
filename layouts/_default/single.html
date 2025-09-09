@@ -12,14 +12,13 @@
   {{ end }}
 {{ end }}
 {{ $lm0 := or .Lastmod $pub0 }}
-
 {{ $raw := .RawContent }}
 {{ $scRe := `(?s){{<\s*comments\s*>}}` }}
 {{ $hasSC := findRE $scRe $raw }}
 
 <article>
   <header>
-    <h1 style="margin-bottom:0.5em;text-align:left;color:black">{{ .Title }}</h1>
+    <h1 style="margin-bottom:.5em;text-align:left;color:black">{{ .Title }}</h1>
   </header>
 
   {{ if $hasSC }}
