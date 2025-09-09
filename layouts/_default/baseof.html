@@ -6,7 +6,9 @@
   <base href="{{ .Site.BaseURL }}">
   {{- partial "html-meta.html" . }}
   <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
-  {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
+  {{- with .Site.Params.favicon }}
+  <link rel="shortcut icon" href="{{ . }}" type="image/x-icon">
+  {{- end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
   <link rel="stylesheet" type="text/css" href="{{ "css/custom.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
