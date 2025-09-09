@@ -4,8 +4,10 @@
     {{- if .Site.Params.subtitle }}<h2><a href="{{ .Site.BaseURL }}">{{ .Site.Params.subtitle }}</a></h2>{{- end }}
   </div>
   <nav class="nav-main">
-    {{ range .Site.Menus.main }}
-      {{ if eq .Name "About" }}<a href="{{ .URL }}">{{ .Name }}</a>{{ end }}
+    {{ if .IsHome }}
+      {{ range .Site.Menus.main }}
+        {{ if eq .Name "About" }}<a href="{{ .URL }}">{{ .Name }}</a>{{ end }}
+      {{ end }}
     {{ end }}
   </nav>
 </header>
