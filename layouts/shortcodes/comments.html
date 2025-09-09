@@ -19,11 +19,7 @@
       {{ $rows := slice }}
       {{ range $i, $r := $csv }}
         {{ if eq $i 0 }}{{ continue }}{{ end }}
-
-        {{ $.Scratch.Set "buf" "" }}
-        {{ range (index $r 1) }}{{ $.Scratch.Add "buf" (printf "%c" .) }}{{ end }}
-        {{ $rowSlug := $.Scratch.Get "buf" }}
-
+        {{ $rowSlug := printf "%s" (index $r 1) }}
         {{ if eq $rowSlug $slug }}
           {{ $rows = $rows | append $r }}
         {{ end }}
@@ -34,18 +30,16 @@
         {{ if gt (len $rows) 0 }}
           <ul class="comment-list">
             {{ range $rows }}
-              {{ $.Scratch.Set "ts" "" }}
-              {{ $.Scratch.Set "name" "" }}
-              {{ $.Scratch.Set "body" "" }}
-              {{ range (index . 0) }}{{ $.Scratch.Add "ts" (printf "%c" .) }}{{ end }}
-              {{ range (index . 2) }}{{ $.Scratch.Add "name" (printf "%c" .) }}{{ end }}
-              {{ range (index . 3) }}{{ $.Scratch.Add "body" (printf "%c" .) }}{{ end }}
+              {{ $ts := printf "%s" (index . 0) }}
+              {{ $nameRaw := printf "%s" (index . 2) }}
+              {{ $body := printf "%s" (index . 3) }}
+              {{ $name := cond (gt (len (trim $nameRaw)) 0) $nameRaw "匿名" }}
               <li class="comment-item">
                 <div class="comment-meta">
-                  <span class="comment-author">{{ with ($.Scratch.Get "name") }}{{ . }}{{ else }}匿名{{ end }}</span>
-                  <span class="comment-date">{{ $.Scratch.Get "ts" }}</span>
+                  <span class="comment-author">{{ $name }}</span>
+                  <span class="comment-date">{{ $ts }}</span>
                 </div>
-                <div class="comment-body">{{ $.Scratch.Get "body" }}</div>
+                <div class="comment-body">{{ $body }}</div>
               </li>
             {{ end }}
           </ul>
