@@ -24,11 +24,6 @@ mainSections = ["posts", "post"]
     url  = "/about/"
     weight = 2
 
-  [[menu.main]]
-    name = "Archives"
-    url  = "/archives/"
-    weight = 3
-
 [params.sidebar]
 about = """
 このサイトの簡単な紹介文をここに書きます。
