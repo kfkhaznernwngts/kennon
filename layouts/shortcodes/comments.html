@@ -1,31 +1,36 @@
 {{ $cfg := site.Params.comments }}
 {{ if and $cfg $cfg.enabled }}
   {{ $slug := .Page.File.BaseFileName }}
-  {{ $rows := slice }}
-  {{ $csv := getCSV "," $cfg.csvUrl }}
-  {{ range $i, $r := $csv }}
-    {{ if eq $i 0 }}{{ continue }}{{ end }}
-    {{ if eq (index $r 1) $slug }}
-      {{ $rows = $rows | append $r }}
-    {{ end }}
-  {{ end }}
 
-  <section id="comments-list">
-    <h2>コメント</h2>
-    {{ if gt (len $rows) 0 }}
-      <ul>
-        {{ range $rows }}
-          <li>
-            <strong>{{ index . 2 }}</strong>
-            <span>{{ index . 0 }}</span><br>
-            <div>{{ index . 3 }}</div>
-          </li>
-        {{ end }}
-      </ul>
-    {{ else }}
-      <p>まだコメントはありません。</p>
+  {{ $remote := resources.GetRemote $cfg.csvUrl }}
+  {{ with $remote }}
+    {{ $csv := transform.Unmarshal . "csv" }}
+    {{ $rows := slice }}
+
+    {{ range $i, $r := $csv }}
+      {{ if eq $i 0 }}{{ continue }}{{ end }}
+      {{ if eq (index $r 1) $slug }}
+        {{ $rows = $rows | append $r }}
+      {{ end }}
     {{ end }}
-  </section>
+
+    <section id="comments-list">
+      <h2>コメント</h2>
+      {{ if gt (len $rows) 0 }}
+        <ul>
+          {{ range $rows }}
+            <li>
+              <strong>{{ index . 2 }}</strong>
+              <span>{{ index . 0 }}</span><br>
+              <div>{{ index . 3 }}</div>
+            </li>
+          {{ end }}
+        </ul>
+      {{ else }}
+        <p>まだコメントはありません。</p>
+      {{ end }}
+    </section>
+  {{ end }}
 
   {{ if $cfg.formEmbedUrl }}
     {{ $url := replace $cfg.formEmbedUrl "{slug}" $slug }}
