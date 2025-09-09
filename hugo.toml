@@ -13,3 +13,24 @@ lastmod     = ["lastmod", ":git", "date", ":default"]
 [params]
 mainSections = ["posts", "post"]
 
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url  = "/"
+    weight = 1
+
+  [[menu.main]]
+    name = "About"
+    url  = "/about/"
+    weight = 2
+
+  [[menu.main]]
+    name = "Archives"
+    url  = "/archives/"
+    weight = 3
+
+[params.sidebar]
+about = """
+このサイトの簡単な紹介文をここに書きます。
+"""
+

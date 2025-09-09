@@ -1,0 +1,17 @@
+{{ define "main" }}
+<section class="archives">
+  {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") }}
+  {{ $pages := where .Site.RegularPages "Section" "in" $sections }}
+  {{ range ($pages.GroupByDate "2006-01") }}
+    {{ $t := time.Parse "2006-01" .Key }}
+    {{ $label := time.Format "2006年01月" $t }}
+    <h2 id="{{ .Key }}">{{ $label }}</h2>
+    <ul class="archive-list">
+      {{ range .Pages.ByPublishDate.Reverse }}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+      {{ end }}
+    </ul>
+  {{ end }}
+</section>
+{{ end }}
+
