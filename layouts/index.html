@@ -19,10 +19,20 @@
     .article-item{
       position:relative;
       border:1px solid #ddd;
-      border-radius:8px;
+      border-radius:0;
       padding:6px 10px 18px 10px;
-      margin:0 0 12px 0;
+      margin:0;
       background:#fff;
+      border-bottom:0;
+    }
+    .article-item:first-child{
+      border-top-left-radius:8px;
+      border-top-right-radius:8px;
+    }
+    .article-item:last-child{
+      border-bottom:1px solid #ddd;
+      border-bottom-left-radius:8px;
+      border-bottom-right-radius:8px;
     }
     .article-title a{
       display:inline-block;
