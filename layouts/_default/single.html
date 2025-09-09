@@ -16,7 +16,10 @@
     {{ $pub0 := .PublishDate }}
     {{ if $pub0.IsZero }}
       {{ $m := site.Data.publishdates }}
-      {{ with index $m .File.Path }}
+      {{ $k1 := .File.Path }}
+      {{ $k2 := printf "content/%s" .File.Path }}
+      {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+      {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
         {{ $pub0 = time . }}
       {{ else }}
         {{ $pub0 = .Date }}
