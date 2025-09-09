@@ -16,20 +16,11 @@
       {{ $opts := dict "format" "csv" "targetType" "slice" "lazyQuotes" true }}
       {{ $csv := transform.Unmarshal $opts .Content }}
 
-      {{/* ヘルパー: セルを必ず文字列に直す */}}
-      {{- $toStr := func ($cell) -}}
-        {{ $.Scratch.Set "buf" "" }}
-        {{ range $cell }}{{ $.Scratch.Add "buf" (printf "%c" .) }}{{ end }}
-        {{ $.Scratch.Get "buf" }}
-      {{- end }}
-
       {{ $rows := slice }}
       {{ range $i, $r := $csv }}
-        {{ if eq $i 0 }}{{ continue }}{{ end }}   {{/* ヘッダー除外 */}}
-        {{ if lt (len $r) 4 }}{{ continue }}{{ end }}
-
-        {{ $rowSlug := $toStr (index $r 1) }}
-        {{ if eq $rowSlug $slug }}
+        {{ if eq $i 0 }}{{ continue }}   {{/* ヘッダー除外 */}}
+        {{ if lt (len $r) 4 }}{{ continue }}
+        {{ if eq (index $r 1) $slug }}
           {{ $rows = $rows | append $r }}
         {{ end }}
       {{ end }}
@@ -39,9 +30,9 @@
         {{ if gt (len $rows) 0 }}
           <ul class="comment-list">
             {{ range $rows }}
-              {{ $ts := $toStr (index . 0) }}
-              {{ $nameRaw := $toStr (index . 2) }}
-              {{ $body := $toStr (index . 3) }}
+              {{ $ts := index . 0 }}
+              {{ $nameRaw := index . 2 }}
+              {{ $body := index . 3 }}
 
               {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
               {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
