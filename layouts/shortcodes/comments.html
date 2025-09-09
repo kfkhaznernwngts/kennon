@@ -3,9 +3,7 @@
   {{ $slug := .Page.File.BaseFileName }}
 
   {{ $sep := "?" }}
-  {{ if in $cfg.csvUrl "?" }}
-    {{ $sep = "&" }}
-  {{ end }}
+  {{ if in $cfg.csvUrl "?" }}{{ $sep = "&" }}{{ end }}
   {{ $freshUrl := printf "%s%st=%d" $cfg.csvUrl $sep (now.Unix) }}
 
   {{ with try (resources.GetRemote $freshUrl) }}
@@ -15,21 +13,12 @@
         <p>コメントを取得できませんでした。</p>
       </section>
     {{ else }}
-      {{ $opts := dict "format" "csv" "targetType" "slice" "lazyQuotes" true }}
+      {{ $opts := dict "format" "csv" "targetType" "map" "lazyQuotes" true }}
       {{ $csv := transform.Unmarshal $opts .Value.Content }}
-
-      {{/* ヘルパー：セルを文字列化する */}}
-      {{/* ここでは関数は作れないので、毎回 Scratch を使う */}}
 
       {{ $rows := slice }}
       {{ range $i, $r := $csv }}
-        {{ if eq $i 0 }}{{ continue }}{{ end }}
-        {{ if lt (len $r) 4 }}{{ continue }}{{ end }}
-
-        {{ $.Scratch.Set "slugstr" "" }}
-        {{ range (index $r 1) }}{{ $.Scratch.Add "slugstr" (printf "%c" .) }}{{ end }}
-        {{ $rowSlug := $.Scratch.Get "slugstr" }}
-
+        {{ $rowSlug := index $r "記事スラッグ" }}
         {{ if eq $rowSlug $slug }}
           {{ $rows = $rows | append $r }}
         {{ end }}
@@ -40,23 +29,11 @@
         {{ if gt (len $rows) 0 }}
           <ul class="comment-list">
             {{ range $rows }}
-              {{/* タイムスタンプ */}}
-              {{ $.Scratch.Set "ts" "" }}
-              {{ range (index . 0) }}{{ $.Scratch.Add "ts" (printf "%c" .) }}{{ end }}
-              {{ $ts := $.Scratch.Get "ts" }}
-
-              {{/* 名前 */}}
-              {{ $.Scratch.Set "name" "" }}
-              {{ range (index . 2) }}{{ $.Scratch.Add "name" (printf "%c" .) }}{{ end }}
-              {{ $nameRaw := $.Scratch.Get "name" }}
+              {{ $ts := index . "タイムスタンプ" }}
+              {{ $nameRaw := index . "名前" }}
+              {{ $body := index . "本文" }}
               {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
               {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
-
-              {{/* 本文 */}}
-              {{ $.Scratch.Set "body" "" }}
-              {{ range (index . 3) }}{{ $.Scratch.Add "body" (printf "%c" .) }}{{ end }}
-              {{ $body := $.Scratch.Get "body" }}
-
               <li class="comment-item">
                 <div class="comment-meta">
                   <span class="comment-author">{{ $name }}</span>
