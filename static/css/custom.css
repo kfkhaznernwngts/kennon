@@ -41,3 +41,26 @@ header nav ul li a,
   text-decoration: none !important;
   padding: 8px 6px !important;
 }
+
+header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 16px;
+}
+
+header > nav {
+  display: flex;
+  gap: 20px;
+}
+
+header > nav:last-of-type {
+  margin-left: auto;
+}
+
+header > nav a {
+  display: inline-block;
+  text-decoration: none;
+  padding: 8px 6px;
+}
