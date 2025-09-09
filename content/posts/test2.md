@@ -1,5 +1,5 @@
 ---
-tilte: "testno2"
+title: "testno2"
 ---
 
 asdfghjkl
