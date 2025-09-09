@@ -14,7 +14,7 @@
       </section>
     {{ else with .Value }}
       {{/* ← targetType を string にするのが重要 */}}
-      {{ $opts := dict "format" "csv" "targetType" "string" "lazyQuotes" true }}
+      {{ $opts := dict "format" "csv" "targetType" "slice" "lazyQuotes" true }}
       {{ $csv := transform.Unmarshal $opts .Content }}
 
       {{ $rows := slice }}
