@@ -28,9 +28,9 @@
     {{ $lm0 := or .Lastmod $pub0 }}
 
     <article>
-      <header style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap;">
-        <h1 style="margin:0;">{{ .Title }}</h1>
-        <div style="font-size:0.85em; color:#777; text-align:right; line-height:1.4; margin:0;">
+      <header>
+        <h1 style="margin:0; text-align:left;">{{ .Title }}</h1>
+        <div style="font-size:0.85em; color:#777; text-align:right; line-height:1.4; margin:0 0 1em 0;">
           {{ if not $pub0.IsZero }}
             {{ $pub := time.In "Asia/Tokyo" $pub0 }}
             公開日:
