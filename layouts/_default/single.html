@@ -11,7 +11,8 @@
   {{- partial "google-tag-manager-head.html" . }}
   <style>
     .post-pager{display:flex;justify-content:space-between;gap:12px;margin-top:24px}
-    .post-pager a{display:inline-block;border:1px solid #ccc;border-radius:6px;padding:8px 12px;text-decoration:none}
+    .post-pager a{display:inline-block;padding:6px 10px;text-decoration:none;border:none;font-size:.9em;color:#333}
+    .post-pager a:hover{text-decoration:underline}
   </style>
 </head>
 <body>
@@ -98,12 +99,12 @@
       <footer class="post-pager">
         <div>
           {{ with .PrevInSection }}
-            <a href="{{ .RelPermalink }}">« 前の記事: {{ .Title }}</a>
+            <a href="{{ .RelPermalink }}">« 前の記事</a>
           {{ end }}
         </div>
         <div>
           {{ with .NextInSection }}
-            <a href="{{ .RelPermalink }}">次の記事: {{ .Title }} »</a>
+            <a href="{{ .RelPermalink }}">次の記事 »</a>
           {{ end }}
         </div>
       </footer>
