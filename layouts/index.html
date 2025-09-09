@@ -16,14 +16,17 @@
     <div>
       {{ .Content -}}
     </div>
+    {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") -}}
+    {{ $pages := where .Site.RegularPages "Section" "in" $sections -}}
     <ul class="article-list">
-      {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") -}}
-      {{ $pages := where .Site.RegularPages "Section" "in" $sections -}}
       {{ range ($pages.ByPublishDate.Reverse) -}}
-      {{- $pub := or .PublishDate .Date -}}
-      {{- $pubJST := time.In "Asia/Tokyo" $pub -}}
+      {{ $pub0 := .PublishDate }}
+      {{ if $pub0.IsZero }}{{ $pub0 = .Date }}{{ end }}
       <li class="article-item">
+        {{ if not $pub0.IsZero }}
+        {{ $pubJST := time.In "Asia/Tokyo" $pub0 }}
         <div class="article-date">{{ time.Format "2006-01-02 15:04" $pubJST }}</div>
+        {{ end }}
         <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
       </li>
       {{ end -}}
