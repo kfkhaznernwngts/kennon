@@ -1,64 +1,24 @@
-header {
-  display: flex !important;
-  align-items: center !important;
-  flex-wrap: wrap !important;
-  width: 100% !important;
-  gap: 16px !important;
+.site-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 16px;
 }
 
-header > nav {
-  display: flex !important;
-  align-items: center !important;
-  gap: 20px !important;
-  margin: 0 !important;
-  padding: 0 !important;
+.site-header .site-branding {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
-header > nav { margin-left: 0 !important; }
-header > nav:last-of-type { margin-left: auto !important; }
-
-header > nav a {
-  display: inline-block !important;
-  text-decoration: none !important;
-  padding: 8px 6px !important;
+.site-header .nav-main {
+  margin-left: auto;
+  display: flex;
+  gap: 20px;
 }
 
-.site-header { display:flex; align-items:center; flex-wrap:wrap; width:100%; gap:16px; }
-.site-header .nav-parent { display:flex; gap:20px; flex:0 0 auto; }
-.site-header .site-branding { flex:1 1 auto; }
-.site-header .nav-main { display:flex; gap:20px; flex:0 0 auto; margin-left:auto; }
-
-header {
-  display: flex !important;
-  align-items: center !important;
-  flex-wrap: wrap !important;
-  width: 100% !important;
-  gap: 16px !important;
-}
-
-header > nav {
-  display: flex !important;
-  align-items: center !important;
-  gap: 20px !important;
-  width: auto !important;
-  flex: 0 0 auto !important;
-}
-
-header > div {
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-}
-
-header > nav:last-of-type {
-  margin-left: auto !important;
-  order: 2 !important;
-}
-
-header > nav:first-of-type { order: 0 !important; }
-header > div { order: 1 !important; }
-
-header > nav a {
-  display: inline-block !important;
-  text-decoration: none !important;
-  padding: 8px 6px !important;
+.site-header .nav-main a {
+  display: inline-block;
+  text-decoration: none;
+  padding: 8px 6px;
 }
