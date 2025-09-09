@@ -2,7 +2,7 @@
 <div>
   {{ .Content }}
 </div>
-{{ $p := .Paginate .Pages }}
+{{ $p := .Paginate (.Pages.ByPublishDate.Reverse) }}
 <ul class="article-list">
   {{ range $p.Pages }}
   {{- $pub := or .PublishDate .Date -}}

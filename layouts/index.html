@@ -1,7 +1,7 @@
 {{ define "main" }}
 {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") }}
-{{ $pages := where .Site.RegularPages "Type" "in" $sections }}
-{{ $p := .Paginate $pages }}
+{{ $pages := where .Site.RegularPages "Section" "in" $sections }}
+{{ $p := .Paginate ($pages.ByPublishDate.Reverse) }}
 <ul class="article-list">
   {{ range $p.Pages }}
   {{- $pub := or .PublishDate .Date -}}
