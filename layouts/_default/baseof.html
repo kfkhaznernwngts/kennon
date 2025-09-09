@@ -6,22 +6,21 @@
   <base href="{{ .Site.BaseURL }}">
   {{- partial "html-meta.html" . }}
   <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
-  {{- with .Site.Params.favicon }}
-  <link rel="shortcut icon" href="{{ . }}" type="image/x-icon">
-  {{- end }}
+  {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
-  <link rel="stylesheet" type="text/css" href="{{ "css/custom.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
+
+  <style>
+    .site-header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .site-header .site-branding{flex:1 1 auto;min-width:0}
+    .site-header .nav-main{margin-left:auto;display:flex;gap:16px}
+    .site-header .nav-main a{text-decoration:none;padding:8px 6px}
+  </style>
 </head>
 <body>
   {{ partial "header.html" . -}}
-  <main class="layout-two-col">
-    <div class="content-main">
-      {{ block "main" . }}{{- end }}
-    </div>
-    <aside class="content-aside">
-      {{ partial "sidebar.html" . }}
-    </aside>
+  <main>
+    {{ block "main" . }}{{ end }}
   </main>
   {{- partial "footer.html" . }}
   {{- template "_internal/google_analytics.html" . }}
