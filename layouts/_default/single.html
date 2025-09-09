@@ -30,7 +30,7 @@
     <article>
       <header>
         <h1>{{ .Title }}</h1>
-        <p>
+        <p style="font-size:0.85em; color:#777; margin:0 0 1em 0;">
           {{ if not $pub0.IsZero }}
             {{ $pub := time.In "Asia/Tokyo" $pub0 }}
             公開日:
