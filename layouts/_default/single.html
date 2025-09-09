@@ -28,12 +28,12 @@
     {{ $lm0 := or .Lastmod $pub0 }}
 
     <article>
-      <header>
-        <h1 style="margin-bottom:0.4em;">{{ .Title }}</h1>
-        <div style="font-size:0.85em; color:#777; line-height:1.6; margin:0 0 1em 0;">
+      <header style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap;">
+        <h1 style="margin:0;">{{ .Title }}</h1>
+        <div style="font-size:0.85em; color:#777; text-align:right; line-height:1.4; margin:0;">
           {{ if not $pub0.IsZero }}
             {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-            公開日:<br>
+            公開日:
             <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">
               {{ time.Format "2006-01-02 15:04" $pub }}
             </time>
@@ -41,14 +41,14 @@
           {{ if not $lm0.IsZero }}
             <br>
             {{ $lm := time.In "Asia/Tokyo" $lm0 }}
-            最終編集日:<br>
+            最終編集日:
             <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">
               {{ time.Format "2006-01-02 15:04" $lm }}
             </time>
           {{ end }}
         </div>
       </header>
-      <div class="content">
+      <div class="content" style="margin-top:1em;">
         {{ .Content }}
       </div>
     </article>
