@@ -1,0 +1,39 @@
+{{ $cfg := site.Params.comments }}
+{{ if and $cfg $cfg.enabled }}
+  {{ $slug := .Page.File.BaseFileName }}
+  {{ $rows := slice }}
+  {{ $csv := getCSV "," $cfg.csvUrl }}
+  {{ range $i, $r := $csv }}
+    {{ if eq $i 0 }}{{ continue }}{{ end }}
+    {{ if eq (index $r 1) $slug }}
+      {{ $rows = $rows | append $r }}
+    {{ end }}
+  {{ end }}
+
+  <section id="comments-list">
+    <h2>コメント</h2>
+    {{ if gt (len $rows) 0 }}
+      <ul>
+        {{ range $rows }}
+          <li>
+            <strong>{{ index . 2 }}</strong>
+            <span>{{ index . 0 }}</span><br>
+            <div>{{ index . 3 }}</div>
+          </li>
+        {{ end }}
+      </ul>
+    {{ else }}
+      <p>まだコメントはありません。</p>
+    {{ end }}
+  </section>
+
+  {{ if $cfg.formEmbedUrl }}
+    {{ $url := replace $cfg.formEmbedUrl "{slug}" $slug }}
+    <section id="comments-form">
+      <h2>コメントを送る</h2>
+      <p>送信から反映まで数分かかる場合があります。</p>
+      <iframe src="{{ $url }}" width="100%" height="560" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    </section>
+  {{ end }}
+{{ end }}
+
