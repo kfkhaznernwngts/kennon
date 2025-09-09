@@ -3,10 +3,12 @@
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
+  gap: 16px;
 }
 
 .site-header .site-branding {
   flex: 1 1 auto;
+  min-width: 0;
 }
 
 .site-header .nav-main {
@@ -16,6 +18,20 @@
 }
 
 .site-header .nav-main a {
+  display: inline-block;
   text-decoration: none;
   padding: 8px 6px;
 }
+
+.site-header .nav-main {
+  margin-left: auto !important;
+  display: flex !important;
+  gap: 20px !important;
+}
+
+.site-header {
+  background: red !important;
+}
+
+
+早く必要なもの全部出せ
