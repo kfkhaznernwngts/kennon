@@ -28,9 +28,13 @@
     {{ $lm0 := or .Lastmod $pub0 }}
 
     <article>
-      <header style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:12px;">
-        <h1 style="margin:0; text-align:left; flex:1 1 260px;">{{ .Title }}</h1>
-        <div style="flex:0 0 auto; text-align:right; font-size:0.85em; color:#777; line-height:1.4; min-width:180px;">
+      <header>
+        <h1 style="margin-bottom:0.5em; text-align:left;">{{ .Title }}</h1>
+      </header>
+
+      <div class="content">
+        {{ .Content }}
+        <div style="font-size:0.85em; color:#777; text-align:right; margin-top:2em; line-height:1.6;">
           {{ if not $pub0.IsZero }}
             {{ $pub := time.In "Asia/Tokyo" $pub0 }}
             公開日:
@@ -47,9 +51,6 @@
             </time>
           {{ end }}
         </div>
-      </header>
-      <div class="content" style="margin-top:1em;">
-        {{ .Content }}
       </div>
     </article>
   </main>
