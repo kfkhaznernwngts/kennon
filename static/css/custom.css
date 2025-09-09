@@ -33,5 +33,89 @@
   background: red !important;
 }
 
+article .content,
+.content {
+  overflow-wrap: anywhere;
+  word-break: normal;
+  line-break: strict;
+  text-justify: inter-ideograph;
+  font-size: clamp(16px, 4.2vw, 18px);
+  line-height: 1.85;
+}
 
-早く必要なもの全部出せ
+article .content p,
+article .content li {
+  margin: 0.9em 0;
+}
+
+article .content h1,
+article .content h2,
+article .content h3,
+article .content h4,
+article .content h5,
+article .content h6 {
+  line-height: 1.35;
+  word-break: keep-all;
+}
+
+article .content img,
+article .content video,
+article .content svg,
+article .content iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+article .content pre,
+article .content code,
+article .content kbd,
+article .content samp {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+article .content pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.8em;
+  border: 1px solid #eee;
+  border-radius: 6px;
+}
+
+article .content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+article .content table th,
+article .content table td {
+  padding: 0.6em 0.5em;
+  border: 1px solid #eee;
+}
+
+article .content .table-wrap,
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+article .content a {
+  word-break: break-word;
+}
+
+@media (min-width: 641px) {
+  article .content {
+    font-size: 17px;
+    line-height: 1.9;
+  }
+}
+
+@media (max-width: 640px) {
+  article .content {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+}
