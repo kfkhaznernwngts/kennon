@@ -1,10 +1,13 @@
 name: Hugo with publishDate
+
 on:
   push:
     branches:
       - main
+
 permissions:
   contents: write
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
@@ -16,15 +19,18 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Setup TZ
         uses: szenius/set-timezone@v2.0
         with:
           timezoneLinux: Asia/Tokyo
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: '0.149.0'
           extended: true
+
       - name: Add publishDate only for new posts
         shell: bash
         run: |
@@ -46,9 +52,8 @@ jobs:
             elif head -n1 "$f" | grep -q '^\+\+\+$'; then
               awk -v ts="$first_ts" 'NR==1{print;print "publishDate = \"" ts "\"";next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
             else
-              printf -- '---\npublishDate: "%s"\n---\n%s\n' "$first_ts" "$(cat "$f")" > "$f.tmp" && mv "$f.tmp" "$f"
+              printf '---\npublishDate: "%s"\n---\n%s\n' "$first_ts" "$(cat "$f")" > "$f.tmp" && mv "$f.tmp" "$f"
             fi
-            echo "Set publishDate for $f to $first_ts"
             edited=1
           done
           if [ "$edited" -eq 1 ]; then
@@ -58,8 +63,10 @@ jobs:
             git commit -m "Add publishDate for new posts" || true
             git push
           fi
+
       - name: Build
         run: hugo --minify
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
