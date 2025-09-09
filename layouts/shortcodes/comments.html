@@ -2,34 +2,41 @@
 {{ if and $cfg $cfg.enabled }}
   {{ $slug := .Page.File.BaseFileName }}
 
-  {{ $remote := resources.GetRemote $cfg.csvUrl }}
-  {{ with $remote }}
-    {{ $csv := transform.Unmarshal .Content "csv" }}
-    {{ $rows := slice }}
+  {{ with try (resources.GetRemote $cfg.csvUrl) }}
+    {{ with .Err }}
+      <section id="comments-list">
+        <h2>コメント</h2>
+        <p>コメントを取得できませんでした。</p>
+      </section>
+    {{ else with .Value }}
+      {{ $opts := dict "format" "csv" "targetType" "slice" "lazyQuotes" true }}
+      {{ $csv := transform.Unmarshal $opts .Content }}
 
-    {{ range $i, $r := $csv }}
-      {{ if eq $i 0 }}{{ continue }}{{ end }}
-      {{ if eq (index $r 1) $slug }}
-        {{ $rows = $rows | append $r }}
+      {{ $rows := slice }}
+      {{ range $i, $r := $csv }}
+        {{ if eq $i 0 }}{{ continue }}{{ end }}
+        {{ if eq (index $r 1) $slug }}
+          {{ $rows = $rows | append $r }}
+        {{ end }}
       {{ end }}
+
+      <section id="comments-list">
+        <h2>コメント</h2>
+        {{ if gt (len $rows) 0 }}
+          <ul>
+            {{ range $rows }}
+              <li>
+                <strong>{{ index . 2 }}</strong>
+                <span>{{ index . 0 }}</span><br>
+                <div>{{ index . 3 }}</div>
+              </li>
+            {{ end }}
+          </ul>
+        {{ else }}
+          <p>まだコメントはありません。</p>
+        {{ end }}
+      </section>
     {{ end }}
-
-    <section id="comments-list">
-      <h2>コメント</h2>
-      {{ if gt (len $rows) 0 }}
-        <ul>
-          {{ range $rows }}
-            <li>
-              <strong>{{ index . 2 }}</strong>
-              <span>{{ index . 0 }}</span><br>
-              <div>{{ index . 3 }}</div>
-            </li>
-          {{ end }}
-        </ul>
-      {{ else }}
-        <p>まだコメントはありません。</p>
-      {{ end }}
-    </section>
   {{ end }}
 
   {{ if $cfg.formEmbedUrl }}
