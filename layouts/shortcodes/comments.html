@@ -29,26 +29,21 @@
       <section id="comments-list" class="comment-section">
         <h2>コメント</h2>
         {{ if gt (len $rows) 0 }}
-          {{ $lastIndex := sub (len $rows) 1 }}
-          <ul class="comment-list">
-            {{ range $i, $r := $rows }}
+          <ul class="comment-list" style="list-style:none; padding:0; margin:0;">
+            {{ range $r := $rows }}
               {{ $ts := index $r "タイムスタンプ" }}
               {{ $nameRaw := index $r "名前" }}
               {{ $body := index $r "本文" }}
               {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
               {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
 
-              {{ if eq $i $lastIndex }}
-                <li class="comment-item" style="padding:12px 0;margin:0;">
-              {{ else }}
-                <li class="comment-item" style="border-bottom:1px solid #ccc;padding:12px 0;margin:0;">
-              {{ end }}
-                  <div class="comment-meta">
-                    <span class="comment-author">{{ $name }}</span>
-                    <span class="comment-date">{{ $ts }}</span>
-                  </div>
-                  <div class="comment-body">{{ $body }}</div>
-                </li>
+              <li class="comment-item" style="border:1px solid #ccc; border-radius:6px; padding:12px; margin-bottom:12px; background:#fafafa;">
+                <div class="comment-meta" style="font-size:0.9em; color:#555; margin-bottom:6px;">
+                  <span class="comment-author" style="font-weight:bold;">{{ $name }}</span>
+                  <span class="comment-date" style="margin-left:8px;">{{ $ts }}</span>
+                </div>
+                <div class="comment-body">{{ $body }}</div>
+              </li>
             {{ end }}
           </ul>
         {{ else }}
