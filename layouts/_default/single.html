@@ -6,46 +6,33 @@
   <base href="{{ .Site.BaseURL }}">
   {{- partial "html-meta.html" . }}
   <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
-  {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
+  {{- with .Site.Params.favicon }}
+    <link rel="shortcut icon" href="{{ . }}" type="image/x-icon">
+  {{- end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
+  <link rel="stylesheet" type="text/css" href="{{ "css/custom.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
 </head>
 <body>
   {{ partial "header.html" . -}}
-  <main>
-    {{ $pub0 := .PublishDate }}
-    {{ if $pub0.IsZero }}
-      {{ $m := site.Data.publishdates }}
-      {{ $k1 := .File.Path }}
-      {{ $k2 := printf "content/%s" .File.Path }}
-      {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
-      {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
-        {{ $pub0 = time . }}
-      {{ else }}
-        {{ $pub0 = .Date }}
-      {{ end }}
-    {{ end }}
-    {{ $lm0 := or .Lastmod $pub0 }}
-    <article>
-      <header>
-        <h1>{{ .Title }}</h1>
-        <p>
-          {{ if not $pub0.IsZero }}
-          {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-          公開日:
-          <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">{{ time.Format "2006-01-02 15:04" $pub }}</time><br>
-          {{ end }}
-          {{ if not $lm0.IsZero }}
-          {{ $lm := time.In "Asia/Tokyo" $lm0 }}
-          最終編集日:
-          <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">{{ time.Format "2006-01-02 15:04" $lm }}</time>
-          {{ end }}
-        </p>
-      </header>
-      <div class="content">
-        {{ .Content }}
-      </div>
-    </article>
+  <main class="layout-two-col">
+    <div class="content-main">
+      <article class="post">
+        <header>
+          <h1>{{ .Title }}</h1>
+          <p class="post-dates" style="font-size:0.85em; color:#777; margin:0 0 1em 0;">
+            公開日: {{ .Date.Format "2006-01-02" }}
+            {{ with .Lastmod }} / 最終更新日: {{ .Format "2006-01-02" }}{{ end }}
+          </p>
+        </header>
+        <div class="post-content">
+          {{ .Content }}
+        </div>
+      </article>
+    </div>
+    <aside class="content-aside">
+      {{ partial "sidebar.html" . }}
+    </aside>
   </main>
   {{- partial "footer.html" . }}
   {{- template "_internal/google_analytics.html" . }}
@@ -53,4 +40,3 @@
 </body>
 {{- partial "google-tag-manager-body.html" . }}
 </html>
-
