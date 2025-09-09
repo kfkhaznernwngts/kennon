@@ -50,4 +50,17 @@
 .comment-form .btn { display: inline-block; padding: 0.6rem 1rem; border: 1px solid #222; border-radius: 8px; background: #222; color: #fff; cursor: pointer; }
 .comment-form .btn:hover { opacity: 0.9; }
 .comment-note { color: #777; font-size: 0.9rem; margin-top: 0.5rem; }
+.comment-list {
+  list-style: none;       /* リストマーカーを消す */
+  padding: 0;
+  margin: 0;
+}
 
+.comment-item {
+  border-bottom: 1px solid #ccc; /* 下に薄いグレー線 */
+  padding: 0.8em 0;              /* 上下に余白 */
+}
+
+.comment-item:last-child {
+  border-bottom: none; /* 最後のコメントは線を消す */
+}
