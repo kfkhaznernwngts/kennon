@@ -49,7 +49,6 @@
                 <div class="comment-body">{{ $body }}</div>
               </li>
             {{ end }}
-            {{/* 最後の要素の下線を消す */}}
             <script>
               document.addEventListener("DOMContentLoaded", function() {
                 let items = document.querySelectorAll("#comments-list .comment-item");
@@ -69,20 +68,35 @@
   {{ $form := site.Params.comments.form }}
   {{ if $form }}
     {{ $action := printf "https://docs.google.com/forms/d/e/%s/formResponse" $form.id }}
-    <section id="comments-form" class="comment-section">
+    <section id="comments-form" class="comment-section" style="margin-top:24px;">
       <h2>コメントを送る</h2>
-      <form class="comment-form" action="{{ $action }}" method="POST" target="_blank" rel="noopener">
+      <form class="comment-form"
+            action="{{ $action }}" method="POST" target="_blank" rel="noopener"
+            style="max-width:600px;">
         <input type="hidden" name="{{ $form.slugEntry }}" value="{{ $slug }}">
-        <div class="field">
-          <label>お名前</label>
-          <input type="text" name="{{ $form.nameEntry }}" placeholder="匿名可">
+
+        <div class="field" style="margin-bottom:12px;">
+          <label style="display:block; font-weight:bold; margin-bottom:4px;">お名前</label>
+          <input type="text" name="{{ $form.nameEntry }}" placeholder="匿名可"
+                 style="width:100%; box-sizing:border-box; padding:8px;
+                        border:1px solid #ccc; border-radius:4px;">
         </div>
-        <div class="field">
-          <label>コメント</label>
-          <textarea name="{{ $form.bodyEntry }}" rows="5" required></textarea>
+
+        <div class="field" style="margin-bottom:12px;">
+          <label style="display:block; font-weight:bold; margin-bottom:4px;">コメント</label>
+          <textarea name="{{ $form.bodyEntry }}" rows="5" required
+                    style="width:100%; box-sizing:border-box; padding:8px;
+                           border:1px solid #ccc; border-radius:4px;"></textarea>
         </div>
-        <button type="submit" class="btn">送信</button>
-        <p class="comment-note">送信から反映まで数分かかる場合があります。</p>
+
+        <button type="submit" class="btn"
+                style="padding:8px 16px; background:#333; color:#fff;
+                       border:none; border-radius:4px;">
+          送信
+        </button>
+        <p class="comment-note" style="font-size:0.9em; color:#555; margin-top:8px;">
+          送信から反映まで数分かかる場合があります。
+        </p>
       </form>
     </section>
   {{ end }}
