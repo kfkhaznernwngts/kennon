@@ -11,12 +11,27 @@
   {{- partial "google-tag-manager-head.html" . }}
 
   <style>
-    header .nav-main a[href="/kennon/"],
-    header .nav-main a[href="/kennon/about/"]{display:none}
     .article-list{list-style:none;margin:0;padding:0}
-    .article-item{padding:6px 0}
-    .article-title a{font-size:1.2em;text-decoration:none;display:inline-block}
-    .article-date{font-size:.95em;color:#666;margin-top:6px}
+    .article-item{
+      position:relative;
+      border:1px solid #ddd;
+      border-radius:8px;
+      padding:14px 16px 36px 16px;
+      margin:12px 0;
+      background:#fff;
+    }
+    .article-title a{
+      display:inline-block;
+      font-size:1.2em;
+      text-decoration:none;
+    }
+    .article-date{
+      position:absolute;
+      right:12px;
+      bottom:10px;
+      font-size:.9em;
+      color:#666;
+    }
   </style>
 </head>
 <body>
@@ -44,8 +59,8 @@
       <li class="article-item">
         <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
         {{ if not $pub0.IsZero }}
-        {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-        <div class="article-date">{{ time.Format "2006-01-02 15:04" $pub }}</div>
+          {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+          <div class="article-date">{{ time.Format "2006-01-02 15:04" $pub }}</div>
         {{ end }}
       </li>
       {{ end -}}
