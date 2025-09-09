@@ -11,11 +11,13 @@
     {{- if .Site.Params.subtitle }}<h2><a href="{{ .Site.BaseURL }}">{{ .Site.Params.subtitle }}</a></h2>{{- end }}
   </div>
   <nav class="nav-main">
-    {{- if not .IsPage -}}
-      {{- range .Site.Menus.main -}}
-      <a href="{{ .URL }}">{{ .Name }}</a>
-      {{- end -}}
-    {{- end -}}
+    {{ if .IsHome }}
+      {{ range .Site.Menus.main }}
+        {{ if eq .Name "About" }}<a href="{{ .URL }}">{{ .Name }}</a>{{ end }}
+      {{ end }}
+    {{ else }}
+      {{ range .Site.Menus.main }}<a href="{{ .URL }}">{{ .Name }}</a>{{ end }}
+    {{ end }}
     {{ partial "search.html" . }}
   </nav>
 </header>
