@@ -13,33 +13,44 @@
 <body>
   {{ partial "header.html" . -}}
   <main>
-    <div>
-      {{ .Content }}
-    </div>
-    <ul class="article-list">
-      {{ range (.Pages.ByPublishDate.Reverse) }}
-      {{ $pub0 := .PublishDate }}
-      {{ if $pub0.IsZero }}
-        {{ $m := site.Data.publishdates }}
-        {{ $k1 := .File.Path }}
-        {{ $k2 := printf "content/%s" .File.Path }}
-        {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
-        {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
-          {{ $pub0 = time . }}
-        {{ else }}
-          {{ $pub0 = .Date }}
-        {{ end }}
+    {{ $pub0 := .PublishDate }}
+    {{ if $pub0.IsZero }}
+      {{ $m := site.Data.publishdates }}
+      {{ $k1 := .File.Path }}
+      {{ $k2 := printf "content/%s" .File.Path }}
+      {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+      {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+        {{ $pub0 = time . }}
+      {{ else }}
+        {{ $pub0 = .Date }}
       {{ end }}
-      <li class="article-item">
-        {{ if not $pub0.IsZero }}
-        {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-        <div class="article-date" style="font-size:0.85em; color:#777;">{{ time.Format "2006-01-02 15:04" $pub }}</div>
-        {{ end }}
-        <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
-      </li>
-      {{ end }}
-    </ul>
-    {{ template "_internal/pagination.html" . }}
+    {{ end }}
+    {{ $lm0 := or .Lastmod $pub0 }}
+
+    <article>
+      <header>
+        <h1>{{ .Title }}</h1>
+        <p>
+          {{ if not $pub0.IsZero }}
+            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+            公開日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">
+              {{ time.Format "2006-01-02 15:04" $pub }}
+            </time><br>
+          {{ end }}
+          {{ if not $lm0.IsZero }}
+            {{ $lm := time.In "Asia/Tokyo" $lm0 }}
+            最終編集日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">
+              {{ time.Format "2006-01-02 15:04" $lm }}
+            </time>
+          {{ end }}
+        </p>
+      </header>
+      <div class="content">
+        {{ .Content }}
+      </div>
+    </article>
   </main>
   {{- partial "footer.html" . }}
   {{- template "_internal/google_analytics.html" . }}
