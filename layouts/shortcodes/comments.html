@@ -19,7 +19,7 @@
       {{ $rows := slice }}
       {{ range $i, $r := $csv }}
         {{ if eq $i 0 }}{{ continue }}{{ end }}
-        {{ $rowSlug := printf "%s" (index $r 1) }}
+        {{ $rowSlug := string (index $r 1) }}
         {{ if eq $rowSlug $slug }}
           {{ $rows = $rows | append $r }}
         {{ end }}
@@ -30,9 +30,9 @@
         {{ if gt (len $rows) 0 }}
           <ul class="comment-list">
             {{ range $rows }}
-              {{ $ts := printf "%s" (index . 0) }}
-              {{ $name := printf "%s" (index . 2) }}
-              {{ $body := printf "%s" (index . 3) }}
+              {{ $ts := string (index . 0) }}
+              {{ $name := string (index . 2) }}
+              {{ $body := string (index . 3) }}
               <li class="comment-item">
                 <div class="comment-meta">
                   <span class="comment-author">{{ cond (ne $name "") $name "匿名" }}</span>
@@ -57,7 +57,7 @@
       <form class="comment-form" action="{{ $action }}" method="POST" target="_blank" rel="noopener">
         <input type="hidden" name="{{ $form.slugEntry }}" value="{{ $slug }}">
         <div class="field">
-          <label>名前</label>
+          <label>お名前</label>
           <input type="text" name="{{ $form.nameEntry }}" placeholder="匿名可">
         </div>
         <div class="field">
