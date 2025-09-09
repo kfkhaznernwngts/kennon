@@ -13,13 +13,12 @@
         <p>コメントを取得できませんでした。</p>
       </section>
     {{ else with .Value }}
-      {{/* ← targetType を string にするのが重要 */}}
       {{ $opts := dict "format" "csv" "targetType" "slice" "lazyQuotes" true }}
       {{ $csv := transform.Unmarshal $opts .Content }}
 
       {{ $rows := slice }}
       {{ range $i, $r := $csv }}
-        {{ if eq $i 0 }}{{ continue }}{{ end }}   {{/* ヘッダー行をスキップ */}}
+        {{ if eq $i 0 }}{{ continue }}{{ end }}   {{/* ヘッダー行スキップ */}}
         {{ if eq (index $r 1) $slug }}
           {{ $rows = $rows | append $r }}
         {{ end }}
@@ -33,7 +32,6 @@
               {{ $ts := index . 0 }}
               {{ $nameRaw := index . 2 }}
               {{ $body := index . 3 }}
-
               {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
               {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
 
