@@ -22,7 +22,7 @@
       {{ range $i, $r := $csv }}
         {{ if eq $i 0 }}{{ continue }}{{ end }}
         {{ if lt (len $r) 4 }}{{ continue }}{{ end }}
-        {{ if eq (index $r 1) $slug }}
+        {{ if eq (printf "%s" (index $r 1)) $slug }}
           {{ $rows = $rows | append $r }}
         {{ end }}
       {{ end }}
@@ -32,9 +32,9 @@
         {{ if gt (len $rows) 0 }}
           <ul class="comment-list">
             {{ range $rows }}
-              {{ $ts := index . 0 }}
-              {{ $nameRaw := index . 2 }}
-              {{ $body := index . 3 }}
+              {{ $ts := printf "%s" (index . 0) }}
+              {{ $nameRaw := printf "%s" (index . 2) }}
+              {{ $body := printf "%s" (index . 3) }}
               {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
               {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
 
@@ -51,8 +51,8 @@
           <p class="comment-empty">まだコメントはありません。</p>
         {{ end }}
       </section>
-    {{ end }} <!-- end if .Err / else -->
-  {{ end }}   <!-- end with try -->
+    {{ end }}
+  {{ end }}
 
   {{ $form := site.Params.comments.form }}
   {{ if $form }}
@@ -73,6 +73,5 @@
         <p class="comment-note">送信から反映まで数分かかる場合があります。</p>
       </form>
     </section>
-  {{ end }} <!-- end if $form -->
-
-{{ end }} <!-- end if $cfg.enabled -->
+  {{ end }}
+{{ end }}
