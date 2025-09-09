@@ -13,9 +13,14 @@
     <h2>Archives</h2>
     <ul class="sidebar-archives">
       {{ range ($pages.GroupByDate "2006-01") }}
-        {{ $t := time.Parse "2006-01" .Key }}
-        {{ $label := time.Format "2006年01月" $t }}
-        <li><a href="{{ "/archives/#" | relURL }}{{ .Key }}">{{ $label }} ({{ len .Pages }})</a></li>
+        {{ $parts := split .Key "-" }}
+        {{ $yyyy := index $parts 0 }}
+        {{ $mm := index $parts 1 }}
+        <li>
+          <a href="{{ "/archives/#" | relURL }}{{ .Key }}">
+            {{ printf "%s年%s月" $yyyy $mm }} ({{ len .Pages }})
+          </a>
+        </li>
       {{ end }}
     </ul>
   </section>
