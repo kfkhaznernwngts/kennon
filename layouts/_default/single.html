@@ -9,6 +9,12 @@
   {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
+  <style>
+    .site-header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .site-header .site-branding{flex:1 1 auto;min-width:0}
+    .site-header .nav-main{margin-left:auto;display:flex;gap:16px}
+    .site-header .nav-main a{text-decoration:none;padding:8px 6px}
+  </style>
 </head>
 <body>
   {{ partial "header.html" . -}}
