@@ -1,40 +1,83 @@
-{{ define "main" }}
-<div>
-  {{ .Content -}}
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="{{ .Site.BaseURL }}">
+  {{- partial "html-meta.html" . }}
+  <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
+  {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
+  <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
+  {{- partial "google-tag-manager-head.html" . }}
 
-<style>
-  .article-list{list-style:none;margin:16px 0;padding:0}
-  .article-item{position:relative;border:1px solid #ddd;border-radius:0;padding:6px 10px 18px 10px;margin:0;background:#fff;border-bottom:0}
-  .article-item:first-child{border-top-left-radius:8px;border-top-right-radius:8px}
-  .article-item:last-child{border-bottom:1px solid #ddd;border-bottom-left-radius:8px;border-bottom-right-radius:8px}
-  .article-title a{display:inline-block;font-size:1.05em;text-decoration:none}
-  .article-date{position:absolute;right:8px;bottom:4px;font-size:.8em;color:#666}
-</style>
-
-{{ $sections := .Site.Params.mainSections | default (slice "posts" "post") -}}
-{{ $pages := where .Site.RegularPages "Section" "in" $sections -}}
-<ul class="article-list">
-  {{ range ($pages.ByPublishDate.Reverse) -}}
-  {{ $pub0 := .PublishDate }}
-  {{ if $pub0.IsZero }}
-    {{ $m := site.Data.publishdates }}
-    {{ $k1 := .File.Path }}
-    {{ $k2 := printf "content/%s" .File.Path }}
-    {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
-    {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
-      {{ $pub0 = time . }}
-    {{ else }}
-      {{ $pub0 = .Date }}
-    {{ end }}
-  {{ end }}
-  <li class="article-item">
-    <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
-    {{ if not $pub0.IsZero }}
-      {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-      <div class="article-date">{{ time.Format "2006-01-02 15:04" $pub }}</div>
-    {{ end }}
-  </li>
-  {{ end -}}
-</ul>
-{{ end }}
+  <style>
+    .article-list{
+      list-style:none;
+      margin:16px 0;
+      padding:0;
+    }
+    .article-item{
+      position:relative;
+      border:1px solid #ddd;
+      border-radius:8px;
+      padding:6px 10px 18px 10px;
+      margin:0;
+      background:#fff;
+      border-bottom:0;
+    }
+    .article-item:last-child{
+      border-bottom:1px solid #ddd;
+    }
+    .article-title a{
+      display:inline-block;
+      font-size:1.05em;
+      text-decoration:none;
+      font-weight:bold;
+    }
+    .article-date{
+      position:absolute;
+      right:8px;
+      bottom:4px;
+      font-size:.8em;
+      color:#666;
+    }
+  </style>
+</head>
+<body>
+  {{ partial "header.html" . -}}
+  <main>
+    <div>
+      {{ .Content -}}
+    </div>
+    {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") -}}
+    {{ $pages := where .Site.RegularPages "Section" "in" $sections -}}
+    <ul class="article-list">
+      {{ range ($pages.ByPublishDate.Reverse) -}}
+      {{ $pub0 := .PublishDate }}
+      {{ if $pub0.IsZero }}
+        {{ $m := site.Data.publishdates }}
+        {{ $k1 := .File.Path }}
+        {{ $k2 := printf "content/%s" .File.Path }}
+        {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+        {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+          {{ $pub0 = time . }}
+        {{ else }}
+          {{ $pub0 = .Date }}
+        {{ end }}
+      {{ end }}
+      <li class="article-item">
+        <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
+        {{ if not $pub0.IsZero }}
+          {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+          <div class="article-date">{{ time.Format "2006-01-02 15:04" $pub }}</div>
+        {{ end }}
+      </li>
+      {{ end -}}
+    </ul>
+  </main>
+  {{- partial "footer.html" . }}
+  {{- template "_internal/google_analytics.html" . }}
+  {{- partial "external-links.html" . }}
+</body>
+{{- partial "google-tag-manager-body.html" . }}
+</html>
