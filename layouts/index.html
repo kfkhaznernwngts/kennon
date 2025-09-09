@@ -1,6 +1,6 @@
 {{ define "main" }}
 {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") }}
-{{ $pages := where .Site.RegularPages "Section" "in" $sections }}
+{{ $pages := where .Site.RegularPages "Type" "in" $sections }}
 {{ $p := .Paginate $pages }}
 <ul class="article-list">
   {{ range $p.Pages }}
