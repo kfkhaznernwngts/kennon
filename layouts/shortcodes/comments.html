@@ -2,36 +2,51 @@
 {{ if and $cfg $cfg.enabled }}
   {{ $slug := .Page.File.BaseFileName }}
 
-  {{ $remote := resources.GetRemote $cfg.csvUrl }}
-  {{ with $remote }}
-    {{ $opts := dict "format" "csv" "targetType" "slice" "lazyQuotes" true }}
-    {{ $csv := transform.Unmarshal $opts .Content }}
-    {{ $rows := slice }}
-    {{ range $i, $r := $csv }}
-      {{ if eq $i 0 }}{{ continue }}{{ end }}
-      {{ if eq (index $r 1) $slug }}
-        {{ $rows = $rows | append $r }}
-      {{ end }}
-    {{ end }}
+  {{ $sep := "?" }}
+  {{ if in $cfg.csvUrl "?" }}{{ $sep = "&" }}{{ end }}
+  {{ $freshUrl := printf "%s%st=%d" $cfg.csvUrl $sep (now.Unix) }}
 
-    <section id="comments-list" class="comment-section">
-      <h2>コメント</h2>
-      {{ if gt (len $rows) 0 }}
-        <ul class="comment-list">
-          {{ range $rows }}
-            <li class="comment-item">
-              <div class="comment-meta">
-                <span class="comment-author">{{ index . 2 }}</span>
-                <span class="comment-date">{{ index . 0 }}</span>
-              </div>
-              <div class="comment-body">{{ index . 3 }}</div>
-            </li>
-          {{ end }}
-        </ul>
-      {{ else }}
-        <p class="comment-empty">まだコメントはありません。</p>
+  {{ with try (resources.GetRemote $freshUrl) }}
+    {{ with .Err }}
+      <section id="comments-list" class="comment-section">
+        <h2>コメント</h2>
+        <p>コメントを取得できませんでした。</p>
+      </section>
+    {{ else with .Value }}
+      {{ $opts := dict "format" "csv" "targetType" "slice" "lazyQuotes" true }}
+      {{ $csv := transform.Unmarshal $opts .Content }}
+
+      {{ $rows := slice }}
+      {{ range $i, $r := $csv }}
+        {{ if eq $i 0 }}{{ continue }}{{ end }}
+        {{ $rowSlug := printf "%s" (index $r 1) }}
+        {{ if eq $rowSlug $slug }}
+          {{ $rows = $rows | append $r }}
+        {{ end }}
       {{ end }}
-    </section>
+
+      <section id="comments-list" class="comment-section">
+        <h2>コメント</h2>
+        {{ if gt (len $rows) 0 }}
+          <ul class="comment-list">
+            {{ range $rows }}
+              {{ $ts := printf "%s" (index . 0) }}
+              {{ $name := printf "%s" (index . 2) }}
+              {{ $body := printf "%s" (index . 3) }}
+              <li class="comment-item">
+                <div class="comment-meta">
+                  <span class="comment-author">{{ cond (ne $name "") $name "匿名" }}</span>
+                  <span class="comment-date">{{ $ts }}</span>
+                </div>
+                <div class="comment-body">{{ $body }}</div>
+              </li>
+            {{ end }}
+          </ul>
+        {{ else }}
+          <p class="comment-empty">まだコメントはありません。</p>
+        {{ end }}
+      </section>
+    {{ end }}
   {{ end }}
 
   {{ $form := site.Params.comments.form }}
@@ -55,4 +70,3 @@
     </section>
   {{ end }}
 {{ end }}
-
