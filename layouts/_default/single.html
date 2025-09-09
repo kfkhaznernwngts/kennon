@@ -36,6 +36,7 @@
         {{ .Content }}
       </div>
 
+      <!-- 本文末尾（コメント区切り線の“上”）に日付を表示 -->
       <div style="font-size:0.85em; color:#777; text-align:right; margin-top:1.5em; line-height:1.6;">
         {{ if not $pub0.IsZero }}
           {{ $pub := time.In "Asia/Tokyo" $pub0 }}
@@ -54,7 +55,8 @@
         {{ end }}
       </div>
 
-      {{< comments >}}
+      <!-- コメント（ショートコードをレイアウトから安全に呼ぶ） -->
+      {{ .RenderString "{{< comments >}}" }}
     </article>
   </main>
   {{- partial "footer.html" . }}
