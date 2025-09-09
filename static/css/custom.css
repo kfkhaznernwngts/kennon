@@ -6,126 +6,43 @@
   margin: 0 auto;
   padding: 16px;
 }
-.content-main {
-  min-width: 0;
-}
-.content-aside {
-  min-width: 0;
-}
-.sidebar-card {
-  border: 1px solid #e5e5e5;
-  padding: 12px;
-  margin-bottom: 16px;
-}
-.sidebar-card h2 {
-  font-size: 1.1rem;
-  margin: 0 0 8px 0;
-}
-.sidebar-archives {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.sidebar-archives li {
-  margin: 6px 0;
-}
+.content-main { min-width: 0; }
+.content-aside { min-width: 0; }
+.sidebar-card { border: 1px solid #e5e5e5; padding: 12px; margin-bottom: 16px; }
+.sidebar-card h2 { font-size: 1.1rem; margin: 0 0 8px 0; }
+.sidebar-archives { list-style: none; padding: 0; margin: 0; }
+.sidebar-archives li { margin: 6px 0; }
+
 @media (max-width: 860px) {
-  .layout-two-col {
-    grid-template-columns: 1fr;
-  }
-  .content-aside {
-    order: 2;
-  }
+  .layout-two-col { grid-template-columns: 1fr; }
+  .content-aside { order: 2; }
 }
 
-/* コメントセクション */
-.comment-section { 
-  margin-top: 2rem; 
-}
-.comment-list { 
-  list-style: none; 
-  padding: 0; 
-  margin: 1rem 0; 
-}
-.comment-item { 
-  padding: 1rem; 
-  border: 1px solid #eee; 
-  border-radius: 8px; 
-  margin-bottom: 1rem; 
-}
-.comment-meta { 
-  font-size: 0.9rem; 
-  color: #666; 
-  margin-bottom: 0.5rem; 
-  display: flex; 
-  gap: 0.75rem; 
-}
-.comment-author { 
-  font-weight: 600; 
-}
-.comment-body { 
-  white-space: pre-wrap; 
-  line-height: 1.7; 
-}
-.comment-empty { 
-  color: #777; 
-}
-.comment-form .field { 
-  margin: 0.75rem 0; 
-}
-.comment-form input[type="text"], 
-.comment-form textarea { 
-  width: 100%; 
-  padding: 0.6rem 0.7rem; 
-  border: 1px solid #ddd; 
-  border-radius: 8px; 
-  font-size: 1rem; 
-}
-.comment-form .btn { 
-  display: inline-block; 
-  padding: 0.6rem 1rem; 
-  border: 1px solid #222; 
-  border-radius: 8px; 
-  background: #222; 
-  color: #fff; 
-  cursor: pointer; 
-}
-.comment-form .btn:hover { 
-  opacity: 0.9; 
-}
-.comment-note { 
-  color: #777; 
-  font-size: 0.9rem; 
-  margin-top: 0.5rem; 
-}
-
-/* コメントの境界線で区切る */
-.comment-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.comment-item {
-  border-bottom: 1px solid #ccc; /* 下に薄いグレー線 */
-  padding: 0.8em 0;              /* 上下に余白 */
-}
-.comment-item:last-child {
-  border-bottom: none; /* 最後のコメントは線を消す */
-}
-#comments-list .comment-list {
+header nav ul,
+nav ul,
+.menu,
+.main-menu,
+.site-nav ul {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
-
-#comments-list .comment-list > li.comment-item {
-  border: 0 !important;
-  border-bottom: 1px solid #ccc !important;
-  border-radius: 0 !important;
-  margin: 0 !important;
-  padding: 12px 0 !important;
+header nav ul li a,
+nav ul li a,
+.menu li a,
+.main-menu li a,
+.site-nav ul li a {
+  text-decoration: none;
+  padding: 8px 6px;
+  display: inline-block;
 }
 
-#comments-list .comment-list > li.comment-item:last-child {
-  border-bottom: 0 !important;
-}
+.article-list { list-style: none; margin: 0; padding: 0; }
+.article-item { padding: 10px 0; border-bottom: 1px solid #eee; }
+.article-item:last-child { border-bottom: 0; }
+.article-date { font-size: 0.85em; color: #777; margin-bottom: 4px; }
+.article-title a { text-decoration: none; }
