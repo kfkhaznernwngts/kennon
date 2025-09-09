@@ -29,23 +29,24 @@
 
     <article>
       <header>
-        <h1 style="margin-bottom:0.2em;">{{ .Title }}</h1>
-        <p style="font-size:0.85em; color:#777; text-align:right; margin:0 0 1em 0;">
+        <h1 style="margin-bottom:0.4em;">{{ .Title }}</h1>
+        <div style="font-size:0.85em; color:#777; line-height:1.6; margin:0 0 1em 0;">
           {{ if not $pub0.IsZero }}
             {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-            公開日:
+            公開日:<br>
             <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">
               {{ time.Format "2006-01-02 15:04" $pub }}
             </time>
           {{ end }}
           {{ if not $lm0.IsZero }}
+            <br>
             {{ $lm := time.In "Asia/Tokyo" $lm0 }}
-            ／ 最終編集日:
+            最終編集日:<br>
             <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">
               {{ time.Format "2006-01-02 15:04" $lm }}
             </time>
           {{ end }}
-        </p>
+        </div>
       </header>
       <div class="content">
         {{ .Content }}
