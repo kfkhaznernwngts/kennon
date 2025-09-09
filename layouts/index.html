@@ -1,9 +1,6 @@
 {{ define "main" }}
-{{ $sections := .Site.Params.mainSections | default (slice "posts" "post") }}
-{{ $pages := where .Site.RegularPages "Section" "in" $sections }}
-{{ $p := .Paginate ($pages.ByPublishDate.Reverse) }}
 <ul class="article-list">
-  {{ range $p.Pages }}
+  {{ range .Site.RegularPages.ByPublishDate.Reverse }}
   {{- $pub := or .PublishDate .Date -}}
   {{- $pubJST := time.In "Asia/Tokyo" $pub -}}
   <li class="article-item">
@@ -12,6 +9,5 @@
   </li>
   {{ end }}
 </ul>
-{{ template "_internal/pagination.html" . }}
 {{ end }}
 
