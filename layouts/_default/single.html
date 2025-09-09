@@ -1,62 +1,138 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <base href="{{ .Site.BaseURL }}">
-  {{- partial "html-meta.html" . }}
-  <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
-  {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
-  <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
-  {{- partial "google-tag-manager-head.html" . }}
-</head>
-<body>
-  {{ partial "header.html" . -}}
-  <main>
-    {{ $pub0 := .PublishDate }}
-    {{ if $pub0.IsZero }}
-      {{ $m := site.Data.publishdates }}
-      {{ $k1 := .File.Path }}
-      {{ $k2 := printf "content/%s" .File.Path }}
-      {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
-      {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
-        {{ $pub0 = time . }}
-      {{ else }}
-        {{ $pub0 = .Date }}
-      {{ end }}
+{{ $cfg := site.Params.comments }}
+{{ if and $cfg $cfg.enabled }}
+  {{ $slug := .Page.File.BaseFileName }}
+
+  {{ $pub0 := .Page.PublishDate }}
+  {{ if $pub0.IsZero }}
+    {{ $m := site.Data.publishdates }}
+    {{ $k1 := .Page.File.Path }}
+    {{ $k2 := printf "content/%s" .Page.File.Path }}
+    {{ $k3 := printf "content/%s%s" .Page.File.Dir .Page.File.LogicalName }}
+    {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+      {{ $pub0 = time . }}
+    {{ else }}
+      {{ $pub0 = .Page.Date }}
     {{ end }}
-    {{ $lm0 := or .Lastmod $pub0 }}
+  {{ end }}
+  {{ $lm0 := or .Page.Lastmod $pub0 }}
 
-    <article>
-      <header>
-        <h1 style="margin-bottom:0.5em; text-align:left;">{{ .Title }}</h1>
-      </header>
+  <div style="font-size:0.85em; color:#777; text-align:right; margin-top:1.5em; line-height:1.6;">
+    {{ if not $pub0.IsZero }}
+      {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+      公開日:
+      <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">
+        {{ time.Format "2006-01-02 15:04" $pub }}
+      </time>
+    {{ end }}
+    {{ if not $lm0.IsZero }}
+      <br>
+      {{ $lm := time.In "Asia/Tokyo" $lm0 }}
+      最終編集日:
+      <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">
+        {{ time.Format "2006-01-02 15:04" $lm }}
+      </time>
+    {{ end }}
+  </div>
 
-      <div class="content">
-        {{ .Content }}
-        <div style="font-size:0.85em; color:#777; text-align:right; margin-top:2em; line-height:1.6;">
-          {{ if not $pub0.IsZero }}
-            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-            公開日:
-            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">
-              {{ time.Format "2006-01-02 15:04" $pub }}
-            </time>
+  {{ $sep := "?" }}
+  {{ if in $cfg.csvUrl "?" }}{{ $sep = "&" }}{{ end }}
+  {{ $freshUrl := printf "%s%st=%d" $cfg.csvUrl $sep (now.Unix) }}
+
+  {{ with try (resources.GetRemote $freshUrl) }}
+    {{ if .Err }}
+      <section id="comments-list" class="comment-section" style="border-top:1px solid #ccc; padding-top:16px; margin-top:24px; font-size:0.9em; color:#555;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <h2 style="font-size:1.1em; margin:0;">コメント</h2>
+        </div>
+        <p>コメントを取得できませんでした。</p>
+      </section>
+    {{ else }}
+      {{ $opts := dict "format" "csv" "targetType" "map" "lazyQuotes" true }}
+      {{ $csv := transform.Unmarshal $opts .Value.Content }}
+
+      {{ $rows := slice }}
+      {{ range $i, $r := $csv }}
+        {{ $rowSlug := index $r "記事スラッグ" }}
+        {{ if eq $rowSlug $slug }}
+          {{ $rows = $rows | append $r }}
+        {{ end }}
+      {{ end }}
+      {{ $count := len $rows }}
+
+      <section id="comments-list" class="comment-section" style="border-top:1px solid #ccc; padding-top:16px; margin-top:24px; font-size:0.9em; color:#555;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <h2 style="font-size:1.1em; margin:0;">コメント</h2>
+          <button id="comments-toggle" type="button" aria-expanded="false" style="margin:0; padding:8px 12px; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer;">
+            コメントを表示 ({{ $count }})
+          </button>
+        </div>
+
+        <div id="comments-panel" style="display:none; margin-top:12px;">
+          {{ if gt $count 0 }}
+            <ul class="comment-list" style="list-style:none; padding:0; margin:0; border:1px solid #ccc; border-radius:6px; overflow:hidden;">
+              {{ range $i, $r := $rows }}
+                {{ $ts := index $r "タイムスタンプ" }}
+                {{ $nameRaw := index $r "名前" }}
+                {{ $body := index $r "本文" }}
+                {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
+                {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
+
+                <li class="comment-item" style="padding:12px; background:#fff; border-bottom:1px solid #ccc;">
+                  <div class="comment-meta" style="font-size:0.85em; color:#555; margin-bottom:6px;">
+                    <span class="comment-author" style="font-weight:bold;">{{ $name }}</span>
+                    <span class="comment-date" style="margin-left:8px;">{{ $ts }}</span>
+                  </div>
+                  <div class="comment-body">{{ $body }}</div>
+                </li>
+              {{ end }}
+            </ul>
+            <script>
+              document.addEventListener("DOMContentLoaded", function() {
+                var list = document.querySelectorAll("#comments-list .comment-item");
+                if (list.length > 0) { list[list.length - 1].style.borderBottom = "none"; }
+              });
+            </script>
+          {{ else }}
+            <p class="comment-empty" style="margin:8px 0 0 0;">まだコメントはありません。</p>
           {{ end }}
-          {{ if not $lm0.IsZero }}
-            <br>
-            {{ $lm := time.In "Asia/Tokyo" $lm0 }}
-            最終編集日:
-            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">
-              {{ time.Format "2006-01-02 15:04" $lm }}
-            </time>
+
+          {{ $form := site.Params.comments.form }}
+          {{ if $form }}
+            {{ $action := printf "https://docs.google.com/forms/d/e/%s/formResponse" $form.id }}
+            <section id="comments-form" class="comment-section" style="margin-top:16px; font-size:0.9em; color:#555;">
+              <h3 style="font-size:1.05em; margin:0 0 8px 0;">コメントを送る</h3>
+              <form class="comment-form" action="{{ $action }}" method="POST" target="_blank" rel="noopener" style="max-width:600px;">
+                <input type="hidden" name="{{ $form.slugEntry }}" value="{{ $slug }}">
+                <div class="field" style="margin-bottom:12px;">
+                  <input type="text" name="{{ $form.nameEntry }}" placeholder="名前（匿名可）" style="width:100%; box-sizing:border-box; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                </div>
+                <div class="field" style="margin-bottom:12px;">
+                  <textarea name="{{ $form.bodyEntry }}" rows="5" required placeholder="コメント" style="width:100%; box-sizing:border-box; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
+                </div>
+                <button type="submit" class="btn" style="padding:8px 16px; background:#333; color:#fff; border:none; border-radius:4px;">送信</button>
+                <p class="comment-note" style="font-size:0.85em; color:#777; margin-top:8px;">送信から反映まで数分かかる場合があります。</p>
+              </form>
+            </section>
           {{ end }}
         </div>
-      </div>
-    </article>
-  </main>
-  {{- partial "footer.html" . }}
-  {{- template "_internal/google_analytics.html" . }}
-  {{- partial "external-links.html" . }}
-</body>
-{{- partial "google-tag-manager-body.html" . }}
-</html>
+
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            var btn = document.getElementById("comments-toggle");
+            var panel = document.getElementById("comments-panel");
+            if (!btn || !panel) return;
+            var expanded = false;
+            var count = {{ $count }};
+            function render() {
+              panel.style.display = expanded ? "block" : "none";
+              btn.setAttribute("aria-expanded", expanded ? "true" : "false");
+              btn.textContent = (expanded ? "コメントを隠す" : "コメントを表示") + " (" + count + ")";
+            }
+            btn.addEventListener("click", function() { expanded = !expanded; render(); });
+            render();
+          });
+        </script>
+      </section>
+    {{ end }}
+  {{ end }}
+{{ end }}
