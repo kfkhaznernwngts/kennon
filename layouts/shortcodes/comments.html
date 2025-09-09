@@ -37,7 +37,12 @@
               {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
               {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
 
-              <li class="comment-item" style="border:1px solid #ccc; border-radius:6px; padding:12px; margin-bottom:12px; background:#fafafa;">
+              <li class="comment-item"
+                  style="border:1px solid #ccc;
+                         border-radius:6px;
+                         padding:12px;
+                         margin-bottom:16px;
+                         background:#fff;">
                 <div class="comment-meta" style="font-size:0.9em; color:#555; margin-bottom:6px;">
                   <span class="comment-author" style="font-weight:bold;">{{ $name }}</span>
                   <span class="comment-date" style="margin-left:8px;">{{ $ts }}</span>
