@@ -2,49 +2,56 @@
 {{ if and $cfg $cfg.enabled }}
   {{ $slug := .Page.File.BaseFileName }}
 
-  {{ with try (resources.GetRemote $cfg.csvUrl) }}
-    {{ with .Err }}
-      <section id="comments-list">
-        <h2>コメント</h2>
-        <p>コメントを取得できませんでした。</p>
-      </section>
-    {{ else with .Value }}
-      {{ $opts := dict "format" "csv" "targetType" "slice" "lazyQuotes" true }}
-      {{ $csv := transform.Unmarshal $opts .Content }}
-
-      {{ $rows := slice }}
-      {{ range $i, $r := $csv }}
-        {{ if eq $i 0 }}{{ continue }}{{ end }}
-        {{ if eq (index $r 1) $slug }}
-          {{ $rows = $rows | append $r }}
-        {{ end }}
+  {{ $remote := resources.GetRemote $cfg.csvUrl }}
+  {{ with $remote }}
+    {{ $opts := dict "format" "csv" "targetType" "slice" "lazyQuotes" true }}
+    {{ $csv := transform.Unmarshal $opts .Content }}
+    {{ $rows := slice }}
+    {{ range $i, $r := $csv }}
+      {{ if eq $i 0 }}{{ continue }}{{ end }}
+      {{ if eq (index $r 1) $slug }}
+        {{ $rows = $rows | append $r }}
       {{ end }}
-
-      <section id="comments-list">
-        <h2>コメント</h2>
-        {{ if gt (len $rows) 0 }}
-          <ul>
-            {{ range $rows }}
-              <li>
-                <strong>{{ index . 2 }}</strong>
-                <span>{{ index . 0 }}</span><br>
-                <div>{{ index . 3 }}</div>
-              </li>
-            {{ end }}
-          </ul>
-        {{ else }}
-          <p>まだコメントはありません。</p>
-        {{ end }}
-      </section>
     {{ end }}
+
+    <section id="comments-list" class="comment-section">
+      <h2>コメント</h2>
+      {{ if gt (len $rows) 0 }}
+        <ul class="comment-list">
+          {{ range $rows }}
+            <li class="comment-item">
+              <div class="comment-meta">
+                <span class="comment-author">{{ index . 2 }}</span>
+                <span class="comment-date">{{ index . 0 }}</span>
+              </div>
+              <div class="comment-body">{{ index . 3 }}</div>
+            </li>
+          {{ end }}
+        </ul>
+      {{ else }}
+        <p class="comment-empty">まだコメントはありません。</p>
+      {{ end }}
+    </section>
   {{ end }}
 
-  {{ if $cfg.formEmbedUrl }}
-    {{ $url := replace $cfg.formEmbedUrl "{slug}" $slug }}
-    <section id="comments-form">
+  {{ $form := site.Params.comments.form }}
+  {{ if $form }}
+    {{ $action := printf "https://docs.google.com/forms/d/e/%s/formResponse" $form.id }}
+    <section id="comments-form" class="comment-section">
       <h2>コメントを送る</h2>
-      <p>送信から反映まで数分かかる場合があります。</p>
-      <iframe src="{{ $url }}" width="100%" height="560" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+      <form class="comment-form" action="{{ $action }}" method="POST" target="_blank" rel="noopener">
+        <input type="hidden" name="{{ $form.slugEntry }}" value="{{ $slug }}">
+        <div class="field">
+          <label>お名前</label>
+          <input type="text" name="{{ $form.nameEntry }}" placeholder="匿名可">
+        </div>
+        <div class="field">
+          <label>コメント</label>
+          <textarea name="{{ $form.bodyEntry }}" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn">送信</button>
+        <p class="comment-note">送信から反映まで数分かかる場合があります。</p>
+      </form>
     </section>
   {{ end }}
 {{ end }}
