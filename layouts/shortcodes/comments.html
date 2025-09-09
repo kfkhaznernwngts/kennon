@@ -17,20 +17,13 @@
       {{ $csv := transform.Unmarshal $opts .Content }}
 
       {{ $rows := slice }}
-
       {{ range $i, $r := $csv }}
         {{ if eq $i 0 }}{{ continue }}{{ end }}
 
-        {{/* ---- セルを「必ず文字列」に直す小ワーク ---- */}}
-        {{ $mk := func ( $cell ) (string) }}
-          {{ $s := "" }}
-          {{ range $cell }}
-            {{ $s = printf "%s%c" $s . }}
-          {{ end }}
-          {{ return $s }}
-        {{ end }}
+        {{ $.Scratch.Set "buf" "" }}
+        {{ range (index $r 1) }}{{ $.Scratch.Add "buf" (printf "%c" .) }}{{ end }}
+        {{ $rowSlug := $.Scratch.Get "buf" }}
 
-        {{ $rowSlug := ($mk (index $r 1)) }}
         {{ if eq $rowSlug $slug }}
           {{ $rows = $rows | append $r }}
         {{ end }}
@@ -41,21 +34,18 @@
         {{ if gt (len $rows) 0 }}
           <ul class="comment-list">
             {{ range $rows }}
-              {{ $mk := func ( $cell ) (string) }}
-                {{ $s := "" }}
-                {{ range $cell }}{{ $s = printf "%s%c" $s . }}{{ end }}
-                {{ return $s }}
-              {{ end }}
-              {{ $ts := ($mk (index . 0)) }}
-              {{ $name := ($mk (index . 2)) }}
-              {{ $body := ($mk (index . 3)) }}
-
+              {{ $.Scratch.Set "ts" "" }}
+              {{ $.Scratch.Set "name" "" }}
+              {{ $.Scratch.Set "body" "" }}
+              {{ range (index . 0) }}{{ $.Scratch.Add "ts" (printf "%c" .) }}{{ end }}
+              {{ range (index . 2) }}{{ $.Scratch.Add "name" (printf "%c" .) }}{{ end }}
+              {{ range (index . 3) }}{{ $.Scratch.Add "body" (printf "%c" .) }}{{ end }}
               <li class="comment-item">
                 <div class="comment-meta">
-                  <span class="comment-author">{{ cond (ne $name "") $name "匿名" }}</span>
-                  <span class="comment-date">{{ $ts }}</span>
+                  <span class="comment-author">{{ with ($.Scratch.Get "name") }}{{ . }}{{ else }}匿名{{ end }}</span>
+                  <span class="comment-date">{{ $.Scratch.Get "ts" }}</span>
                 </div>
-                <div class="comment-body">{{ $body }}</div>
+                <div class="comment-body">{{ $.Scratch.Get "body" }}</div>
               </li>
             {{ end }}
           </ul>
