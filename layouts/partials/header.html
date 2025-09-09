@@ -1,23 +1,11 @@
 <header class="site-header">
-{{ with .Site.Menus.parent -}}
-  <nav class="nav-parent">
-  {{ range . -}}
-    <a href="{{ .URL }}">{{ .Name }}</a>
-  {{ end -}}
-  </nav>
-{{ end -}}
   <div class="site-branding">
     <h1><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
     {{- if .Site.Params.subtitle }}<h2><a href="{{ .Site.BaseURL }}">{{ .Site.Params.subtitle }}</a></h2>{{- end }}
   </div>
   <nav class="nav-main">
-    {{ if .IsHome }}
-      {{ range .Site.Menus.main }}
-        {{ if eq .Name "About" }}<a href="{{ .URL }}">{{ .Name }}</a>{{ end }}
-      {{ end }}
-    {{ else }}
-      {{ range .Site.Menus.main }}<a href="{{ .URL }}">{{ .Name }}</a>{{ end }}
+    {{ range .Site.Menus.main }}
+      {{ if eq .Name "About" }}<a href="{{ .URL }}">{{ .Name }}</a>{{ end }}
     {{ end }}
-    {{ partial "search.html" . }}
   </nav>
 </header>
