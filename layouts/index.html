@@ -9,6 +9,14 @@
   {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
+
+  <style>
+    header .nav-main a[href="/kennon/"]{display:none}
+    .article-list{list-style:none;margin:0;padding:0}
+    .article-item{padding:14px 0}
+    .article-title a{font-size:1.2em;text-decoration:none}
+    .article-date{font-size:.95em;color:#666;margin-top:4px}
+  </style>
 </head>
 <body>
   {{ partial "header.html" . -}}
@@ -33,11 +41,11 @@
         {{ end }}
       {{ end }}
       <li class="article-item">
+        <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
         {{ if not $pub0.IsZero }}
         {{ $pub := time.In "Asia/Tokyo" $pub0 }}
         <div class="article-date">{{ time.Format "2006-01-02 15:04" $pub }}</div>
         {{ end }}
-        <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
       </li>
       {{ end -}}
     </ul>
@@ -48,4 +56,3 @@
 </body>
 {{- partial "google-tag-manager-body.html" . }}
 </html>
-
