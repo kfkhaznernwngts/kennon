@@ -21,14 +21,17 @@
         {{ if eq $i 0 }}{{ continue }}{{ end }}
         {{ if lt (len $r) 4 }}{{ continue }}{{ end }}
 
-        {{ $cell := index $r 1 }}
+        {{ $c := index $r 1 }}
+        {{ $s := printf "%v" $c }}
         {{ $rowSlug := "" }}
-        {{ if eq (kindOf $cell) "slice" }}
+        {{ if hasPrefix $s "%!s(uint8=" }}
           {{ $.Scratch.Set "buf" "" }}
-          {{ range $cell }}{{ $.Scratch.Add "buf" (printf "%c" .) }}{{ end }}
+          {{ range (findRE "\\d+" $s) }}
+            {{ $.Scratch.Add "buf" (printf "%c" (int .)) }}
+          {{ end }}
           {{ $rowSlug = $.Scratch.Get "buf" }}
         {{ else }}
-          {{ $rowSlug = printf "%v" $cell }}
+          {{ $rowSlug = $s }}
         {{ end }}
 
         {{ if eq $rowSlug $slug }}
@@ -45,34 +48,43 @@
               {{ $nameCell := index . 2 }}
               {{ $bodyCell := index . 3 }}
 
+              {{ $tsStr := printf "%v" $tsCell }}
               {{ $ts := "" }}
-              {{ if eq (kindOf $tsCell) "slice" }}
+              {{ if hasPrefix $tsStr "%!s(uint8=" }}
                 {{ $.Scratch.Set "ts" "" }}
-                {{ range $tsCell }}{{ $.Scratch.Add "ts" (printf "%c" .) }}{{ end }}
+                {{ range (findRE "\\d+" $tsStr) }}
+                  {{ $.Scratch.Add "ts" (printf "%c" (int .)) }}
+                {{ end }}
                 {{ $ts = $.Scratch.Get "ts" }}
               {{ else }}
-                {{ $ts = printf "%v" $tsCell }}
+                {{ $ts = $tsStr }}
               {{ end }}
 
-              {{ $nameRaw := "" }}
-              {{ if eq (kindOf $nameCell) "slice" }}
+              {{ $nameStr := printf "%v" $nameCell }}
+              {{ $nameVal := "" }}
+              {{ if hasPrefix $nameStr "%!s(uint8=" }}
                 {{ $.Scratch.Set "name" "" }}
-                {{ range $nameCell }}{{ $.Scratch.Add "name" (printf "%c" .) }}{{ end }}
-                {{ $nameRaw = $.Scratch.Get "name" }}
+                {{ range (findRE "\\d+" $nameStr) }}
+                  {{ $.Scratch.Add "name" (printf "%c" (int .)) }}
+                {{ end }}
+                {{ $nameVal = $.Scratch.Get "name" }}
               {{ else }}
-                {{ $nameRaw = printf "%v" $nameCell }}
+                {{ $nameVal = $nameStr }}
               {{ end }}
 
+              {{ $bodyStr := printf "%v" $bodyCell }}
               {{ $body := "" }}
-              {{ if eq (kindOf $bodyCell) "slice" }}
+              {{ if hasPrefix $bodyStr "%!s(uint8=" }}
                 {{ $.Scratch.Set "body" "" }}
-                {{ range $bodyCell }}{{ $.Scratch.Add "body" (printf "%c" .) }}{{ end }}
+                {{ range (findRE "\\d+" $bodyStr) }}
+                  {{ $.Scratch.Add "body" (printf "%c" (int .)) }}
+                {{ end }}
                 {{ $body = $.Scratch.Get "body" }}
               {{ else }}
-                {{ $body = printf "%v" $bodyCell }}
+                {{ $body = $bodyStr }}
               {{ end }}
 
-              {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
+              {{ $nameTrim := trim $nameVal " \t\r\n　" }}
               {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
 
               <li class="comment-item">
