@@ -9,3 +9,7 @@ timeZone = "Asia/Tokyo"
   publishDate = ["publishDate", "date", ":filename", ":fileModTime", ":default"]
   date        = ["date", "publishDate", ":filename", ":fileModTime", ":default"]
   lastmod     = ["lastmod", ":git", ":fileModTime", "date", ":default"]
+
+[params]
+mainSections = ["posts"]
+

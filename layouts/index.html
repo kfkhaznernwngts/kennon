@@ -1,24 +1,17 @@
-<!doctype html>
-<html lang="ja">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{{ .Site.Title }}</title>
-<body>
-<section>
-  <h1>{{ .Site.Title }}</h1>
-  <ul>
-    {{ range .Site.RegularPages.ByPublishDate.Reverse }}
-    {{- $pub := or .PublishDate .Date -}}
-    {{- $pubJST := time.In "Asia/Tokyo" $pub -}}
-    <li>
-      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-      <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pubJST }}">
-        {{ time.Format "2006-01-02" $pubJST }}
-      </time>
-    </li>
-    {{ end }}
-  </ul>
-</section>
-</body>
-</html>
+{{ define "main" }}
+{{ $sections := .Site.Params.mainSections | default (slice "posts" "post") }}
+{{ $pages := where .Site.RegularPages "Section" "in" $sections }}
+{{ $p := .Paginate $pages }}
+<ul class="article-list">
+  {{ range $p.Pages }}
+  {{- $pub := or .PublishDate .Date -}}
+  {{- $pubJST := time.In "Asia/Tokyo" $pub -}}
+  <li class="article-item">
+    <div class="article-date">{{ time.Format "2006-01-02 15:04" $pubJST }}</div>
+    <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
+  </li>
+  {{ end }}
+</ul>
+{{ template "_internal/pagination.html" . }}
+{{ end }}
 

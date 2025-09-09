@@ -1,18 +1,18 @@
 {{ define "main" }}
-<section>
-  <h1>{{ .Title }}</h1>
-  <ul>
-    {{ range .Pages.ByPublishDate.Reverse }}
-    {{- $pub := or .PublishDate .Date -}}
-    {{- $pubJST := time.In "Asia/Tokyo" $pub -}}
-    <li>
-      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-      <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pubJST }}">
-        {{ time.Format "2006-01-02" $pubJST }}
-      </time>
-    </li>
-    {{ end }}
-  </ul>
-</section>
+<div>
+  {{ .Content }}
+</div>
+{{ $p := .Paginate .Pages }}
+<ul class="article-list">
+  {{ range $p.Pages }}
+  {{- $pub := or .PublishDate .Date -}}
+  {{- $pubJST := time.In "Asia/Tokyo" $pub -}}
+  <li class="article-item">
+    <div class="article-date">{{ time.Format "2006-01-02 15:04" $pubJST }}</div>
+    <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
+  </li>
+  {{ end }}
+</ul>
+{{ template "_internal/pagination.html" . }}
 {{ end }}
 
