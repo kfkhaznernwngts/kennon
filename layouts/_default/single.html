@@ -1,21 +1,41 @@
-{{ define "main" }}
-{{- $pub := or .PublishDate .Date -}}
-{{- $pubJST := time.In "Asia/Tokyo" $pub -}}
-{{- $last := or .Lastmod $pub -}}
-{{- $lastJST := time.In "Asia/Tokyo" $last -}}
-<article>
-  <header>
-    <h1>{{ .Title }}</h1>
-    <p>
-      公開日:
-      <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pubJST }}">{{ time.Format "2006-01-02 15:04" $pubJST }}</time><br>
-      更新日:
-      <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lastJST }}">{{ time.Format "2006-01-02 15:04" $lastJST }}</time>
-    </p>
-  </header>
-  <div class="content">
-    {{ .Content }}
-  </div>
-</article>
-{{ end }}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="{{ .Site.BaseURL }}">
+  {{- partial "html-meta.html" . }}
+  <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
+  {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
+  <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
+  {{- partial "google-tag-manager-head.html" . }}
+</head>
+<body>
+  {{ partial "header.html" . -}}
+  <main>
+    {{- $pub := or .PublishDate .Date -}}
+    {{- $pubJST := time.In "Asia/Tokyo" $pub -}}
+    {{- $last := or .Lastmod $pub -}}
+    {{- $lastJST := time.In "Asia/Tokyo" $last -}}
+    <article>
+      <header>
+        <h1>{{ .Title }}</h1>
+        <p>
+          公開日:
+          <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pubJST }}">{{ time.Format "2006-01-02 15:04" $pubJST }}</time><br>
+          更新日:
+          <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lastJST }}">{{ time.Format "2006-01-02 15:04" $lastJST }}</time>
+        </p>
+      </header>
+      <div class="content">
+        {{ .Content }}
+      </div>
+    </article>
+  </main>
+  {{- partial "footer.html" . }}
+  {{- template "_internal/google_analytics.html" . }}
+  {{- partial "external-links.html" . }}
+</body>
+{{- partial "google-tag-manager-body.html" . }}
+</html>
 

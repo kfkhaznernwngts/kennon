@@ -4,7 +4,6 @@ title = '剣呑'
 theme = "simple-style"
 enableGitInfo = true
 timeZone = "Asia/Tokyo"
-buildFuture = true
 
 [frontmatter]
   publishDate = ["publishDate", "date", ":filename", ":fileModTime", ":default"]
