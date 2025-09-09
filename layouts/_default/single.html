@@ -6,33 +6,40 @@
   <base href="{{ .Site.BaseURL }}">
   {{- partial "html-meta.html" . }}
   <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
-  {{- with .Site.Params.favicon }}
-    <link rel="shortcut icon" href="{{ . }}" type="image/x-icon">
-  {{- end }}
+  {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
-  <link rel="stylesheet" type="text/css" href="{{ "css/custom.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
 </head>
 <body>
   {{ partial "header.html" . -}}
-  <main class="layout-two-col">
-    <div class="content-main">
-      <article class="post">
-        <header>
-          <h1>{{ .Title }}</h1>
-          <p class="post-dates" style="font-size:0.85em; color:#777; margin:0 0 1em 0;">
-            公開日: {{ .Date }}
-            {{ with .Lastmod }} / 最終更新日: {{ . }}{{ end }}
-          </p>
-        </header>
-        <div class="post-content">
-          {{ .Content }}
-        </div>
-      </article>
+  <main>
+    <div>
+      {{ .Content }}
     </div>
-    <aside class="content-aside">
-      {{ partial "sidebar.html" . }}
-    </aside>
+    <ul class="article-list">
+      {{ range (.Pages.ByPublishDate.Reverse) }}
+      {{ $pub0 := .PublishDate }}
+      {{ if $pub0.IsZero }}
+        {{ $m := site.Data.publishdates }}
+        {{ $k1 := .File.Path }}
+        {{ $k2 := printf "content/%s" .File.Path }}
+        {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+        {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+          {{ $pub0 = time . }}
+        {{ else }}
+          {{ $pub0 = .Date }}
+        {{ end }}
+      {{ end }}
+      <li class="article-item">
+        {{ if not $pub0.IsZero }}
+        {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+        <div class="article-date" style="font-size:0.85em; color:#777;">{{ time.Format "2006-01-02 15:04" $pub }}</div>
+        {{ end }}
+        <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
+      </li>
+      {{ end }}
+    </ul>
+    {{ template "_internal/pagination.html" . }}
   </main>
   {{- partial "footer.html" . }}
   {{- template "_internal/google_analytics.html" . }}
