@@ -1,19 +1,22 @@
 {{ define "main" }}
+{{- $pub := or .PublishDate .Date -}}
+{{- $pubJST := time.In "Asia/Tokyo" $pub -}}
+{{- $last := or .Lastmod $pub -}}
+{{- $lastJST := time.In "Asia/Tokyo" $last -}}
 <article>
   <header>
     <h1>{{ .Title }}</h1>
     <p>
       公開日:
-      <time datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">
-        {{ .PublishDate.Format "2006-01-02 15:04" }}
+      <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pubJST }}">
+        {{ time.Format "2006-01-02 15:04" $pubJST }}
       </time><br>
       更新日:
-      <time datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
-        {{ .Lastmod.Format "2006-01-02 15:04" }}
+      <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lastJST }}">
+        {{ time.Format "2006-01-02 15:04" $lastJST }}
       </time>
     </p>
   </header>
-
   <div class="content">
     {{ .Content }}
   </div>

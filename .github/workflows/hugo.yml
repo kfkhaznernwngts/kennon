@@ -11,12 +11,19 @@ permissions:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Tokyo
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup TZ
+        uses: szenius/set-timezone@v2.0
+        with:
+          timezoneLinux: Asia/Tokyo
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
@@ -29,14 +36,14 @@ jobs:
           files=$(git ls-files 'content/post/**/*.md' 'content/posts/**/*.md' 2>/dev/null || true)
           edited=0
           for f in $files; do
-            if grep -q -i '^publishdate' "$f"; then
+            if grep -qi '^publishdate' "$f"; then
               continue
             fi
             raw_ts=$(git log --diff-filter=A --follow --format='%aI' -- "$f" | tail -n1)
             if [ -n "$raw_ts" ]; then
               first_ts=$(TZ=Asia/Tokyo date -d "$raw_ts" +"%Y-%m-%dT%H:%M:%S%:z")
             else
-              first_ts=$(date +"%Y-%m-%dT%H:%M:%S%:z")
+              first_ts=$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S%:z")
             fi
             if head -1 "$f" | grep -q '^---$'; then
               awk -v ts="$first_ts" 'NR==1{print;print "publishDate: " ts;next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"

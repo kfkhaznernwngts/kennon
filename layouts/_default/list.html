@@ -2,11 +2,13 @@
 <section>
   <h1>{{ .Title }}</h1>
   <ul>
-    {{ range .Pages.ByPublishDate }}
+    {{ range .Pages.ByPublishDate.Reverse }}
+    {{- $pub := or .PublishDate .Date -}}
+    {{- $pubJST := time.In "Asia/Tokyo" $pub -}}
     <li>
       <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-      <time datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">
-        {{ .PublishDate.Format "2006-01-02" }}
+      <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pubJST }}">
+        {{ time.Format "2006-01-02" $pubJST }}
       </time>
     </li>
     {{ end }}
