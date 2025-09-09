@@ -27,36 +27,69 @@
     {{ end }}
     {{ $lm0 := or .Lastmod $pub0 }}
 
+    {{ $raw := .RawContent }}
+    {{ $scRe := `(?s){{<\s*comments\s*>}}` }}
+    {{ $hasSC := findRE $scRe $raw }}
+
     <article>
       <header>
         <h1 style="margin-bottom:0.5em; text-align:left;">{{ .Title }}</h1>
       </header>
 
-      <div class="content">
-        {{ .Content }}
-      </div>
+      {{ if $hasSC }}
+        {{ $withMarker := replaceRE $scRe "__COMMENTS__" $raw }}
+        {{ $parts := split $withMarker "__COMMENTS__" }}
+        {{ $before := index $parts 0 }}
+        {{ $after := "" }}
+        {{ if gt (len $parts) 1 }}{{ $after = index $parts 1 }}{{ end }}
 
-      <!-- 本文末尾（コメント区切り線の“上”）に日付を表示 -->
-      <div style="font-size:0.85em; color:#777; text-align:right; margin-top:1.5em; line-height:1.6;">
-        {{ if not $pub0.IsZero }}
-          {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-          公開日:
-          <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">
-            {{ time.Format "2006-01-02 15:04" $pub }}
-          </time>
-        {{ end }}
-        {{ if not $lm0.IsZero }}
-          <br>
-          {{ $lm := time.In "Asia/Tokyo" $lm0 }}
-          最終編集日:
-          <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">
-            {{ time.Format "2006-01-02 15:04" $lm }}
-          </time>
-        {{ end }}
-      </div>
+        <div class="content">
+          {{ .RenderString $before }}
+        </div>
 
-      <!-- コメント（ショートコードをレイアウトから安全に呼ぶ） -->
-      {{ .RenderString "{{< comments >}}" }}
+        <div style="font-size:0.85em; color:#777; text-align:right; margin-top:1.5em; line-height:1.6;">
+          {{ if not $pub0.IsZero }}
+            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+            公開日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">{{ time.Format "2006-01-02 15:04" $pub }}</time>
+          {{ end }}
+          {{ if not $lm0.IsZero }}
+            <br>
+            {{ $lm := time.In "Asia/Tokyo" $lm0 }}
+            最終編集日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">{{ time.Format "2006-01-02 15:04" $lm }}</time>
+          {{ end }}
+        </div>
+
+        {{ .RenderString "{{< comments >}}" }}
+
+        {{ if $after }}
+          <div class="content">
+            {{ .RenderString $after }}
+          </div>
+        {{ end }}
+
+      {{ else }}
+
+        <div class="content">
+          {{ .Content }}
+        </div>
+
+        <div style="font-size:0.85em; color:#777; text-align:right; margin-top:1.5em; line-height:1.6;">
+          {{ if not $pub0.IsZero }}
+            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+            公開日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">{{ time.Format "2006-01-02 15:04" $pub }}</time>
+          {{ end }}
+          {{ if not $lm0.IsZero }}
+            <br>
+            {{ $lm := time.In "Asia/Tokyo" $lm0 }}
+            最終編集日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">{{ time.Format "2006-01-02 15:04" $lm }}</time>
+          {{ end }}
+        </div>
+
+      {{ end }}
     </article>
   </main>
   {{- partial "footer.html" . }}
