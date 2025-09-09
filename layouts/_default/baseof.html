@@ -16,13 +16,10 @@
     .site-header .nav-main a{text-decoration:none;padding:8px 6px}
     article>header{border:0}
     article>header h1{border:0;margin-bottom:.5em}
-    article .content{border-top:0;border-bottom:0}
+    article .content{border-top:0}
   </style>
   {{ if not .IsHome }}
   <style>
-    article>footer,
-    article footer,
-    .post-pager{border-top:0 !important}
     main article{border-bottom:0 !important}
   </style>
   {{ end }}
