@@ -19,11 +19,18 @@
     <ul class="article-list">
       {{ range (.Pages.ByPublishDate.Reverse) }}
       {{ $pub0 := .PublishDate }}
-      {{ if $pub0.IsZero }}{{ $pub0 = .Date }}{{ end }}
+      {{ if $pub0.IsZero }}
+        {{ $m := site.Data.publishdates }}
+        {{ with index $m .File.Path }}
+          {{ $pub0 = time . }}
+        {{ else }}
+          {{ $pub0 = .Date }}
+        {{ end }}
+      {{ end }}
       <li class="article-item">
         {{ if not $pub0.IsZero }}
-        {{ $pubJST := time.In "Asia/Tokyo" $pub0 }}
-        <div class="article-date">{{ time.Format "2006-01-02 15:04" $pubJST }}</div>
+        {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+        <div class="article-date">{{ time.Format "2006-01-02 15:04" $pub }}</div>
         {{ end }}
         <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
       </li>

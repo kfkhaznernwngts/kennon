@@ -14,9 +14,15 @@
   {{ partial "header.html" . -}}
   <main>
     {{ $pub0 := .PublishDate }}
-    {{ if $pub0.IsZero }}{{ $pub0 = .Date }}{{ end }}
-    {{ $lm0 := .Lastmod }}
-    {{ if $lm0.IsZero }}{{ $lm0 = $pub0 }}{{ end }}
+    {{ if $pub0.IsZero }}
+      {{ $m := site.Data.publishdates }}
+      {{ with index $m .File.Path }}
+        {{ $pub0 = time . }}
+      {{ else }}
+        {{ $pub0 = .Date }}
+      {{ end }}
+    {{ end }}
+    {{ $lm0 := or .Lastmod $pub0 }}
     <article>
       <header>
         <h1>{{ .Title }}</h1>

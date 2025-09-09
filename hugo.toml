@@ -12,3 +12,4 @@ lastmod     = ["lastmod", ":git", "date", ":default"]
 
 [params]
 mainSections = ["posts", "post"]
+
