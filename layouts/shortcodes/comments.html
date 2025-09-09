@@ -13,28 +13,14 @@
         <p>コメントを取得できませんでした。</p>
       </section>
     {{ else with .Value }}
-      {{ $opts := dict "format" "csv" "targetType" "slice" "lazyQuotes" true }}
+      {{/* ← targetType を string にするのが重要 */}}
+      {{ $opts := dict "format" "csv" "targetType" "string" "lazyQuotes" true }}
       {{ $csv := transform.Unmarshal $opts .Content }}
 
       {{ $rows := slice }}
       {{ range $i, $r := $csv }}
-        {{ if eq $i 0 }}{{ continue }}{{ end }}
-        {{ if lt (len $r) 4 }}{{ continue }}{{ end }}
-
-        {{ $c := index $r 1 }}
-        {{ $s := printf "%v" $c }}
-        {{ $rowSlug := "" }}
-        {{ if hasPrefix $s "%!s(uint8=" }}
-          {{ $.Scratch.Set "buf" "" }}
-          {{ range (findRE "\\d+" $s) }}
-            {{ $.Scratch.Add "buf" (printf "%c" (int .)) }}
-          {{ end }}
-          {{ $rowSlug = $.Scratch.Get "buf" }}
-        {{ else }}
-          {{ $rowSlug = $s }}
-        {{ end }}
-
-        {{ if eq $rowSlug $slug }}
+        {{ if eq $i 0 }}{{ continue }}{{ end }}   {{/* ヘッダー行をスキップ */}}
+        {{ if eq (index $r 1) $slug }}
           {{ $rows = $rows | append $r }}
         {{ end }}
       {{ end }}
@@ -44,47 +30,11 @@
         {{ if gt (len $rows) 0 }}
           <ul class="comment-list">
             {{ range $rows }}
-              {{ $tsCell := index . 0 }}
-              {{ $nameCell := index . 2 }}
-              {{ $bodyCell := index . 3 }}
+              {{ $ts := index . 0 }}
+              {{ $nameRaw := index . 2 }}
+              {{ $body := index . 3 }}
 
-              {{ $tsStr := printf "%v" $tsCell }}
-              {{ $ts := "" }}
-              {{ if hasPrefix $tsStr "%!s(uint8=" }}
-                {{ $.Scratch.Set "ts" "" }}
-                {{ range (findRE "\\d+" $tsStr) }}
-                  {{ $.Scratch.Add "ts" (printf "%c" (int .)) }}
-                {{ end }}
-                {{ $ts = $.Scratch.Get "ts" }}
-              {{ else }}
-                {{ $ts = $tsStr }}
-              {{ end }}
-
-              {{ $nameStr := printf "%v" $nameCell }}
-              {{ $nameVal := "" }}
-              {{ if hasPrefix $nameStr "%!s(uint8=" }}
-                {{ $.Scratch.Set "name" "" }}
-                {{ range (findRE "\\d+" $nameStr) }}
-                  {{ $.Scratch.Add "name" (printf "%c" (int .)) }}
-                {{ end }}
-                {{ $nameVal = $.Scratch.Get "name" }}
-              {{ else }}
-                {{ $nameVal = $nameStr }}
-              {{ end }}
-
-              {{ $bodyStr := printf "%v" $bodyCell }}
-              {{ $body := "" }}
-              {{ if hasPrefix $bodyStr "%!s(uint8=" }}
-                {{ $.Scratch.Set "body" "" }}
-                {{ range (findRE "\\d+" $bodyStr) }}
-                  {{ $.Scratch.Add "body" (printf "%c" (int .)) }}
-                {{ end }}
-                {{ $body = $.Scratch.Get "body" }}
-              {{ else }}
-                {{ $body = $bodyStr }}
-              {{ end }}
-
-              {{ $nameTrim := trim $nameVal " \t\r\n　" }}
+              {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
               {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
 
               <li class="comment-item">
