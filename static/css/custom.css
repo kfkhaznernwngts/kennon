@@ -3,12 +3,10 @@
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
-  gap: 16px;
 }
 
 .site-header .site-branding {
   flex: 1 1 auto;
-  min-width: 0;
 }
 
 .site-header .nav-main {
@@ -18,14 +16,6 @@
 }
 
 .site-header .nav-main a {
-  display: inline-block;
   text-decoration: none;
   padding: 8px 6px;
-}
-
-.post-dates {
-  font-size: 0.9em;
-  color: #666;
-  text-align: right;
-  margin-top: 12px;
 }
