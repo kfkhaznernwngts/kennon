@@ -10,10 +10,8 @@
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
   <style>
-    .site-header{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .site-header .site-branding{flex:1 1 auto;min-width:0}
-    .site-header .nav-main{margin-left:auto;display:flex;gap:16px}
-    .site-header .nav-main a{text-decoration:none;padding:8px 6px}
+    .post-pager{display:flex;justify-content:space-between;gap:12px;margin-top:24px}
+    .post-pager a{display:inline-block;border:1px solid #ccc;border-radius:6px;padding:8px 12px;text-decoration:none}
   </style>
 </head>
 <body>
@@ -96,6 +94,19 @@
         </div>
 
       {{ end }}
+
+      <footer class="post-pager">
+        <div>
+          {{ with .PrevInSection }}
+            <a href="{{ .RelPermalink }}">« 前の記事: {{ .Title }}</a>
+          {{ end }}
+        </div>
+        <div>
+          {{ with .NextInSection }}
+            <a href">{{ .RelPermalink }}">次の記事: {{ .Title }} »</a>
+          {{ end }}
+        </div>
+      </footer>
     </article>
   </main>
   {{- partial "footer.html" . }}
