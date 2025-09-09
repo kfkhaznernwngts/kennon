@@ -1,0 +1,7 @@
+{{ $cfg := site.Params.comments }}
+{{ $url := $cfg.csvUrl }}
+{{ $res := resources.GetRemote $url }}
+{{ $opts := dict "format" "csv" "targetType" "slice" "lazyQuotes" true }}
+{{ $csv := transform.Unmarshal $opts $res.Content }}
+<pre>{{ printf "%#v" $csv }}</pre>
+
