@@ -33,8 +33,8 @@ mainSections = ["posts", "post"]
 about = """
 このサイトの簡単な紹介文をここに書きます。
 """
-#[params.comments]
-#enabled = true
+[params.comments]
+enabled = true
 csvUrl = "https://docs.google.com/spreadsheets/d/1Fuzu34hPGZbOfkuZZws_Rzu5dcrf-163JZgPuL8VE9s/gviz/tq?tqx=out:csv&sheet=%E3%83%95%E3%83%BC%E3%83%A0%E3%81%AE%E5%9B%9E%E7%AD%94%201"
 
 [params.comments.form]
