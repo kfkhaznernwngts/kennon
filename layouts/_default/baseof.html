@@ -15,32 +15,15 @@
     .site-header .site-branding{flex:1 1 auto;min-width:0}
     .site-header .nav-main{margin-left:auto;display:flex;gap:16px}
     .site-header .nav-main a{text-decoration:none;padding:8px 6px}
+    article>header{border:0}
+    article>header h1{border:0;margin-bottom:.5em}
+    article .content{border-top:0}
   </style>
 
   <style>
-    body.is-page main article,
-    body.is-page main article .content,
-    body.is-page main article footer,
-    body.is-page footer.site-footer,
-    body.kind-page main article,
-    body.kind-page main article .content,
-    body.kind-page main article footer,
-    body.kind-page footer.site-footer{
-      border-bottom:0 !important;
+    body.is-page > footer,
+    body.kind-page > footer {
       border-top:0 !important;
-    }
-    body.is-page main article footer.post-pager,
-    body.kind-page main article footer.post-pager{
-      border-top:0 !important;
-    }
-    body.is-page main article footer.post-pager + *,
-    body.kind-page main article footer.post-pager + *{
-      border-top:0 !important;
-      border-bottom:0 !important;
-    }
-    body.is-page main article hr:last-child,
-    body.kind-page main article hr:last-child{
-      display:none !important;
     }
   </style>
 </head>
