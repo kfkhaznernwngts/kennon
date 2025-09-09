@@ -20,7 +20,17 @@
       {{ range $i, $r := $csv }}
         {{ if eq $i 0 }}{{ continue }}{{ end }}
         {{ if lt (len $r) 4 }}{{ continue }}{{ end }}
-        {{ $rowSlug := printf "%s" (index $r 1) }}
+
+        {{ $cell := index $r 1 }}
+        {{ $rowSlug := "" }}
+        {{ if eq (kindOf $cell) "slice" }}
+          {{ $.Scratch.Set "buf" "" }}
+          {{ range $cell }}{{ $.Scratch.Add "buf" (printf "%c" .) }}{{ end }}
+          {{ $rowSlug = $.Scratch.Get "buf" }}
+        {{ else }}
+          {{ $rowSlug = printf "%v" $cell }}
+        {{ end }}
+
         {{ if eq $rowSlug $slug }}
           {{ $rows = $rows | append $r }}
         {{ end }}
@@ -31,9 +41,37 @@
         {{ if gt (len $rows) 0 }}
           <ul class="comment-list">
             {{ range $rows }}
-              {{ $ts := printf "%s" (index . 0) }}
-              {{ $nameRaw := printf "%s" (index . 2) }}
-              {{ $body := printf "%s" (index . 3) }}
+              {{ $tsCell := index . 0 }}
+              {{ $nameCell := index . 2 }}
+              {{ $bodyCell := index . 3 }}
+
+              {{ $ts := "" }}
+              {{ if eq (kindOf $tsCell) "slice" }}
+                {{ $.Scratch.Set "ts" "" }}
+                {{ range $tsCell }}{{ $.Scratch.Add "ts" (printf "%c" .) }}{{ end }}
+                {{ $ts = $.Scratch.Get "ts" }}
+              {{ else }}
+                {{ $ts = printf "%v" $tsCell }}
+              {{ end }}
+
+              {{ $nameRaw := "" }}
+              {{ if eq (kindOf $nameCell) "slice" }}
+                {{ $.Scratch.Set "name" "" }}
+                {{ range $nameCell }}{{ $.Scratch.Add "name" (printf "%c" .) }}{{ end }}
+                {{ $nameRaw = $.Scratch.Get "name" }}
+              {{ else }}
+                {{ $nameRaw = printf "%v" $nameCell }}
+              {{ end }}
+
+              {{ $body := "" }}
+              {{ if eq (kindOf $bodyCell) "slice" }}
+                {{ $.Scratch.Set "body" "" }}
+                {{ range $bodyCell }}{{ $.Scratch.Add "body" (printf "%c" .) }}{{ end }}
+                {{ $body = $.Scratch.Get "body" }}
+              {{ else }}
+                {{ $body = printf "%v" $bodyCell }}
+              {{ end }}
+
               {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
               {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
 
