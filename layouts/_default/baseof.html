@@ -9,6 +9,7 @@
   {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
   <link rel="stylesheet" type="text/css" href="{{ "css/custom.css" | absURL }}">
+  <link rel="stylesheet" type="text/css" href="{{ "css/comments.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
 </head>
 <body>
@@ -27,4 +28,3 @@
 </body>
 {{- partial "google-tag-manager-body.html" . }}
 </html>
-
