@@ -112,3 +112,20 @@
 .comment-item:last-child {
   border-bottom: none; /* 最後のコメントは線を消す */
 }
+#comments-list .comment-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#comments-list .comment-list > li.comment-item {
+  border: 0 !important;
+  border-bottom: 1px solid #ccc !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 12px 0 !important;
+}
+
+#comments-list .comment-list > li.comment-item:last-child {
+  border-bottom: 0 !important;
+}
