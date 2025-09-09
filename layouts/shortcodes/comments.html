@@ -3,23 +3,25 @@
   {{ $slug := .Page.File.BaseFileName }}
 
   {{ $sep := "?" }}
-  {{ if in $cfg.csvUrl "?" }}{{ $sep = "&" }}{{ end }}
+  {{ if in $cfg.csvUrl "?" }}
+    {{ $sep = "&" }}
+  {{ end }}
   {{ $freshUrl := printf "%s%st=%d" $cfg.csvUrl $sep (now.Unix) }}
 
   {{ with try (resources.GetRemote $freshUrl) }}
-    {{ with .Err }}
+    {{ if .Err }}
       <section id="comments-list" class="comment-section">
         <h2>コメント</h2>
         <p>コメントを取得できませんでした。</p>
       </section>
-    {{ else with .Value }}
+    {{ else }}
       {{ $opts := dict "format" "csv" "targetType" "slice" "lazyQuotes" true }}
-      {{ $csv := transform.Unmarshal $opts .Content }}
+      {{ $csv := transform.Unmarshal $opts .Value.Content }}
 
       {{ $rows := slice }}
       {{ range $i, $r := $csv }}
-        {{ if eq $i 0 }}{{ continue }}   {{/* ヘッダー除外 */}}
-        {{ if lt (len $r) 4 }}{{ continue }}
+        {{ if eq $i 0 }}{{ continue }}{{ end }}
+        {{ if lt (len $r) 4 }}{{ continue }}{{ end }}
         {{ if eq (index $r 1) $slug }}
           {{ $rows = $rows | append $r }}
         {{ end }}
@@ -33,7 +35,6 @@
               {{ $ts := index . 0 }}
               {{ $nameRaw := index . 2 }}
               {{ $body := index . 3 }}
-
               {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
               {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
 
@@ -50,8 +51,8 @@
           <p class="comment-empty">まだコメントはありません。</p>
         {{ end }}
       </section>
-    {{ end }}   {{/* end .Value */}}
-  {{ end }}     {{/* end try */}}
+    {{ end }} <!-- end if .Err / else -->
+  {{ end }}   <!-- end with try -->
 
   {{ $form := site.Params.comments.form }}
   {{ if $form }}
@@ -72,5 +73,6 @@
         <p class="comment-note">送信から反映まで数分かかる場合があります。</p>
       </form>
     </section>
-  {{ end }}   {{/* end $form */}}
-{{ end }}     {{/* end $cfg.enabled */}}
+  {{ end }} <!-- end if $form -->
+
+{{ end }} <!-- end if $cfg.enabled -->
