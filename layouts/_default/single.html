@@ -21,8 +21,8 @@
         <header>
           <h1>{{ .Title }}</h1>
           <p class="post-dates" style="font-size:0.85em; color:#777; margin:0 0 1em 0;">
-            公開日: {{ .Date.Format "2006-01-02" }}
-            {{ with .Lastmod }} / 最終更新日: {{ .Format "2006-01-02" }}{{ end }}
+            公開日: {{ .Date }}
+            {{ with .Lastmod }} / 最終更新日: {{ . }}{{ end }}
           </p>
         </header>
         <div class="post-content">
