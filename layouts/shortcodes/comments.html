@@ -4,7 +4,7 @@
 
   {{ $remote := resources.GetRemote $cfg.csvUrl }}
   {{ with $remote }}
-    {{ $csv := transform.Unmarshal . "csv" }}
+    {{ $csv := transform.Unmarshal .Content "csv" }}
     {{ $rows := slice }}
 
     {{ range $i, $r := $csv }}
