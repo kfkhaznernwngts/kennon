@@ -1,66 +1,24 @@
-.site-header,
-header,
-header .container {
-  display: flex !important;
-  align-items: center !important;
-}
-
-header nav,
-.site-nav,
-.menu,
-.main-menu {
-  margin-left: auto !important;
-}
-
-header nav ul,
-.site-nav ul,
-.menu,
-.main-menu {
-  display: flex !important;
-  justify-content: flex-end !important;
-  align-items: center !important;
-  gap: 20px !important;
-  list-style: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-header nav ul li,
-.site-nav ul li,
-.menu li,
-.main-menu li {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-header nav ul li a,
-.site-nav ul li a,
-.menu li a,
-.main-menu li a {
-  display: inline-block !important;
-  text-decoration: none !important;
-  padding: 8px 6px !important;
-}
-
 header {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  width: 100%;
-  gap: 16px;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+  gap: 16px !important;
 }
 
 header > nav {
-  display: flex;
-  gap: 20px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-header > nav:last-of-type {
-  margin-left: auto;
-}
+header > nav { margin-left: 0 !important; }
+header > nav:last-of-type { margin-left: auto !important; }
 
 header > nav a {
-  display: inline-block;
-  text-decoration: none;
-  padding: 8px 6px;
+  display: inline-block !important;
+  text-decoration: none !important;
+  padding: 8px 6px !important;
 }
