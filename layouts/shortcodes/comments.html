@@ -8,7 +8,7 @@
   {{ with try (resources.GetRemote $freshUrl) }}
     {{ if .Err }}
       <section id="comments-list" class="comment-section" style="border-top:1px solid #ccc; padding-top:8px; margin-top:8px; font-size:0.9em; color:#555;">
-        <h2 style="font-size:1.1em;">コメント</h2>
+        <h2 style="font-size:1.1em; color:black;">コメント</h2>
         <p>コメントを取得できませんでした。</p>
       </section>
     {{ else }}
@@ -26,7 +26,7 @@
 
       <section id="comments-list" class="comment-section" style="border-top:1px solid #ccc; padding-top:8px; margin-top:8px; font-size:0.9em; color:#555;">
         <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-          <h2 style="font-size:1.1em; margin:0;">コメント</h2>
+          <h2 style="font-size:1.1em; margin:0; color:black;">コメント</h2>
           <button id="comments-toggle" type="button"
                   aria-expanded="false"
                   style="margin:0; padding:8px 12px; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer;">
@@ -68,7 +68,7 @@
           {{ if $form }}
             {{ $action := printf "https://docs.google.com/forms/d/e/%s/formResponse" $form.id }}
             <section id="comments-form" class="comment-section" style="margin-top:12px; font-size:0.9em; color:#555;">
-              <h3 style="font-size:1.05em; margin:0 0 8px 0;">コメントを送る</h3>
+              <h3 style="font-size:1.05em; margin:0 0 8px 0; color:black;">コメントを送る</h3>
               <form class="comment-form"
                     action="{{ $action }}" method="POST" target="_blank" rel="noopener"
                     style="max-width:600px;">
