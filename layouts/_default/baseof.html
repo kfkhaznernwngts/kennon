@@ -9,23 +9,42 @@
   {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
+
   <style>
     .site-header{display:flex;align-items:center;justify-content:space-between;gap:16px}
     .site-header .site-branding{flex:1 1 auto;min-width:0}
     .site-header .nav-main{margin-left:auto;display:flex;gap:16px}
     .site-header .nav-main a{text-decoration:none;padding:8px 6px}
-    article>header{border:0}
-    article>header h1{border:0;margin-bottom:.5em}
-    article .content{border-top:0}
   </style>
-  {{ if or .IsPage (eq .Kind "section") }}
+
   <style>
-    article{border-bottom:0 !important}
-    article .content{border-bottom:0 !important}
+    body.is-page main article,
+    body.is-page main article .content,
+    body.is-page main article footer,
+    body.is-page footer.site-footer,
+    body.kind-page main article,
+    body.kind-page main article .content,
+    body.kind-page main article footer,
+    body.kind-page footer.site-footer{
+      border-bottom:0 !important;
+      border-top:0 !important;
+    }
+    body.is-page main article footer.post-pager,
+    body.kind-page main article footer.post-pager{
+      border-top:0 !important;
+    }
+    body.is-page main article footer.post-pager + *,
+    body.kind-page main article footer.post-pager + *{
+      border-top:0 !important;
+      border-bottom:0 !important;
+    }
+    body.is-page main article hr:last-child,
+    body.kind-page main article hr:last-child{
+      display:none !important;
+    }
   </style>
-  {{ end }}
 </head>
-<body>
+<body class="{{ if .IsHome }}is-home{{ else if .IsPage }}is-page{{ else }}is-list{{ end }} kind-{{ .Kind }}">
   {{ partial "header.html" . -}}
   <main>
     {{ block "main" . }}{{ end }}
