@@ -1,7 +1,100 @@
-{{ define "main" }}
-<article>
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-  {{ .RenderString "{{< comments >}}" }}
-</article>
-{{ end }}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="{{ .Site.BaseURL }}">
+  {{- partial "html-meta.html" . }}
+  <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
+  {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
+  <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
+  {{- partial "google-tag-manager-head.html" . }}
+</head>
+<body>
+  {{ partial "header.html" . -}}
+  <main>
+    {{ $pub0 := .PublishDate }}
+    {{ if $pub0.IsZero }}
+      {{ $m := site.Data.publishdates }}
+      {{ $k1 := .File.Path }}
+      {{ $k2 := printf "content/%s" .File.Path }}
+      {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+      {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+        {{ $pub0 = time . }}
+      {{ else }}
+        {{ $pub0 = .Date }}
+      {{ end }}
+    {{ end }}
+    {{ $lm0 := or .Lastmod $pub0 }}
+
+    {{ $raw := .RawContent }}
+    {{ $scRe := `(?s){{<\s*comments\s*>}}` }}
+    {{ $hasSC := findRE $scRe $raw }}
+
+    <article>
+      <header>
+        <h1 style="margin-bottom:0.5em; text-align:left;">{{ .Title }}</h1>
+      </header>
+
+      {{ if $hasSC }}
+        {{ $withMarker := replaceRE $scRe "__COMMENTS__" $raw }}
+        {{ $parts := split $withMarker "__COMMENTS__" }}
+        {{ $before := index $parts 0 }}
+        {{ $after := "" }}
+        {{ if gt (len $parts) 1 }}{{ $after = index $parts 1 }}{{ end }}
+
+        <div class="content">
+          {{ .RenderString $before }}
+        </div>
+
+        <div style="font-size:0.85em; color:#777; text-align:right; margin-top:1.5em; line-height:1.6;">
+          {{ if not $pub0.IsZero }}
+            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+            公開日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">{{ time.Format "2006-01-02 15:04" $pub }}</time>
+          {{ end }}
+          {{ if not $lm0.IsZero }}
+            <br>
+            {{ $lm := time.In "Asia/Tokyo" $lm0 }}
+            最終編集日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">{{ time.Format "2006-01-02 15:04" $lm }}</time>
+          {{ end }}
+        </div>
+
+        {{ .RenderString "{{< comments >}}" }}
+
+        {{ if $after }}
+          <div class="content">
+            {{ .RenderString $after }}
+          </div>
+        {{ end }}
+
+      {{ else }}
+
+        <div class="content">
+          {{ .Content }}
+        </div>
+
+        <div style="font-size:0.85em; color:#777; text-align:right; margin-top:0.5em; line-height:1.6;">
+          {{ if not $pub0.IsZero }}
+            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+            公開日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">{{ time.Format "2006-01-02 15:04" $pub }}</time>
+          {{ end }}
+          {{ if not $lm0.IsZero }}
+            <br>
+            {{ $lm := time.In "Asia/Tokyo" $lm0 }}
+            最終編集日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">{{ time.Format "2006-01-02 15:04" $lm }}</time>
+          {{ end }}
+        </div>
+
+      {{ end }}
+    </article>
+  </main>
+  {{- partial "footer.html" . }}
+  {{- template "_internal/google_analytics.html" . }}
+  {{- partial "external-links.html" . }}
+</body>
+{{- partial "google-tag-manager-body.html" . }}
+</html>
