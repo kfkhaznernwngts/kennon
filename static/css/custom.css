@@ -4,7 +4,7 @@
   flex-wrap: wrap;
   width: 100%;
   gap: 16px;
-  background: #fff; /* 赤背景を白に修正 */
+  background: #fff;
 }
 
 .site-header .site-branding {
@@ -37,4 +37,12 @@
   display: inline-block;
   margin: 0 auto;
   text-align: center;
+}
+
+/* ブログタイトルを他リンクと同じ青にする */
+.site-header .site-branding h1 a {
+  color: #0645ad !important;
+}
+.site-header .site-branding h1 a:hover {
+  color: #0b0080 !important;
 }
