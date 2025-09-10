@@ -102,6 +102,13 @@ a:focus,
   padding: 0 16px; 
 }
 
+.layout-one-col,
+.layout-one-col .content-main {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0;
+  padding: 0;
+}
 .layout-one-col .content-main article {
   max-width: 800px;
   margin: 0 auto;
