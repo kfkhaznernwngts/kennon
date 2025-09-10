@@ -48,3 +48,14 @@
 .site-header .site-branding h1 a:hover {
   color: #0b0080 !important;
 }
+
+a {
+  color: #007bff !important;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  color: #0056b3 !important; /* hover 時は少し濃いめ */
+  text-decoration: underline;
+}
