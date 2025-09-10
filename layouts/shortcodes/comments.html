@@ -68,7 +68,7 @@
           {{ if $form }}
             {{ $action := printf "https://docs.google.com/forms/d/e/%s/formResponse" $form.id }}
             <section id="comments-form" class="comment-section" style="margin-top:12px; font-size:0.9em; color:#555;">
-              <h3 style="font-size:1.05em; margin:0 0 8px 0; color:black;">コメントを送る</h3>
+              <h3 style="font-size:1.05em; margin:0 0 8px 0; color:black;">コメントを書く</h3>
               <form id="comment-form"
                     action="{{ $action }}" method="POST" target="hidden_iframe"
                     style="max-width:600px;">
