@@ -68,3 +68,7 @@ a:focus,
   --primary-color: #218bed !important;
   --link-hover-color: #155a9c !important;  
 }
+
+.site-header {
+  padding: 16px 0; 
+}
