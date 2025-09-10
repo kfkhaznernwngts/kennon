@@ -132,3 +132,15 @@ article .content a {
   text-align: center;
   color: black;
 }
+
+.site-header .site-branding {
+  width: 100%;
+  text-align: center;
+}
+
+.site-header .site-branding h1,
+.site-header .site-branding h1 a {
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+}
