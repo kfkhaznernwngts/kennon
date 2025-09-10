@@ -1,40 +1,83 @@
 {{ define "main" }}
-<div class="content-main wide-page">
-  <article style="border:none">
-    <header style="border:none">
-      <h1 style="margin-bottom:0.5em;text-align:left;color:black">{{ .Title }}</h1>
-      <div style="margin-top:0.5em;margin-bottom:1.5em;font-size:0.9em;color:#555">
-        <time datetime="{{ .Date.Format "2006-01-02" }}">公開日: {{ .Date.Format "2006-01-02" }}</time>
-        {{ with .Lastmod }}
-          {{ if ne .Unix .Date.Unix }}
-            ・<time datetime="{{ .Format "2006-01-02" }}">最終更新日: {{ .Format "2006-01-02" }}</time>
-          {{ end }}
-        {{ end }}
-      </div>
-    </header>
-
-    <div class="content" style="border:none">
-      {{ .Content }}
-    </div>
-
-    {{ if not .Params.disableComments }}
-      <section id="comments" style="border:none">
-        {{< comments >}}
-      </section>
+<div class="wide-page">
+  <div class="page-body">
+    {{ $pub0 := .PublishDate }}
+    {{ if $pub0.IsZero }}
+      {{ $m := site.Data.publishdates }}
+      {{ $k1 := .File.Path }}
+      {{ $k2 := printf "content/%s" .File.Path }}
+      {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+      {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+        {{ $pub0 = time . }}
+      {{ else }}
+        {{ $pub0 = .Date }}
+      {{ end }}
     {{ end }}
+    {{ $lm0 := or .Lastmod $pub0 }}
+    {{ $raw := .RawContent }}
+    {{ $scRe := `(?s){{<\s*comments\s*>}}` }}
+    {{ $hasSC := findRE $scRe $raw }}
 
-    <footer class="post-pager" style="display:flex;justify-content:space-between;gap:12px;margin-top:24px;border:none">
-      <div>
-        {{ with .PrevInSection }}
-          <a href="{{ .RelPermalink }}" style="display:inline-block;padding:6px 10px;text-decoration:none;border:none;font-size:1.2em;color:blue">&lt;</a>
+    <article style="border:none">
+      <header style="border:none">
+        <h1 style="margin-bottom:0.5em;text-align:left;color:black">{{ .Title }}</h1>
+      </header>
+
+      {{ if $hasSC }}
+        <div class="content" style="border:none">
+          {{ .Content }}
+        </div>
+      {{ else }}
+        <div class="content" style="border:none">
+          {{ .Content }}
+        </div>
+        <div style="font-size:.85em;color:#777;text-align:right;margin-top:.5em;line-height:1.6;border:none">
+          {{ if not $pub0.IsZero }}
+            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+            公開日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">{{ time.Format "2006-01-02 15:04" $pub }}</time>
+          {{ end }}
+          {{ if not $lm0.IsZero }}
+            <br>
+            {{ $lm := time.In "Asia/Tokyo" $lm0 }}
+            最終編集日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">{{ time.Format "2006-01-02 15:04" $lm }}</time>
+          {{ end }}
+        </div>
+        {{ if ne .File.BaseFileName "about" }}
+          {{ .RenderString "{{< comments >}}" }}
         {{ end }}
-      </div>
-      <div>
-        {{ with .NextInSection }}
-          <a href="{{ .RelPermalink }}" style="display:inline-block;padding:6px 10px;text-decoration:none;border:none;font-size:1.2em;color:blue">&gt;</a>
-        {{ end }}
-      </div>
-    </footer>
-  </article>
+      {{ end }}
+
+      {{ if $hasSC }}
+        <div style="font-size:.85em;color:#777;text-align:right;margin-top:.5em;line-height:1.6;border:none">
+          {{ if not $pub0.IsZero }}
+            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+            公開日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $pub }}">{{ time.Format "2006-01-02 15:04" $pub }}</time>
+          {{ end }}
+          {{ if not $lm0.IsZero }}
+            <br>
+            {{ $lm := time.In "Asia/Tokyo" $lm0 }}
+            最終編集日:
+            <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">{{ time.Format "2006-01-02 15:04" $lm }}</time>
+          {{ end }}
+        </div>
+      {{ end }}
+
+      <footer class="post-pager" style="display:flex;justify-content:space-between;gap:12px;margin-top:24px;border:none">
+        <div>
+          {{ with .PrevInSection }}
+            <a href="{{ .RelPermalink }}" style="display:inline-block;padding:6px 10px;text-decoration:none;border:none;font-size:1.2em;color:blue">&lt;</a>
+          {{ end }}
+        </div>
+        <div>
+          {{ with .NextInSection }}
+            <a href="{{ .RelPermalink }}" style="display:inline-block;padding:6px 10px;text-decoration:none;border:none;font-size:1.2em;color:blue">&gt;</a>
+          {{ end }}
+        </div>
+      </footer>
+    </article>
+  </div>
 </div>
 {{ end }}
