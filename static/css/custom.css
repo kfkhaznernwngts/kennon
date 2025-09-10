@@ -38,8 +38,3 @@
   margin: 0 auto;
   text-align: center;
 }
-
-/* ブログタイトルを他リンクと同じ青にする */
-.site-header .site-branding h1 a {
-  color: #0645ad !important;
-}
