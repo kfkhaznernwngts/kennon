@@ -42,7 +42,9 @@
         <time datetime="{{ time.Format "2006-01-02T15:04:05Z07:00" $lm }}">{{ time.Format "2006-01-02 15:04" $lm }}</time>
       {{ end }}
     </div>
-    {{ .RenderString "{{< comments >}}" }}
+    {{ if ne .File.BaseFileName "about" }}
+      {{ .RenderString "{{< comments >}}" }}
+    {{ end }}
   {{ end }}
 
   {{ if $hasSC }}
