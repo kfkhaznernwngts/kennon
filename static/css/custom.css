@@ -38,3 +38,12 @@
   margin: 0 auto;
   text-align: center;
 }
+
+.site-header .site-branding h1 a {
+  color: #0645ad !important;
+  text-decoration: none;
+}
+
+.site-header .site-branding h1 a:hover {
+  color: #0b0080 !important;
+}
