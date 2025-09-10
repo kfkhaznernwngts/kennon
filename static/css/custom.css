@@ -114,3 +114,12 @@ a:focus,
   margin: 0 auto;
   padding: 0 16px;
 }
+
+body main.layout-one-col,
+body main.layout-one-col .content-main {
+  all: unset;
+  display: block;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
