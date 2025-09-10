@@ -88,38 +88,17 @@ a:focus,
   padding: 0 16px;
 }
 
-.content-main.wide-page {
-  width: 100% !important;
-  max-width: 1200px !important;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.content-main.wide-page {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0;
-  padding: 0 16px; 
-}
-
-.layout-one-col,
-.layout-one-col .content-main {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0;
+/* full-bleed 本文ブロック（親の幅制約を無視して全幅に） */
+.wide-page {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   padding: 0;
 }
-.layout-one-col .content-main article {
-  max-width: 800px;
+
+/* テキスト本文は中央寄せ＋適度な幅 */
+.wide-page .page-body {
+  max-width: 900px;
   margin: 0 auto;
   padding: 0 16px;
-}
-
-body main.layout-one-col,
-body main.layout-one-col .content-main {
-  all: unset;
-  display: block;
-  width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
 }
