@@ -96,3 +96,22 @@ header.site-header {
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
+
+.article-item {
+  border: 1px solid #ddd;
+  border-radius: 0 !important;
+  margin: 0;
+  background: #fff;
+  border-bottom: 0;
+}
+
+.article-item:first-child {
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+}
+
+.article-item:last-child {
+  border-bottom: 1px solid #ddd !important;
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+}
