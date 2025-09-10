@@ -1,14 +1,17 @@
 .site-header {
   display: flex;
-  align-items: center; !important;
+  align-items: center !important;
   flex-wrap: wrap;
   width: 100%;
   gap: 16px;
+  background: #fff; /* ← 赤を白に修正 */
 }
 
 .site-header .site-branding {
   flex: 1 1 auto;
   min-width: 0;
+  width: 100%;
+  text-align: center;
 }
 
 .site-header .nav-main {
@@ -27,10 +30,6 @@
   margin-left: auto !important;
   display: flex !important;
   gap: 20px !important;
-}
-
-.site-header {
-  background: red !important;
 }
 
 article .content,
@@ -120,27 +119,10 @@ article .content a {
   }
 }
 
-.site-header .site-branding {
-  width: 100%;
-  text-align: center;
-}
-
 .site-header .site-branding h1,
 .site-header .site-branding h1 a {
   display: inline-block;
   margin: 0 auto;
   text-align: center;
   color: black;
-}
-
-.site-header .site-branding {
-  width: 100%;
-  text-align: center;
-}
-
-.site-header .site-branding h1,
-.site-header .site-branding h1 a {
-  display: inline-block;
-  margin: 0 auto;
-  text-align: center;
 }
