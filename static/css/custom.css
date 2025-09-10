@@ -103,3 +103,10 @@ a:focus,
     padding: 0 12px; 
   }
 
+  .layout-one-col .content-main article {
+  border: none !important;
+}
+
+.layout-one-col .content-main article hr {
+  display: none !important;
+}
