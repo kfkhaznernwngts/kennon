@@ -7,7 +7,7 @@
 
   {{ with try (resources.GetRemote $freshUrl) }}
     {{ if .Err }}
-      <section id="comments-list" class="comment-section" style="border-top:1px solid #ccc; padding-top:8px; margin-top:8px; font-size:0.9em; color:#555;">
+      <section id="comments-list" class="comment-section" style="padding-top:8px; margin-top:8px; font-size:0.9em; color:#555;">
         <h2 style="font-size:1.1em; color:black;">コメント</h2>
         <p>コメントを取得できませんでした。</p>
       </section>
@@ -24,7 +24,7 @@
       {{ end }}
       {{ $count := len $rows }}
 
-      <section id="comments-list" class="comment-section" style="border-top:1px solid #ccc; padding-top:8px; margin-top:8px; font-size:0.9em; color:#555;">
+      <section id="comments-list" class="comment-section" style="padding-top:8px; margin-top:8px; font-size:0.9em; color:#555;">
         <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
           <h2 style="font-size:1.1em; margin:0; color:black;">コメント</h2>
           <button id="comments-toggle" type="button"
