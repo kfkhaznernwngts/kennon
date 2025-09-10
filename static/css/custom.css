@@ -124,3 +124,11 @@ a:focus,
   border: none !important;
 }
   
+.layout-one-col .content-main article::before,
+.layout-one-col .content-main article::after,
+.layout-one-col .content-main .content::before,
+.layout-one-col .content-main .content::after {
+  content: none !important;
+  border: none !important;
+  display: none !important;
+}
