@@ -119,3 +119,16 @@ article .content a {
     padding-right: 2px;
   }
 }
+
+.site-header .site-branding {
+  width: 100%;
+  text-align: center;
+}
+
+.site-header .site-branding h1,
+.site-header .site-branding h1 a {
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+  color: black;
+}
