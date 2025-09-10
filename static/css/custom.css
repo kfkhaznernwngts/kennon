@@ -82,8 +82,8 @@ a:focus,
 }
 
 .layout-one-col .content-main {
-  width: 100%;
-  max-width: 800px;
+  width: 90%;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 16px;
 }
