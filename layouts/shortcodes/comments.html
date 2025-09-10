@@ -69,8 +69,8 @@
             {{ $action := printf "https://docs.google.com/forms/d/e/%s/formResponse" $form.id }}
             <section id="comments-form" class="comment-section" style="margin-top:12px; font-size:0.9em; color:#555;">
               <h3 style="font-size:1.05em; margin:0 0 8px 0; color:black;">コメントを送る</h3>
-              <form class="comment-form"
-                    action="{{ $action }}" method="POST" target="_blank" rel="noopener"
+              <form id="comment-form"
+                    action="{{ $action }}" method="POST" target="hidden_iframe"
                     style="max-width:600px;">
                 <input type="hidden" name="{{ $form.slugEntry }}" value="{{ $slug }}">
 
@@ -94,6 +94,14 @@
                   送信から反映まで絶対に数分はかかります。
                 </p>
               </form>
+
+              <iframe name="hidden_iframe" style="display:none;"></iframe>
+              <script>
+                document.getElementById("comment-form").addEventListener("submit", function(e) {
+                  this.reset();
+                  setTimeout(() => { location.reload(); }, 300);
+                });
+              </script>
             </section>
           {{ end }}
         </div>
