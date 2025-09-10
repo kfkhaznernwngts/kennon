@@ -1,3 +1,4 @@
+/* ヘッダー全体 */
 .site-header {
   display: flex;
   align-items: center;
@@ -39,23 +40,22 @@
   text-align: center;
 }
 
-/* ブログタイトルの色を強制 */
-.site-header .site-branding h1 a {
-  color: #0645ad !important;
-  text-decoration: none;
-}
-
-.site-header .site-branding h1 a:hover {
-  color: #0b0080 !important;
-}
-
-a {
+a,
+a:visited,
+.content a,
+.site-header a,
+.site-footer a,
+.sidebar a {
   color: #007bff !important;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 a:hover,
-a:focus {
-  color: #0056b3 !important; /* hover 時は少し濃いめ */
-  text-decoration: underline;
+a:focus,
+.content a:hover,
+.site-header a:hover,
+.site-footer a:hover,
+.sidebar a:hover {
+  color: #0056b3 !important;
+  text-decoration: underline !important;
 }
