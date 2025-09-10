@@ -6,22 +6,31 @@
   <base href="{{ .Site.BaseURL }}">
   {{- partial "html-meta.html" . }}
   <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
-  {{- with .Site.Params.favicon }}
-    <link rel="shortcut icon" href="{{ . }}" type="image/x-icon">
-  {{- end }}
+  {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
-  <link rel="stylesheet" type="text/css" href="{{ "css/custom.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
+
+  <style>
+    .site-header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .site-header .site-branding{flex:1 1 auto;min-width:0}
+    .site-header .nav-main{margin-left:auto;display:flex;gap:16px}
+    .site-header .nav-main a{text-decoration:none;padding:8px 6px}
+    article>header{border:0}
+    article>header h1{border:0;margin-bottom:.5em}
+    article .content{border-top:0}
+  </style>
+
+  <style>
+    body.is-page > footer,
+    body.kind-page > footer {
+      border-top:0 !important;
+    }
+  </style>
 </head>
-<body>
+<body class="{{ if .IsHome }}is-home{{ else if .IsPage }}is-page{{ else }}is-list{{ end }} kind-{{ .Kind }}">
   {{ partial "header.html" . -}}
-  <main class="layout-two-col">
-    <div class="content-main">
-      {{ block "main" . }}{{- end }}
-    </div>
-    <aside class="content-aside">
-      {{ partial "sidebar.html" . }}
-    </aside>
+  <main>
+    {{ block "main" . }}{{ end }}
   </main>
   {{- partial "footer.html" . }}
   {{- template "_internal/google_analytics.html" . }}
