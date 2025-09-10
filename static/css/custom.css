@@ -115,3 +115,12 @@ a:focus,
 .layout-one-col .content-main article footer {
   border: none !important;
 }
+
+.layout-one-col .content-main article {
+  border: none !important;
+}
+
+.layout-one-col .content-main .content {
+  border: none !important;
+}
+  
