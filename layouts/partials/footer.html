@@ -1,5 +1,5 @@
-<footer>
-  <div class="footer-inner" style="display:flex;justify-content:center;align-items:center;padding:8px 0">
+<footer {{ if .IsPage }}style="border:none;border-top:none"{{ end }}>
+  <div class="footer-inner" {{ if .IsPage }}style="display:flex;justify-content:center;align-items:center;padding:8px 0;border:none"{{ else }}style="display:flex;justify-content:center;align-items:center;padding:8px 0"{{ end }}>
     <nav class="footer-nav">
       <a href="{{ "about/" | absURL }}" style="text-decoration:none;padding:6px 8px">About</a>
     </nav>
