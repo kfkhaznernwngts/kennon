@@ -13,13 +13,10 @@
 </head>
 <body>
   {{ partial "header.html" . -}}
-  <main class="layout-two-col">
+  <main class="layout-one-col">
     <div class="content-main">
       {{ block "main" . }}{{- end }}
     </div>
-    <aside class="content-aside">
-      {{ partial "sidebar.html" . }}
-    </aside>
   </main>
   {{- partial "footer.html" . }}
   {{- template "_internal/google_analytics.html" . }}
