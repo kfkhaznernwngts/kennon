@@ -39,6 +39,7 @@
   text-align: center;
 }
 
+/* ブログタイトルの色を強制 */
 .site-header .site-branding h1 a {
   color: #0645ad !important;
   text-decoration: none;
