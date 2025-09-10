@@ -1,5 +1,6 @@
 {{ define "main" }}
-<div class="content-main wide-page">
+<div class="wide-page">
+  <div class="page-body">
 {{ $pub0 := .PublishDate }}
 {{ if $pub0.IsZero }}
   {{ $m := site.Data.publishdates }}
@@ -77,5 +78,6 @@
     </div>
   </footer>
 </article>
+  </div>
 </div>
 {{ end }}
