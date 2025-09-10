@@ -18,20 +18,20 @@
 {{ $scRe := `(?s){{<\s*comments\s*>}}` }}
 {{ $hasSC := findRE $scRe $raw }}
 
-<article>
-  <header>
+<article style="border:none">
+  <header style="border:none">
     <h1 style="margin-bottom:0.5em;text-align:left;color:black">{{ .Title }}</h1>
   </header>
 
   {{ if $hasSC }}
-    <div class="content">
+    <div class="content" style="border:none">
       {{ .Content }}
     </div>
   {{ else }}
-    <div class="content">
+    <div class="content" style="border:none">
       {{ .Content }}
     </div>
-    <div style="font-size:.85em;color:#777;text-align:right;margin-top:.5em;line-height:1.6">
+    <div style="font-size:.85em;color:#777;text-align:right;margin-top:.5em;line-height:1.6;border:none">
       {{ if not $pub0.IsZero }}
         {{ $pub := time.In "Asia/Tokyo" $pub0 }}
         公開日:
@@ -50,7 +50,7 @@
   {{ end }}
 
   {{ if $hasSC }}
-    <div style="font-size:.85em;color:#777;text-align:right;margin-top:.5em;line-height:1.6">
+    <div style="font-size:.85em;color:#777;text-align:right;margin-top:.5em;line-height:1.6;border:none">
       {{ if not $pub0.IsZero }}
         {{ $pub := time.In "Asia/Tokyo" $pub0 }}
         公開日:
@@ -65,7 +65,7 @@
     </div>
   {{ end }}
 
-  <footer class="post-pager" style="display:flex;justify-content:space-between;gap:12px;margin-top:24px">
+  <footer class="post-pager" style="display:flex;justify-content:space-between;gap:12px;margin-top:24px;border:none">
     <div>
       {{ with .PrevInSection }}
         <a href="{{ .RelPermalink }}" style="display:inline-block;padding:6px 10px;text-decoration:none;border:none;font-size:1.2em;color:blue">&lt;</a>
