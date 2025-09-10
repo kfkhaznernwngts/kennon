@@ -46,3 +46,7 @@
 .site-header .site-branding h1 a:hover {
   color: #0b0080 !important;
 }
+
+.site-header .site-branding h1 a {
+  color: #0645ad !important;
+}
