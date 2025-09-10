@@ -110,3 +110,8 @@ a:focus,
 .layout-one-col .content-main article hr {
   display: none !important;
 }
+
+.layout-one-col .content-main article header,
+.layout-one-col .content-main article footer {
+  border: none !important;
+}
