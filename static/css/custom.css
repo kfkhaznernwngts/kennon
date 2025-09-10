@@ -1,6 +1,6 @@
 .site-header {
   display: flex;
-  align-items: center;
+  align-items: center; !important;
   flex-wrap: wrap;
   width: 100%;
   gap: 16px;
