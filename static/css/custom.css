@@ -94,3 +94,10 @@ a:focus,
   margin: 0 auto;
   padding: 0 24px;
 }
+
+.content-main.wide-page {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0;
+  padding: 0 16px; 
+}
