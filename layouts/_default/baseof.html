@@ -12,7 +12,10 @@
   {{- partial "google-tag-manager-head.html" . }}
 </head>
 <body>
-  {{ partial "header.html" . -}}
+  <!-- Wrapped header in container for consistent width -->
+  <div class="site-container">
+    {{ partial "header.html" . -}}
+  </div>
   <main class="layout-one-col">
     <div class="content-main">
       {{ block "main" . }}{{- end }}
