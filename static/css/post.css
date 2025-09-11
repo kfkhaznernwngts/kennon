@@ -1,0 +1,16 @@
+.post-pager {
+  display: flex;
+  justify-content: space-between; /* 左右端に固定配置 */
+  margin-top: 2em;
+  font-size: 1.5em;
+}
+
+.post-pager a {
+  text-decoration: none;
+  color: #218bed;
+  font-weight: bold;
+}
+
+.post-pager a:hover {
+  color: #155a9c;
+}
