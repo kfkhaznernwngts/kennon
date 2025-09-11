@@ -4,7 +4,7 @@
     <header style="border:none">
       <h1 style="margin-bottom:0.5em;text-align:left;color:black;border:none">{{ .Title }}</h1>
       <div class="post-meta" style="font-size:0.9em;color:#555;border:none">
-        <time datetime="{{ .PublishDate }}">{{ .PublishDate.Format "2006-01-02" }}</time>
+        <time datetime="{{ .Date }}">{{ .Date.Format "2006-01-02" }}</time>
         {{ if ne .Date .Lastmod }}
           （最終更新: <time datetime="{{ .Lastmod }}">{{ .Lastmod.Format "2006-01-02" }}</time>）
         {{ end }}
