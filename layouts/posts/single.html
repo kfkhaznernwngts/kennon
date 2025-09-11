@@ -13,6 +13,19 @@
     {{ .Content }}
   </div>
 
-  {{< comments >}}
+  {{ partial "shortcodes/comments.html" . }}
+
+  <nav class="post-pager">
+    <div class="prev-post">
+      {{ with .PrevInSection }}
+        <a href="{{ .RelPermalink }}">←</a>
+      {{ end }}
+    </div>
+    <div class="next-post">
+      {{ with .NextInSection }}
+        <a href="{{ .RelPermalink }}">→</a>
+      {{ end }}
+    </div>
+  </nav>
 </article>
 {{ end }}
