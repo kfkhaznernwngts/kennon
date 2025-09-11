@@ -132,3 +132,7 @@ a:focus,
   border: none !important;
   display: none !important;
 }
+
+.single .content {
+  max-width: 100% !important;
+}
