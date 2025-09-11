@@ -42,7 +42,7 @@
         <!-- 本文：ここまで -->
 
         {{ if .Params.comments }}
-          {{< comments >}}
+          {{ partial "shortcodes/comments.html" . }}
         {{ end }}
 
         <footer style="border:none;">
