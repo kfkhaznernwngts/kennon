@@ -136,3 +136,149 @@ a:focus,
 .single .content {
   max-width: 100% !important;
 }
+
+.site-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 16px;
+  background: #fff;
+}
+
+.site-header .site-branding {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.site-header .nav-main {
+  margin-left: auto;
+  display: flex;
+  gap: 20px;
+}
+
+.site-header .nav-main a {
+  display: inline-block;
+  text-decoration: none;
+  padding: 8px 6px;
+}
+
+.site-header .nav-main {
+  margin-left: auto !important;
+  display: flex !important;
+  gap: 20px !important;
+}
+
+.site-header .site-branding h1,
+.site-header .site-branding h1 a {
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+header.site-header {
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+}
+
+a,
+a:visited,
+.content a,
+.site-header a,
+.site-footer a {
+  color: #218bed !important;
+  text-decoration: none !important;
+}
+
+a:hover,
+a:focus,
+.content a:hover,
+.site-header a:hover,
+.site-footer a:hover {
+  color: #155a9c !important;
+  text-decoration: underline !important;
+}
+
+.article-item {
+  border: 1px solid #ddd;
+  border-radius: 0 !important;
+  margin: 0;
+  background: #fff;
+  border-bottom: 0;
+}
+
+.article-item:first-child {
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+}
+
+.article-item:last-child {
+  border-bottom: 1px solid #ddd !important;
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+}
+
+.layout-one-col .content-main {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.layout-one-col .content-main {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (max-width: 768px) {
+  .layout-one-col .content-main {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0 12px; 
+  }
+
+  .layout-one-col .content-main article {
+  border: none !important;
+}
+
+.layout-one-col .content-main article hr {
+  display: none !important;
+}
+
+.layout-one-col .content-main article header,
+.layout-one-col .content-main article footer {
+  border: none !important;
+}
+
+.layout-one-col .content-main article {
+  border: none !important;
+}
+
+.layout-one-col .content-main .content {
+  border: none !important;
+}
+  
+.layout-one-col .content-main article::before,
+.layout-one-col .content-main article::after,
+.layout-one-col .content-main .content::before,
+.layout-one-col .content-main .content::after {
+  content: none !important;
+  border: none !important;
+  display: none !important;
+}
+
+.single .content {
+  max-width: 100% !important;
+}
+
+/* 記事ページ（single.html）の本文幅はヘッダーと揃える */
+.single-page .content-main {
+  max-width: none !important;
+  width: 100% !important;
+  padding: 0 16px; /* 左右にだけ少し余白を残す */
+}
