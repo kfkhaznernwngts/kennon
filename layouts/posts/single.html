@@ -17,17 +17,13 @@
 
   <nav class="post-pager">
     <div class="prev-post">
-      {{ with .PrevInSection }}
-        <a href="{{ .RelPermalink }}">←</a>
-      {{ else }}
-        <span></span>
+      {{ if .PrevInSection }}
+        <a href="{{ .PrevInSection.RelPermalink }}">←</a>
       {{ end }}
     </div>
     <div class="next-post">
-      {{ with .NextInSection }}
-        <a href="{{ .RelPermalink }}">→</a>
-      {{ else }}
-        <span></span>
+      {{ if .NextInSection }}
+        <a href="{{ .NextInSection.RelPermalink }}">→</a>
       {{ end }}
     </div>
   </nav>
