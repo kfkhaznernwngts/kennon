@@ -5,49 +5,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <base href="{{ .Site.BaseURL }}">
   {{- partial "html-meta.html" . }}
-  <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
+  <title>{{ .Title }} - {{ .Site.Title }}</title>
   {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
-
-  <style>
-    header nav a[href="/kennon/"]{display:none}
-    .article-list{list-style:none;margin:0;padding:0}
-    .article-item{padding:10px 0}
-    .article-title a{font-size:1.15em;text-decoration:none}
-    .article-date{font-size:.95em;color:#666;margin-top:2px}
-  </style>
 </head>
 <body>
   {{ partial "header.html" . -}}
   <main>
-    <div>
-      {{ .Content }}
-    </div>
-    <ul class="article-list">
-      {{ range (.Pages.ByPublishDate.Reverse) }}
-      {{ $pub0 := .PublishDate }}
-      {{ if $pub0.IsZero }}
-        {{ $m := site.Data.publishdates }}
-        {{ $k1 := .File.Path }}
-        {{ $k2 := printf "content/%s" .File.Path }}
-        {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
-        {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
-          {{ $pub0 = time . }}
-        {{ else }}
-          {{ $pub0 = .Date }}
+    <article style="position: relative;">
+
+      <header>
+        <h1>{{ .Title }}</h1>
+      </header>
+
+      <!-- 公開日・最終更新日を右上に配置 -->
+      <div class="post-meta" style="position:absolute; top:2.5em; right:0; text-align:right; font-size:0.9em;">
+        <p class="post-date" style="margin:0;">
+          公開日:
+          {{ $pub0 := .PublishDate }}
+          {{ if $pub0.IsZero }}
+            {{ $m := site.Data.publishdates }}
+            {{ $k1 := .File.Path }}
+            {{ $k2 := printf "content/%s" .File.Path }}
+            {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+            {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+              {{ $pub0 = time . }}
+            {{ else }}
+              {{ $pub0 = .Date }}
+            {{ end }}
+          {{ end }}
+          {{ if not $pub0.IsZero }}
+            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+            <time datetime="{{ $pub }}">{{ time.Format "2006-01-02 15:04" $pub }}</time>
+          {{ end }}
+        </p>
+
+        {{ if ne .Lastmod .Date }}
+          <p class="post-lastmod" style="margin:0;">
+            最終更新日:
+            <time datetime="{{ .Lastmod }}">{{ .Lastmod.Format "2006-01-02" }}</time>
+          </p>
         {{ end }}
-      {{ end }}
-      <li class="article-item">
-        <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
-        {{ if not $pub0.IsZero }}
-        {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-        <div class="article-date">{{ time.Format "2006-01-02 15:04" $pub }}</div>
+      </div>
+
+      <div>
+        {{ .Content }}
+      </div>
+
+      <!-- コメント欄 -->
+      <div class="post-comments">
+        {{ if .Params.comments }}
+          {{ partial "shortcodes/comments.html" . }}
         {{ end }}
-      </li>
-      {{ end }}
-    </ul>
-    {{ template "_internal/pagination.html" . }}
+      </div>
+
+      <!-- 前後記事ナビ -->
+      <footer class="post-pager" style="display:flex;justify-content:space-between;gap:12px;margin-top:24px;">
+        <div>
+          {{ with .PrevInSection }}
+            <a href="{{ .RelPermalink }}" style="display:inline-block;padding:6px 10px;text-decoration:none;font-size:1.2em;color:blue">&lt;</a>
+          {{ end }}
+        </div>
+        <div>
+          {{ with .NextInSection }}
+            <a href="{{ .RelPermalink }}" style="displa
+              y:inline-block;padding:6px 10px;text-decoration:none;font-size:1.2em;color:blue">&gt;</a>
+          {{ end }}
+        </div>
+      </footer>
+
+    </article>
   </main>
   {{- partial "footer.html" . }}
   {{- template "_internal/google_analytics.html" . }}
