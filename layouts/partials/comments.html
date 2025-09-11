@@ -1,0 +1,128 @@
+{{ $cfg := site.Params.comments }}
+{{ if and $cfg $cfg.enabled }}
+  {{ $slug := .Page.File.BaseFileName }}
+  {{ $sep := "?" }}
+  {{ if in $cfg.csvUrl "?" }}{{ $sep = "&" }}{{ end }}
+  {{ $freshUrl := printf "%s%st=%d" $cfg.csvUrl $sep (now.Unix) }}
+
+  {{ with try (resources.GetRemote $freshUrl) }}
+    {{ if .Err }}
+      <section id="comments-list" class="comment-section" style="padding-top:8px; margin-top:8px; font-size:0.9em; color:#555;">
+        <h2 style="font-size:1.1em; color:black;">コメント</h2>
+        <p>コメントを取得できませんでした。</p>
+      </section>
+    {{ else }}
+      {{ $opts := dict "format" "csv" "targetType" "map" "lazyQuotes" true }}
+      {{ $csv := transform.Unmarshal $opts .Value.Content }}
+
+      {{ $rows := slice }}
+      {{ range $i, $r := $csv }}
+        {{ $rowSlug := index $r "記事スラッグ" }}
+        {{ if eq $rowSlug $slug }}
+          {{ $rows = $rows | append $r }}
+        {{ end }}
+      {{ end }}
+      {{ $count := len $rows }}
+
+      <section id="comments-list" class="comment-section" style="padding-top:8px; margin-top:8px; font-size:0.9em; color:#555;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <h2 style="font-size:1.1em; margin:0; color:black;">コメント</h2>
+          <button id="comments-toggle" type="button"
+                  aria-expanded="false"
+                  style="margin:0; padding:8px 12px; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer;">
+            コメントを表示 ({{ $count }})
+          </button>
+        </div>
+
+        <div id="comments-panel" style="display:none; margin-top:8px;">
+          {{ if gt $count 0 }}
+            <ul class="comment-list"
+                style="list-style:none; padding:0; margin:0; border:1px solid #ccc; border-radius:6px; overflow:hidden;">
+              {{ range $i, $r := $rows }}
+                {{ $ts := index $r "タイムスタンプ" }}
+                {{ $nameRaw := index $r "名前" }}
+                {{ $body := index $r "本文" }}
+                {{ $nameTrim := trim $nameRaw " \t\r\n　" }}
+                {{ $name := cond (gt (len $nameTrim) 0) $nameTrim "匿名" }}
+
+                <li class="comment-item" style="padding:12px; background:#fff; border-bottom:1px solid #ccc;">
+                  <div class="comment-meta" style="font-size:0.85em; color:#555; margin-bottom:6px;">
+                    <span class="comment-author" style="font-weight:bold;">{{ $name }}</span>
+                    <span class="comment-date" style="margin-left:8px;">{{ $ts }}</span>
+                  </div>
+                  <div class="comment-body">{{ $body }}</div>
+                </li>
+              {{ end }}
+            </ul>
+            <script>
+              document.addEventListener("DOMContentLoaded", function() {
+                var list = document.querySelectorAll("#comments-list .comment-item");
+                if (list.length > 0) { list[list.length - 1].style.borderBottom = "none"; }
+              });
+            </script>
+          {{ else }}
+            <p class="comment-empty" style="margin:8px 0 0 0;">まだコメントはありません。</p>
+          {{ end }}
+
+          {{ $form := site.Params.comments.form }}
+          {{ if $form }}
+            {{ $action := printf "https://docs.google.com/forms/d/e/%s/formResponse" $form.id }}
+            <section id="comments-form" class="comment-section" style="margin-top:12px; font-size:0.9em; color:#555;">
+              <h3 style="font-size:1.05em; margin:0 0 8px 0; color:black;">コメントを書く</h3>
+              <form id="comment-form"
+                    action="{{ $action }}" method="POST" target="hidden_iframe"
+                    style="max-width:600px;">
+                <input type="hidden" name="{{ $form.slugEntry }}" value="{{ $slug }}">
+
+                <div class="field" style="margin-bottom:12px;">
+                  <input type="text" name="{{ $form.nameEntry }}"
+                         placeholder="名前（匿名可）"
+                         style="width:100%; box-sizing:border-box; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                </div>
+
+                <div class="field" style="margin-bottom:12px;">
+                  <textarea name="{{ $form.bodyEntry }}" rows="5" required
+                            placeholder="コメント"
+                            style="width:100%; box-sizing:border-box; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
+                </div>
+
+                <button type="submit" class="btn"
+                        style="padding:8px 16px; background:#333; color:#fff; border:none; border-radius:4px;">
+                  送信
+                </button>
+                <p class="comment-note" style="font-size:0.85em; color:#777; margin-top:8px;">
+                  送信から反映まで絶対に数分はかかります。
+                </p>
+              </form>
+
+              <iframe name="hidden_iframe" style="display:none;"></iframe>
+              <script>
+                document.getElementById("comment-form").addEventListener("submit", function(e) {
+                  this.reset();
+                  setTimeout(() => { location.reload(); }, 300);
+                });
+              </script>
+            </section>
+          {{ end }}
+        </div>
+
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            var btn = document.getElementById("comments-toggle");
+            var panel = document.getElementById("comments-panel");
+            if (!btn || !panel) return;
+            var expanded = false;
+            var count = {{ $count }};
+            function render() {
+              panel.style.display = expanded ? "block" : "none";
+              btn.setAttribute("aria-expanded", expanded ? "true" : "false");
+              btn.textContent = (expanded ? "コメントを隠す" : "コメントを表示") + " (" + count + ")";
+            }
+            btn.addEventListener("click", function() { expanded = !expanded; render(); });
+            render();
+          });
+        </script>
+      </section>
+    {{ end }}
+  {{ end }}
+{{ end }}
