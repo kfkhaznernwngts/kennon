@@ -1,8 +1,21 @@
 .post-pager {
   display: flex;
-  justify-content: space-between; /* 左右端に固定配置 */
+  justify-content: space-between; /* 左右端に配置 */
   margin-top: 2em;
   font-size: 1.5em;
+}
+
+.post-pager .prev-post,
+.post-pager .next-post {
+  flex: 1; /* 両方が同じ幅を持つ */
+}
+
+.post-pager .prev-post {
+  text-align: left;
+}
+
+.post-pager .next-post {
+  text-align: right;
 }
 
 .post-pager a {
