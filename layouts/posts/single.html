@@ -1,41 +1,41 @@
 {{ define "main" }}
 <main class="layout-one-col">
   <div class="content-main">
-    <article>
+    <article style="position: relative;">
 
-      <header style="position: relative;">
+      <header>
         <h1>{{ .Title }}</h1>
-
-        <!-- 公開日・最終更新日を右上に配置 -->
-        <div class="post-meta" style="position:absolute; top:0; right:0; text-align:right; font-size:0.9em;">
-          <p class="post-date" style="margin:0;">
-            公開日:
-            {{ $pub0 := .PublishDate }}
-            {{ if $pub0.IsZero }}
-              {{ $m := site.Data.publishdates }}
-              {{ $k1 := .File.Path }}
-              {{ $k2 := printf "content/%s" .File.Path }}
-              {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
-              {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
-                {{ $pub0 = time . }}
-              {{ else }}
-                {{ $pub0 = .Date }}
-              {{ end }}
-            {{ end }}
-            {{ if not $pub0.IsZero }}
-              {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-              <time datetime="{{ $pub }}">{{ time.Format "2006-01-02 15:04" $pub }}</time>
-            {{ end }}
-          </p>
-
-          {{ if ne .Lastmod .Date }}
-            <p class="post-lastmod" style="margin:0;">
-              最終更新日:
-              <time datetime="{{ .Lastmod }}">{{ .Lastmod.Format "2006-01-02" }}</time>
-            </p>
-          {{ end }}
-        </div>
       </header>
+
+      <!-- 公開日・最終更新日を右上に配置 -->
+      <div class="post-meta" style="position:absolute; top:2.5em; right:0; text-align:right; font-size:0.9em;">
+        <p class="post-date" style="margin:0;">
+          公開日:
+          {{ $pub0 := .PublishDate }}
+          {{ if $pub0.IsZero }}
+            {{ $m := site.Data.publishdates }}
+            {{ $k1 := .File.Path }}
+            {{ $k2 := printf "content/%s" .File.Path }}
+            {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+            {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+              {{ $pub0 = time . }}
+            {{ else }}
+              {{ $pub0 = .Date }}
+            {{ end }}
+          {{ end }}
+          {{ if not $pub0.IsZero }}
+            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+            <time datetime="{{ $pub }}">{{ time.Format "2006-01-02 15:04" $pub }}</time>
+          {{ end }}
+        </p>
+
+        {{ if ne .Lastmod .Date }}
+          <p class="post-lastmod" style="margin:0;">
+            最終更新日:
+            <time datetime="{{ .Lastmod }}">{{ .Lastmod.Format "2006-01-02" }}</time>
+          </p>
+        {{ end }}
+      </div>
 
       <div class="content">
         {{ .Content }}
