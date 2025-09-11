@@ -1,25 +1,39 @@
-{{ define "main" }}
-<main class="layout-one-col">
-  <div class="content-main">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="{{ .Site.BaseURL }}">
+  {{- partial "html-meta.html" . }}
+  <title>{{ .Title }} - {{ .Site.Title }}</title>
+  {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
+  <!-- list.html と合わせて main.css のみ読み込み -->
+  <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
+  {{- partial "google-tag-manager-head.html" . }}
 
-    <!-- このページだけでヘッダーのサイトタイトルを list.html と同じ中央寄せにする局所スタイル -->
-    <style>
-      .site-header .site-branding { width: 100% !important; text-align: center !important; }
-      .site-header .site-branding h1,
-      .site-header .site-branding h1 a {
-        display: inline-block !important;
-        margin: 0 auto !important;
-        text-align: center !important;
-      }
-    </style>
+  <!-- ヘッダーのブログタイトルを list.html と同じ中央寄せにする（このページだけの局所オーバーライド） -->
+  <style>
+    .site-header .site-branding { width: 100% !important; text-align: center !important; }
+    .site-header .site-branding h1,
+    .site-header .site-branding h1 a {
+      display: inline-block !important;
+      margin: 0 auto !important;
+      text-align: center !important;
+    }
+  </style>
+</head>
+<body>
+  {{ partial "header.html" . -}}
 
+  <!-- 本文幅は list.html と同じく、<main> 直下に記事を置く（余計なラッパークラスなし） -->
+  <main>
     <article style="position: relative;">
 
       <header>
         <h1>{{ .Title }}</h1>
       </header>
 
-      <!-- 公開日・最終更新日を右上に配置（縦並び） -->
+      <!-- 公開日・最終更新日（本文の右上に縦並び） -->
       <div class="post-meta" style="position:absolute; top:2.5em; right:0; text-align:right; font-size:0.9em;">
         <p class="post-date" style="margin:0;">
           公開日:
@@ -49,18 +63,18 @@
         {{ end }}
       </div>
 
-      <div class="content">
+      <div>
         {{ .Content }}
       </div>
 
-      <!-- コメント欄 -->
-      <div class="post-comments">
+      <!-- コメント欄（ショートコードではなく partial を呼び出す） -->
+      <div class="post-comments" style="border:none; margin-top:2em;">
         {{ if .Params.comments }}
           {{ partial "shortcodes/comments.html" . }}
         {{ end }}
       </div>
 
-      <!-- 前後記事ナビ -->
+      <!-- 前後記事ナビ（従来の見た目を維持） -->
       <footer class="post-pager" style="display:flex;justify-content:space-between;gap:12px;margin-top:24px;">
         <div>
           {{ with .PrevInSection }}
@@ -75,6 +89,11 @@
       </footer>
 
     </article>
-  </div>
-</main>
-{{ end }}
+  </main>
+
+  {{- partial "footer.html" . }}
+  {{- template "_internal/google_analytics.html" . }}
+  {{- partial "external-links.html" . }}
+</body>
+{{- partial "google-tag-manager-body.html" . }}
+</html>
