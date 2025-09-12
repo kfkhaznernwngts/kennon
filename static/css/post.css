@@ -113,3 +113,23 @@
   border-bottom-right-radius: 6px;
 }
 
+.comment {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  padding: 0.5em 0.8em;   /* 内側余白を小さく調整 */
+  margin: 0;              /* コメント同士の余白はゼロ */
+  border-radius: 0;       /* デフォルトは直角 */
+  border-top: none;       /* 最初以外の上枠線は消す */
+}
+
+.comment:first-child {
+  border-top: 1px solid #ddd; /* 一番上の上線を復活 */
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.comment:last-child {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
