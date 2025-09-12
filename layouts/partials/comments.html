@@ -1,13 +1,14 @@
+{{ $cfg := site.Params.comments }}
+{{ if and $cfg $cfg.enabled }}
 <section id="comments">
   <h2 style="margin:0 0 0.5em 0;">コメント</h2>
 
-  {{ $cfg := site.Params.comments }}
   {{ $csvUrl := $cfg.csvUrl }}
   {{ $res := resources.GetRemote $csvUrl }}
+  {{ $slug := .File.BaseFileName }}
 
   {{ if $res }}
     {{ $csv := $res | transform.Unmarshal (dict "delimiter" ",") }}
-    {{ $slug := .File.BaseFileName }}
 
     <div class="comment-list" style="margin:0; padding:0;">
       {{ range $i, $row := $csv }}
@@ -29,3 +30,25 @@
   {{ else }}
     <p>コメントを取得できませんでした。</p>
   {{ end }}
+
+  <form action="https://docs.google.com/forms/d/e/{{ $cfg.form.id }}/formResponse"
+        method="POST" target="_blank" class="comment-form" style="margin-top:1em;">
+    <input type="hidden" name="entry.{{ $cfg.form.slugEntry }}" value="{{ .File.BaseFileName }}">
+
+    <p style="margin:0.5em 0;">
+      <input type="text" name="entry.{{ $cfg.form.nameEntry }}"
+             placeholder="名前" required style="width:100%; padding:0.4em;">
+    </p>
+
+    <p style="margin:0.5em 0;">
+      <textarea name="entry.{{ $cfg.form.bodyEntry }}"
+                placeholder="本文" rows="4" required
+                style="width:100%; padding:0.4em;"></textarea>
+    </p>
+
+    <p style="margin:0.5em 0;">
+      <button type="submit" style="padding:0.5em 1em;">送信</button>
+    </p>
+  </form>
+</section>
+{{ end }}
