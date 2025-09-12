@@ -27,3 +27,34 @@
 .post-pager a:hover {
   color: #155a9c;
 }
+
+.post-pager {
+  display: flex;
+  justify-content: space-between; /* 両端 */
+  margin-top: 2em;
+  font-size: 1.5em;
+}
+
+.post-pager .prev-post,
+.post-pager .next-post {
+  flex: 1;               /* どちらも同じ幅を取る */
+  min-width: 0;          /* 強制的に縮まらないように */
+}
+
+.post-pager .prev-post {
+  text-align: left;      /* ← を左端へ */
+}
+
+.post-pager .next-post {
+  text-align: right;     /* → を右端へ */
+}
+
+.post-pager a {
+  text-decoration: none;
+  color: #218bed;
+  font-weight: bold;
+}
+
+.post-pager a:hover {
+  color: #155a9c;
+}
