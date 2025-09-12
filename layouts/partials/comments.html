@@ -1,31 +1,35 @@
-{{/* デバッグ: コメントCSVの取得 */}}
-{{ $csvUrl := site.Params.comments.csvUrl }}
-{{ $res := resources.GetRemote $csvUrl }}
-
-{{ warnf "DEBUG: trying to fetch comments from %s" $csvUrl }}
-{{ warnf "DEBUG: GetRemote result = %#v" $res }}
-
-{{ if not $res }}
-  {{ errorf "FAILED to fetch comments CSV from %s" $csvUrl }}
-{{ end }}
-
+{{/* コメント機能有効化チェック */}}
 {{ $cfg := site.Params.comments }}
 {{ if and $cfg $cfg.enabled }}
   <section id="comments">
     <h2>コメント</h2>
 
+    {{/* CSV 取得 */}}
+    {{ $csvUrl := $cfg.csvUrl }}
+    {{ $res := resources.GetRemote $csvUrl }}
+
     {{ if $res }}
       {{ $csv := $res | transform.Unmarshal (dict "delimiter" ",") }}
-      {{ range $csv }}
-        <div class="comment">
-          <p><strong>{{ .name }}</strong> ({{ .date }})</p>
-          <p>{{ .message }}</p>
-        </div>
+
+      {{/* CSVを1行ずつ処理 */}}
+      {{ range $i, $row := $csv }}
+        {{ if gt $i 0 }} {{/* 1行目はヘッダーなのでスキップ */}}
+          {{ if eq (index $row 1) .File.BaseFileName }} {{/* 記事スラッグが一致したものだけ */}}
+            <div class="comment">
+              <p><strong>{{ index $row 2 }}</strong> ({{ index $row 0 }})</p>
+              <p>{{ index $row 3 }}</p>
+            </div>
+          {{ end }}
+        {{ end }}
       {{ end }}
+
     {{ else }}
       <p>コメントを取得できませんでした。</p>
     {{ end }}
 
-    <iframe src="{{ $cfg.formUrl }}" width="100%" height="400"></iframe>
+    {{/* Google Form 埋め込み（フォームURLは config.toml に指定） */}}
+    {{ with $cfg.formUrl }}
+      <iframe src="{{ . }}" width="100%" height="400"></iframe>
+    {{ end }}
   </section>
 {{ end }}
