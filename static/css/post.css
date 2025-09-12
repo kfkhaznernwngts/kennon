@@ -1,14 +1,51 @@
+/* ===== 前後記事ナビ ===== */
+.post-pager {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2em;
+  font-size: 1.5em;
+}
+
+.post-pager .prev-post,
+.post-pager .next-post {
+  flex: 1;
+  min-width: 0;
+}
+
+.post-pager .prev-post {
+  text-align: left;
+}
+
+.post-pager .next-post {
+  text-align: right;
+}
+
+.post-pager a {
+  text-decoration: none;
+  color: #218bed;
+  font-weight: bold;
+}
+
+.post-pager a:hover {
+  color: #155a9c;
+}
+
+/* ===== コメント欄 ===== */
+#comments {
+  margin-top: 2em;
+}
+
 #comments .comment {
   border: 1px solid #ddd;
   background-color: #fff;
-  padding: 0.5em 0.8em;   /* コンパクトな余白 */
-  margin: 0;              /* コメント同士の余白なし */
-  border-radius: 0;       /* 直角 */
-  border-top: none;       /* 2件目以降の上枠は消す */
+  padding: 0.5em 0.8em;
+  margin: 0;
+  border-radius: 0;
+  border-top: none;
 }
 
 #comments .comment:first-child {
-  border-top: 1px solid #ddd; /* 一番上のコメントは上枠あり */
+  border-top: 1px solid #ddd;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
