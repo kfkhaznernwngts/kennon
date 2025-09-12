@@ -10,11 +10,12 @@
 
     {{ if $res }}
       {{ $csv := $res | transform.Unmarshal (dict "delimiter" ",") }}
+      {{ $slug := .File.BaseFileName }}
 
       {{/* CSVを1行ずつ処理 */}}
       {{ range $i, $row := $csv }}
         {{ if gt $i 0 }} {{/* 1行目はヘッダーなのでスキップ */}}
-          {{ if eq (index $row 1) .File.BaseFileName }} {{/* 記事スラッグが一致したものだけ */}}
+          {{ if eq (index $row 1) $slug }} {{/* 記事スラッグが一致したものだけ */}}
             <div class="comment">
               <p><strong>{{ index $row 2 }}</strong> ({{ index $row 0 }})</p>
               <p>{{ index $row 3 }}</p>
