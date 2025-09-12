@@ -1,14 +1,14 @@
 .post-pager {
   display: flex;
-  justify-content: space-between; /* 両端に配置 */
+  justify-content: space-between;
   margin-top: 2em;
   font-size: 1.5em;
 }
 
 .post-pager .prev-post,
 .post-pager .next-post {
-  flex: 1;      /* 両方が同じ幅を持つ */
-  min-width: 0; /* 空でも幅を確保 */
+  flex: 1;          /* 左右で均等にスペース確保 */
+  min-width: 0;
 }
 
 .post-pager .prev-post {
@@ -27,4 +27,11 @@
 
 .post-pager a:hover {
   color: #155a9c;
+}
+
+/* 空の placeholder に幅を持たせる */
+.post-pager .placeholder {
+  display: inline-block;
+  width: 1em; /* 矢印と同じくらいの幅を確保 */
+  visibility: hidden;
 }
