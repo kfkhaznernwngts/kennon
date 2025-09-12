@@ -1,51 +1,46 @@
+{{/* コメント機能有効化チェック */}}
 {{ $cfg := site.Params.comments }}
 {{ if and $cfg $cfg.enabled }}
-<section id="comments">
-  <h2>コメント</h2>
+  <section id="comments">
+    <h2>コメント</h2>
 
-  {{ $csvUrl := $cfg.csvUrl }}
-  {{ $res := resources.GetRemote $csvUrl }}
+    {{/* CSV 取得 */}}
+    {{ $csvUrl := $cfg.csvUrl }}
+    {{ $res := resources.GetRemote $csvUrl }}
 
-  <div class="comment-list">
     {{ if $res }}
       {{ $csv := $res | transform.Unmarshal (dict "delimiter" ",") }}
       {{ $slug := .File.BaseFileName }}
 
+      {{/* CSVを1行ずつ処理 */}}
       {{ range $i, $row := $csv }}
-        {{ if gt $i 0 }}
-          {{ if eq (index $row 1) $slug }}
+        {{ if gt $i 0 }} {{/* 1行目はヘッダーなのでスキップ */}}
+          {{ if eq (index $row 1) $slug }} {{/* 記事スラッグが一致したものだけ */}}
             <div class="comment">
-              <p class="comment-meta">
-                <strong>{{ index $row 2 }}</strong>
-                <span class="comment-date">({{ index $row 0 }})</span>
-              </p>
-              <p class="comment-body">{{ index $row 3 }}</p>
+              <p><strong>{{ index $row 2 }}</strong> ({{ index $row 0 }})</p>
+              <p>{{ index $row 3 }}</p>
             </div>
           {{ end }}
         {{ end }}
       {{ end }}
+
     {{ else }}
       <p>コメントを取得できませんでした。</p>
     {{ end }}
-  </div>
 
-  {{ with $cfg.form }}
-  <div class="comment-form">
-    <form action="https://docs.google.com/forms/d/e/{{ .id }}/formResponse" method="POST" target="_blank">
-      <!-- 記事スラッグを自動埋め込み -->
-      <input type="hidden" name="{{ .slugEntry }}" value="{{ $.File.BaseFileName }}">
+    {{/* Googleフォーム連携フォーム */}}
+    <form action="https://docs.google.com/forms/d/e/{{ $cfg.form.id }}/formResponse" method="POST" target="_blank">
+      <input type="hidden" name="entry.{{ $cfg.form.slugEntry }}" value="{{ .File.BaseFileName }}">
 
-      <label>名前:<br>
-        <input type="text" name="{{ .nameEntry }}" required>
-      </label><br><br>
-
-      <label>本文:<br>
-        <textarea name="{{ .bodyEntry }}" rows="4" required></textarea>
-      </label><br><br>
-
-      <button type="submit">送信</button>
+      <p>
+        <input type="text" name="entry.{{ $cfg.form.nameEntry }}" placeholder="名前" required>
+      </p>
+      <p>
+        <textarea name="entry.{{ $cfg.form.bodyEntry }}" placeholder="本文" rows="4" required></textarea>
+      </p>
+      <p>
+        <button type="submit">送信</button>
+      </p>
     </form>
-  </div>
-  {{ end }}
-</section>
+  </section>
 {{ end }}
