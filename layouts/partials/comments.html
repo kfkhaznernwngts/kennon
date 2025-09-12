@@ -12,8 +12,8 @@
         {{ $slug := .File.BaseFileName }}
 
         {{ range $i, $row := $csv }}
-          {{ if gt $i 0 }} <!-- 1行目(ヘッダー)はスキップ -->
-            {{ if eq (index $row 1) $slug }} <!-- 記事スラッグ一致のみ -->
+          {{ if gt $i 0 }} <!-- 1行目はヘッダーなのでスキップ -->
+            {{ if eq (index $row 1) $slug }} <!-- 記事スラッグが一致した行だけ -->
               <div class="comment">
                 <p class="comment-meta">
                   <strong>{{ index $row 2 }}</strong>
@@ -30,8 +30,16 @@
     </div>
 
     <div class="comment-form">
-      {{ with $cfg.formUrl }}
-        <iframe src="{{ . }}" width="100%" height="400" frameborder="0"></iframe>
+      {{ with site.Params.comments.form.id }}
+        <iframe
+          src="https://docs.google.com/forms/d/e/{{ . }}/viewform?embedded=true"
+          width="100%"
+          height="600"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0">
+          読み込んでいます…
+        </iframe>
       {{ end }}
     </div>
   </section>
