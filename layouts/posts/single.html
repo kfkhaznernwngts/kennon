@@ -20,14 +20,15 @@
       {{ if .PrevInSection }}
         <a href="{{ .PrevInSection.RelPermalink }}">←</a>
       {{ else }}
-        <span></span>
+        <!-- 空の要素でも幅を確保 -->
+        <span class="placeholder"></span>
       {{ end }}
     </div>
     <div class="next-post">
       {{ if .NextInSection }}
         <a href="{{ .NextInSection.RelPermalink }}">→</a>
       {{ else }}
-        <span></span>
+        <span class="placeholder"></span>
       {{ end }}
     </div>
   </nav>
