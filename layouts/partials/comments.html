@@ -1,31 +1,63 @@
-{{ $cfg := site.Params.comments }}
+<section id="comments">
+  <h2 style="margin:0 0 0.5em 0;">コメント</h2>
 
-<form action="https://docs.google.com/forms/d/e/{{ $cfg.form.id }}/formResponse"
-      method="POST" target="_blank" class="comment-form"
-      style="margin-top:1em;">
+  {{ $cfg := site.Params.comments }}
+  {{ $csvUrl := $cfg.csvUrl }}
+  {{ $res := resources.GetRemote $csvUrl }}
 
-  <input type="hidden" name="entry.{{ $cfg.form.slugEntry }}" value="{{ .File.BaseFileName }}">
+  {{ if $res }}
+    {{ $csv := $res | transform.Unmarshal (dict "delimiter" ",") }}
+    {{ $slug := .File.BaseFileName }}
 
-  <!-- 名前入力欄 -->
-  <p style="margin:0.5em 0;">
-    <input type="text"
-           name="entry.{{ $cfg.form.nameEntry }}"
-           placeholder="名前" required
-           style="display:block; width:100%; box-sizing:border-box;"/>
-  </p>
+    <div class="comment-list" style="margin:0; padding:0;">
+      {{ range $i, $row := $csv }}
+        {{ if gt $i 0 }}
+          {{ if eq (index $row 1) $slug }}
+            <div class="comment" style="margin:0;">
+              <p class="comment-meta" style="margin:0; line-height:1.4;">
+                <strong>{{ index $row 2 }}</strong>
+                <span class="comment-date">({{ index $row 0 }})</span>
+              </p>
+              <p class="comment-body" style="margin:0.2em 0 0; line-height:1.4;">
+                {{ index $row 3 }}
+              </p>
+            </div>
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    </div>
+  {{ else }}
+    <p>コメントを取得できませんでした。</p>
+  {{ end }}
 
-  <!-- 本文入力欄 -->
-  <p style="margin:0.5em 0;">
-    <textarea name="entry.{{ $cfg.form.bodyEntry }}"
-              placeholder="本文" rows="4" required
-              style="display:block; width:100%; box-sizing:border-box;"></textarea>
-  </p>
+  <!-- 入力フォーム -->
+  <form action="https://docs.google.com/forms/d/e/{{ $cfg.form.id }}/formResponse"
+        method="POST" target="_blank" class="comment-form"
+        style="margin-top:1em;">
 
-  <!-- 送信ボタン（左端揃え・小さめ） -->
-  <p style="margin:0.5em 0;">
-    <button type="submit"
-            style="display:inline-block; padding:0.4em 1em; font-size:0.9em;">
-      送信
-    </button>
-  </p>
-</form>
+    <input type="hidden" name="entry.{{ $cfg.form.slugEntry }}" value="{{ .File.BaseFileName }}">
+
+    <!-- 名前入力欄 -->
+    <p style="margin:0.5em 0;">
+      <input type="text"
+             name="entry.{{ $cfg.form.nameEntry }}"
+             placeholder="名前" required
+             style="display:block; width:100%; box-sizing:border-box;"/>
+    </p>
+
+    <!-- 本文入力欄 -->
+    <p style="margin:0.5em 0;">
+      <textarea name="entry.{{ $cfg.form.bodyEntry }}"
+                placeholder="本文" rows="4" required
+                style="display:block; width:100%; box-sizing:border-box;"></textarea>
+    </p>
+
+    <!-- 送信ボタン（左端のみ揃え・小さめ） -->
+    <p style="margin:0.5em 0;">
+      <button type="submit"
+              style="display:inline-block; padding:0.4em 1em; font-size:0.9em;">
+        送信
+      </button>
+    </p>
+  </form>
+</section>
