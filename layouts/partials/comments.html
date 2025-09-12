@@ -1,5 +1,5 @@
 <section id="comments">
-  <h2>コメント</h2>
+  <h2 style="margin:0 0 0.5em 0;">コメント</h2>
 
   {{ $cfg := site.Params.comments }}
   {{ $csvUrl := $cfg.csvUrl }}
@@ -9,16 +9,18 @@
     {{ $csv := $res | transform.Unmarshal (dict "delimiter" ",") }}
     {{ $slug := .File.BaseFileName }}
 
-    <div class="comment-list">
+    <div class="comment-list" style="margin:0; padding:0;">
       {{ range $i, $row := $csv }}
         {{ if gt $i 0 }}
           {{ if eq (index $row 1) $slug }}
-            <div class="comment">
-              <p class="comment-meta">
+            <div class="comment" style="margin:0;">
+              <p class="comment-meta" style="margin:0; line-height:1.4;">
                 <strong>{{ index $row 2 }}</strong>
                 <span class="comment-date">({{ index $row 0 }})</span>
               </p>
-              <p class="comment-body">{{ index $row 3 }}</p>
+              <p class="comment-body" style="margin:0.2em 0 0; line-height:1.4;">
+                {{ index $row 3 }}
+              </p>
             </div>
           {{ end }}
         {{ end }}
@@ -27,11 +29,3 @@
   {{ else }}
     <p>コメントを取得できませんでした。</p>
   {{ end }}
-
-  <form action="https://docs.google.com/forms/d/e/{{ $cfg.form.id }}/formResponse" method="POST" target="_blank" class="comment-form">
-    <input type="hidden" name="entry.{{ $cfg.form.slugEntry }}" value="{{ .File.BaseFileName }}">
-    <p><input type="text" name="entry.{{ $cfg.form.nameEntry }}" placeholder="名前" required></p>
-    <p><textarea name="entry.{{ $cfg.form.bodyEntry }}" placeholder="本文" rows="4" required></textarea></p>
-    <p><button type="submit">送信</button></p>
-  </form>
-</section>
