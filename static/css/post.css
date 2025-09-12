@@ -44,15 +44,6 @@
   margin-bottom: 2em;
 }
 
-.comment {
-  border: 1px solid #ddd;      /* 薄いグレー枠 */
-  border-radius: 6px;          /* 角を丸く */
-  background-color: #fff;      /* 白背景 */
-  padding: 0.8em 1em;
-  margin: 0.8em 0;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* ほんのり影 */
-}
-
 .comment-meta {
   font-size: 0.9em;
   color: #555;
@@ -73,17 +64,20 @@
   margin-top: 2em;
 }
 
+/* -----------------------
+   コメントカード (整理版)
+   ----------------------- */
 .comment {
   border: 1px solid #ddd;
   background-color: #fff;
-  padding: 0.8em;
-  margin: 0;                /* 間の余白をなくす */
-  border-radius: 0;         /* 直角にする（基本） */
-  border-top: none;         /* 上下で重なる枠線を消す */
+  padding: 0.5em 0.8em;   /* 内側余白を小さめに */
+  margin: 0;              /* コメント同士の余白なし */
+  border-radius: 0;       /* 基本は直角 */
+  border-top: none;       /* 2件目以降は上線を消す */
 }
 
 .comment:first-child {
-  border-top: 1px solid #ddd; /* 一番上だけ枠線を残す */
+  border-top: 1px solid #ddd; /* 一番上のコメントは上線を表示 */
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
@@ -92,44 +86,3 @@
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 }
-
-.comment {
-  border: 1px solid #ddd;
-  background-color: #fff;
-  padding: 0.8em;
-  margin: 0;                /* コメント同士の余白をなくす */
-  border-radius: 0;         /* 角を直角に */
-  border-top: none;         /* 上側の枠線を消す（最初の要素以外） */
-}
-
-.comment:first-child {
-  border-top: 1px solid #ddd; /* 一番上だけ上枠を描く */
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-}
-
-.comment:last-child {
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-}
-
-.comment {
-  border: 1px solid #ddd;
-  background-color: #fff;
-  padding: 0.5em 0.8em;   /* 内側余白を小さく調整 */
-  margin: 0;              /* コメント同士の余白はゼロ */
-  border-radius: 0;       /* デフォルトは直角 */
-  border-top: none;       /* 最初以外の上枠線は消す */
-}
-
-.comment:first-child {
-  border-top: 1px solid #ddd; /* 一番上の上線を復活 */
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-}
-
-.comment:last-child {
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-}
-
