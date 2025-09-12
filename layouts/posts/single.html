@@ -19,11 +19,15 @@
     <div class="prev-post">
       {{ if .PrevInSection }}
         <a href="{{ .PrevInSection.RelPermalink }}">←</a>
+      {{ else }}
+        <span></span>
       {{ end }}
     </div>
     <div class="next-post">
       {{ if .NextInSection }}
         <a href="{{ .NextInSection.RelPermalink }}">→</a>
+      {{ else }}
+        <span></span>
       {{ end }}
     </div>
   </nav>
