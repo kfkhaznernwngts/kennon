@@ -72,3 +72,23 @@
 .comment-form {
   margin-top: 2em;
 }
+
+.comment {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  padding: 0.8em;
+  margin: 0;                /* 間の余白をなくす */
+  border-radius: 0;         /* 直角にする（基本） */
+  border-top: none;         /* 上下で重なる枠線を消す */
+}
+
+.comment:first-child {
+  border-top: 1px solid #ddd; /* 一番上だけ枠線を残す */
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.comment:last-child {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
