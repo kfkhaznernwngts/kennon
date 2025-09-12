@@ -1,46 +1,37 @@
-{{/* コメント機能有効化チェック */}}
-{{ $cfg := site.Params.comments }}
-{{ if and $cfg $cfg.enabled }}
-  <section id="comments">
-    <h2>コメント</h2>
+<section id="comments">
+  <h2>コメント</h2>
 
-    {{/* CSV 取得 */}}
-    {{ $csvUrl := $cfg.csvUrl }}
-    {{ $res := resources.GetRemote $csvUrl }}
+  {{ $cfg := site.Params.comments }}
+  {{ $csvUrl := $cfg.csvUrl }}
+  {{ $res := resources.GetRemote $csvUrl }}
 
-    {{ if $res }}
-      {{ $csv := $res | transform.Unmarshal (dict "delimiter" ",") }}
-      {{ $slug := .File.BaseFileName }}
+  {{ if $res }}
+    {{ $csv := $res | transform.Unmarshal (dict "delimiter" ",") }}
+    {{ $slug := .File.BaseFileName }}
 
-      {{/* CSVを1行ずつ処理 */}}
+    <div class="comment-list">
       {{ range $i, $row := $csv }}
-        {{ if gt $i 0 }} {{/* 1行目はヘッダーなのでスキップ */}}
-          {{ if eq (index $row 1) $slug }} {{/* 記事スラッグが一致したものだけ */}}
+        {{ if gt $i 0 }}
+          {{ if eq (index $row 1) $slug }}
             <div class="comment">
-              <p><strong>{{ index $row 2 }}</strong> ({{ index $row 0 }})</p>
-              <p>{{ index $row 3 }}</p>
+              <p class="comment-meta">
+                <strong>{{ index $row 2 }}</strong>
+                <span class="comment-date">({{ index $row 0 }})</span>
+              </p>
+              <p class="comment-body">{{ index $row 3 }}</p>
             </div>
           {{ end }}
         {{ end }}
       {{ end }}
+    </div>
+  {{ else }}
+    <p>コメントを取得できませんでした。</p>
+  {{ end }}
 
-    {{ else }}
-      <p>コメントを取得できませんでした。</p>
-    {{ end }}
-
-    {{/* Googleフォーム連携フォーム */}}
-    <form action="https://docs.google.com/forms/d/e/{{ $cfg.form.id }}/formResponse" method="POST" target="_blank">
-      <input type="hidden" name="entry.{{ $cfg.form.slugEntry }}" value="{{ .File.BaseFileName }}">
-
-      <p>
-        <input type="text" name="entry.{{ $cfg.form.nameEntry }}" placeholder="名前" required>
-      </p>
-      <p>
-        <textarea name="entry.{{ $cfg.form.bodyEntry }}" placeholder="本文" rows="4" required></textarea>
-      </p>
-      <p>
-        <button type="submit">送信</button>
-      </p>
-    </form>
-  </section>
-{{ end }}
+  <form action="https://docs.google.com/forms/d/e/{{ $cfg.form.id }}/formResponse" method="POST" target="_blank" class="comment-form">
+    <input type="hidden" name="entry.{{ $cfg.form.slugEntry }}" value="{{ .File.BaseFileName }}">
+    <p><input type="text" name="entry.{{ $cfg.form.nameEntry }}" placeholder="名前" required></p>
+    <p><textarea name="entry.{{ $cfg.form.bodyEntry }}" placeholder="本文" rows="4" required></textarea></p>
+    <p><button type="submit">送信</button></p>
+  </form>
+</section>
