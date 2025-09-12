@@ -65,24 +65,24 @@
 }
 
 /* -----------------------
-   コメントカード (整理版)
+   コメントカード (最終版)
    ----------------------- */
-.comment {
+#comments .comment {
   border: 1px solid #ddd;
   background-color: #fff;
-  padding: 0.5em 0.8em;   /* 内側余白を小さめに */
+  padding: 0.5em 0.8em;   /* コンパクトな余白 */
   margin: 0;              /* コメント同士の余白なし */
-  border-radius: 0;       /* 基本は直角 */
-  border-top: none;       /* 2件目以降は上線を消す */
+  border-radius: 0;       /* 直角 */
+  border-top: none;       /* 2件目以降の上枠は消す */
 }
 
-.comment:first-child {
-  border-top: 1px solid #ddd; /* 一番上のコメントは上線を表示 */
+#comments .comment:first-child {
+  border-top: 1px solid #ddd; /* 一番上のコメントは上枠あり */
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
 
-.comment:last-child {
+#comments .comment:last-child {
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 }
