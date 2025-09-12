@@ -92,3 +92,24 @@
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 }
+
+.comment {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  padding: 0.8em;
+  margin: 0;                /* コメント同士の余白をなくす */
+  border-radius: 0;         /* 角を直角に */
+  border-top: none;         /* 上側の枠線を消す（最初の要素以外） */
+}
+
+.comment:first-child {
+  border-top: 1px solid #ddd; /* 一番上だけ上枠を描く */
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.comment:last-child {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
