@@ -33,6 +33,7 @@
 /* ===== コメント欄 ===== */
 #comments {
   margin-top: 2em;
+  font-size: 0.9em;  /* 全体を少し小さく */
 }
 
 #comments .comment {
@@ -58,7 +59,7 @@
 #comments .comment {
   border: 1px solid #ddd;
   background-color: #fff;
-  padding: 0.4em 0.6em;  /* さらにコンパクトに */
+  padding: 0.4em 0.6em;  /* コンパクトに */
   margin: 0;
   border-radius: 0;
   border-top: none;
@@ -77,6 +78,19 @@
 
 /* コメント内の段落の余白を詰める */
 #comments .comment p {
-  margin: 0.2em 0;   /* デフォルトの1em→0.2emに縮小 */
+  margin: 0.2em 0;
   line-height: 1.4;
+}
+
+/* 入力欄の文字サイズを小さく */
+#comments input[type="text"],
+#comments textarea {
+  font-size: 0.9em;
+  padding: 0.3em 0.5em;
+}
+
+/* 送信ボタンのサイズを調整 */
+#comments button {
+  font-size: 0.9em;
+  padding: 0.4em 0.8em;
 }
