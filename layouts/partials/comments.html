@@ -1,54 +1,64 @@
 {{ $cfg := site.Params.comments }}
 {{ if and $cfg $cfg.enabled }}
 <section id="comments">
-  <h2 style="margin:0 0 0.5em 0;">コメント</h2>
+  <h2 style="margin:0 0 0.5em 0; cursor:pointer;" onclick="toggleComments()">コメント</h2>
+  <div id="comments-body" style="display:none;">
 
-  {{ $csvUrl := $cfg.csvUrl }}
-  {{ $res := resources.GetRemote $csvUrl }}
-  {{ $slug := .File.BaseFileName }}
+    {{ $csvUrl := $cfg.csvUrl }}
+    {{ $res := resources.GetRemote $csvUrl }}
+    {{ $slug := .File.BaseFileName }}
 
-  {{ if $res }}
-    {{ $csv := $res | transform.Unmarshal (dict "delimiter" ",") }}
+    {{ if $res }}
+      {{ $csv := $res | transform.Unmarshal (dict "delimiter" ",") }}
 
-    <div class="comment-list" style="margin:0; padding:0;">
-      {{ range $i, $row := $csv }}
-        {{ if gt $i 0 }}
-          {{ if eq (index $row 1) $slug }}
-            <div class="comment" style="margin:0;">
-              <p class="comment-meta" style="margin:0; line-height:1.4;">
-                <strong>{{ index $row 2 }}</strong>
-                <span class="comment-date">({{ index $row 0 }})</span>
-              </p>
-              <p class="comment-body" style="margin:0.2em 0 0; line-height:1.4;">
-                {{ index $row 3 }}
-              </p>
-            </div>
+      <div class="comment-list" style="margin:0; padding:0;">
+        {{ range $i, $row := $csv }}
+          {{ if gt $i 0 }}
+            {{ if eq (index $row 1) $slug }}
+              <div class="comment" style="margin:0;">
+                <p class="comment-meta" style="margin:0; line-height:1.4;">
+                  <strong>{{ index $row 2 }}</strong>
+                  <span class="comment-date">({{ index $row 0 }})</span>
+                </p>
+                <p class="comment-body" style="margin:0.2em 0 0; line-height:1.4;">
+                  {{ index $row 3 }}
+                </p>
+              </div>
+            {{ end }}
           {{ end }}
         {{ end }}
-      {{ end }}
-    </div>
-  {{ else }}
-    <p>コメントを取得できませんでした。</p>
-  {{ end }}
+      </div>
+    {{ else }}
+      <p>コメントを取得できませんでした。</p>
+    {{ end }}
 
-  <form action="https://docs.google.com/forms/d/e/{{ $cfg.form.id }}/formResponse"
-        method="POST" target="_blank" class="comment-form" style="margin-top:1em;">
-    <input type="hidden" name="entry.{{ $cfg.form.slugEntry }}" value="{{ .File.BaseFileName }}">
+    <form action="https://docs.google.com/forms/d/e/{{ $cfg.form.id }}/formResponse"
+          method="POST" target="_blank" class="comment-form" style="margin-top:1em;">
+      <input type="hidden" name="entry.{{ $cfg.form.slugEntry }}" value="{{ .File.BaseFileName }}">
 
-    <p style="margin:0.5em 0;">
-      <input type="text" name="entry.{{ $cfg.form.nameEntry }}"
-             placeholder="名前" required style="width:100%; padding:0.4em;">
-    </p>
+      <p style="margin:0.5em 0;">
+        <input type="text" name="entry.{{ $cfg.form.nameEntry }}"
+               placeholder="名前" required style="width:100%; padding:0.4em;">
+      </p>
 
-    <p style="margin:0.5em 0;">
-      <textarea name="entry.{{ $cfg.form.bodyEntry }}"
-                placeholder="本文" rows="4" required
-                style="width:100%; padding:0.4em;"></textarea>
-    </p>
+      <p style="margin:0.5em 0;">
+        <textarea name="entry.{{ $cfg.form.bodyEntry }}"
+                  placeholder="本文" rows="4" required
+                  style="width:100%; padding:0.4em;"></textarea>
+      </p>
 
-    <p style="margin:0.5em 0;">
-      <button type="submit" style="padding:0.5em 1em;">送信</button>
-    </p>
-  </form>
+      <p style="margin:0.5em 0;">
+        <button type="submit" style="padding:0.5em 1em;">送信</button>
+      </p>
+    </form>
+
+  </div>
 </section>
+
+<script>
+function toggleComments() {
+  const body = document.getElementById("comments-body");
+  body.style.display = (body.style.display === "none") ? "block" : "none";
+}
+</script>
 {{ end }}
