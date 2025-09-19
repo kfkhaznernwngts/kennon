@@ -98,3 +98,9 @@
 .single-page h1 {
   color: #000 !important;
 }
+
+.post-meta {
+  color: #666;
+  font-size: 0.9em;
+  margin: 0.5em 0 1.2em 0;
+}
