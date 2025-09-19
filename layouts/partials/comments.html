@@ -12,11 +12,13 @@
 
     {{ if $res }}
       {{ $csv := $res | transform.Unmarshal (dict "delimiter" ",") }}
+      {{ $count := 0 }}
 
       <div class="comment-list" style="margin:0; padding:0;">
         {{ range $i, $row := $csv }}
           {{ if gt $i 0 }}
             {{ if eq (index $row 1) $slug }}
+              {{ $count = add $count 1 }}
               <div class="comment" style="margin:0;">
                 <p class="comment-meta" style="margin:0; line-height:1.4;">
                   <strong>{{ index $row 2 }}</strong>
@@ -28,6 +30,10 @@
               </div>
             {{ end }}
           {{ end }}
+        {{ end }}
+
+        {{ if eq $count 0 }}
+          <p style="margin:0.5em 0; color:#666;">コメントはありません。</p>
         {{ end }}
       </div>
     {{ else }}
