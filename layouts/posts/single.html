@@ -2,15 +2,16 @@
 <article class="single-page">
   <h1>{{ .Title }}</h1>
 
+  <div class="content">
+    {{ .Content }}
+  </div>
+
+  <!-- 公開日・更新日をコメントセクション直前へ移動 -->
   <div class="post-meta">
     公開日: {{ .Date.Format "2006-01-02" }}
     {{ with .Lastmod }}
       （更新日: {{ .Format "2006-01-02" }}）
     {{ end }}
-  </div>
-
-  <div class="content">
-    {{ .Content }}
   </div>
 
   {{ partial "comments.html" . }}
@@ -20,7 +21,6 @@
       {{ if .PrevInSection }}
         <a href="{{ .PrevInSection.RelPermalink }}">←</a>
       {{ else }}
-        <!-- 空の要素でも幅を確保 -->
         <span class="placeholder"></span>
       {{ end }}
     </div>
