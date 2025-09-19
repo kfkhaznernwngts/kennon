@@ -1,7 +1,9 @@
 {{ $cfg := site.Params.comments }}
 {{ if and $cfg $cfg.enabled }}
 <section id="comments">
-  <h2 style="margin:0 0 0.5em 0; cursor:pointer;" onclick="toggleComments()">コメント</h2>
+  <button id="toggle-comments" onclick="toggleComments()" style="margin:0 0 0.5em 0; font-size:0.9em; padding:0.3em 0.6em; cursor:pointer;">
+    コメントを表示
+  </button>
   <div id="comments-body" style="display:none;">
 
     {{ $csvUrl := $cfg.csvUrl }}
@@ -58,7 +60,14 @@
 <script>
 function toggleComments() {
   const body = document.getElementById("comments-body");
-  body.style.display = (body.style.display === "none") ? "block" : "none";
+  const btn = document.getElementById("toggle-comments");
+  if (body.style.display === "none") {
+    body.style.display = "block";
+    btn.textContent = "コメントを非表示";
+  } else {
+    body.style.display = "none";
+    btn.textContent = "コメントを表示";
+  }
 }
 </script>
 {{ end }}
