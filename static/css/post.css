@@ -86,3 +86,11 @@
   font-size: 0.9em;
   padding: 0.4em 0.8em;
 }
+
+/* コメント欄の上に境界線を追加 */
+#comments {
+  margin-top: 2em;
+  font-size: 0.9em;
+  border-top: 1px solid #ddd;  /* ← ここで線を追加 */
+  padding-top: 1em;            /* 線と内容の間に余白を確保 */
+}
