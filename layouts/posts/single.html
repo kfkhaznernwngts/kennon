@@ -6,9 +6,23 @@
     {{ .Content }}
   </div>
 
-  <!-- コメントセクション直前の境界線の上に公開日・更新日を配置 -->
   <div class="post-meta">
-    公開日: {{ .Date.Format "2006-01-02" }}
+    {{ $pub0 := .PublishDate }}
+    {{ if $pub0.IsZero }}
+      {{ $m := site.Data.publishdates }}
+      {{ $k1 := .File.Path }}
+      {{ $k2 := printf "content/%s" .File.Path }}
+      {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+      {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+        {{ $pub0 = time . }}
+      {{ else }}
+        {{ $pub0 = .Date }}
+      {{ end }}
+    {{ end }}
+    {{ if not $pub0.IsZero }}
+      {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+      公開日: {{ time.Format "2006-01-02 15:04" $pub }}
+    {{ end }}
     {{ with .Lastmod }}
       （更新日: {{ .Format "2006-01-02" }}）
     {{ end }}
