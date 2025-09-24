@@ -126,3 +126,21 @@
   overflow-x: hidden;
   box-sizing: border-box;
 }
+
+/* 記事ページでの横スクロール防止 */
+body {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  overflow-x: hidden !important;
+}
+
+/* 記事ページのレイアウト要素を画面幅に収める */
+.single-page,
+.single-page .content,
+.layout-one-col .content-main {
+  max-width: 100% !important;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
