@@ -42,7 +42,7 @@
         <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
         {{ if not $pub0.IsZero }}
         {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-        <div class="article-date">{{ time.Format "2006-01-02 15:04" $pub }}</div>
+        <div class="article-date">{{ time.Format "2006-01-02" $pub }}</div>
         {{ end }}
       </li>
       {{ end }}
