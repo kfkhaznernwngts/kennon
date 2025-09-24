@@ -21,7 +21,7 @@
     {{ end }}
     {{ if not $pub0.IsZero }}
       {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-      公開日: {{ time.Format "2006-01-02 15:04" $pub }}
+      公開日: {{ time.Format "2006-01-02" $pub }}
     {{ end }}
     {{ with .Lastmod }}
       （更新日: {{ .Format "2006-01-02" }}）
