@@ -171,3 +171,11 @@ body.single .single-page {
   padding: 1.5em 0;
   box-shadow: none !important;
 }
+
+.article-item {
+  border: none !important;
+  border-top: 1px solid #ddd !important;
+}
+.article-item:last-child {
+  border-bottom: 1px solid #ddd !important;
+}
