@@ -70,3 +70,22 @@ a:focus,
     padding: 0 16px; /* スマホは左右余白16px */
   }
 }
+
+.section-divider {
+  border-top: 1px solid #ddd;
+  margin: 0 auto;         /* 中央寄せ */
+  max-width: 1100px;      /* 本文と同じ幅 */
+  padding: 0 16px;        /* 本文と同じ左右余白 */
+  box-sizing: border-box; /* 幅計算を統一 */
+}
+
+/* 既存の border を無効化 */
+.site-header {
+  border-bottom: none !important;
+}
+#comments {
+  border-top: none !important;
+}
+footer {
+  border-top: none !important;
+}
