@@ -68,9 +68,7 @@
 
 /* ===== 記事ページ ===== */
 .single-page {
-  width: 100%;
-  max-width: 660px;
-  margin: 0 auto;
+  /* 幅指定を削除して一覧と同じ .content-main に合わせる */
   padding: 1.2em 0;
   box-sizing: border-box;
   border: none !important;
@@ -89,12 +87,4 @@
   text-align: right;
 }
 
-/* ===== 記事ページ body の余白を一覧と統一 ===== */
-body.page {
-  margin-left: auto !important;
-  margin-right: auto !important;
-  max-width: 660px !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  box-sizing: border-box;
-}
+/* body.page の指定は不要なので削除 */
