@@ -90,11 +90,12 @@ a:focus,
   padding: 0;
 }
 .article-item {
-  padding: 1.2em 0;
+  position: relative;
+  padding: 1.2em 0 2.5em 0;
   border-top: 1px solid #ddd;
 }
 .article-item:first-child {
-  border-top: none; /* ← 最初の1件だけ線を消す */
+  border-top: none;
 }
 .article-item:last-child {
   border-bottom: 1px solid #ddd;
@@ -119,7 +120,9 @@ a:focus,
 .article-date {
   font-size: 0.85em;
   color: #666;
-  text-align: right;
+  position: absolute;
+  right: 0;
+  bottom: 0.5em;
 }
 
 /* ===============================
@@ -139,24 +142,28 @@ body.home .section-divider:last-of-type {
   display: none;
 }
 
-.article-item {
-  position: relative;
-  padding: 1.2em 0 2.5em 0; /* 下に余白を追加して公開日スペースを確保 */
-  border-top: 1px solid #ddd;
+/* ===============================
+   ページネーション
+================================= */
+.pagination {
+  display: flex;
+  justify-content: center; /* ←中央寄せ */
+  gap: 0.6em;
+  margin: 1.5em 0;
+  padding: 0;
+  list-style: none;
 }
-
-.article-item:first-child {
-  border-top: none;
+.pagination li {
+  display: inline-block;
 }
-
-.article-item:last-child {
-  border-bottom: 1px solid #ddd;
+.pagination a {
+  text-decoration: none;
+  color: #218bed;
 }
-
-.article-date {
-  font-size: 0.85em;
-  color: #666;
-  position: absolute;
-  right: 0;
-  bottom: 0.5em;
+.pagination .active a {
+  font-weight: bold;
+  color: #155a9c;
+}
+.pagination .disabled {
+  display: none; /* «« と »» を消す */
 }
