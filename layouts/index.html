@@ -12,52 +12,13 @@
   {{- partial "google-tag-manager-head.html" . }}
 
   <style>
-    .article-list{
-      list-style:none;
-      margin:16px 0;
-      padding:0;
-    }
-    .article-item{
-      position:relative;
-      border:1px solid #ddd;
-      margin:0;
-      background:#fff;
-      border-bottom:0;
-    }
-    .article-item:last-child{
-      border-bottom:1px solid #ddd;
-    }
-    .article-link{
-      display:block;
-      padding:6px 10px 18px 10px;
-      color:inherit;
-      text-decoration:none;
-    }
-    .article-title{
-      font-size:1.05em;
-      font-weight:bold;
-      color:black;
-      margin:0;
-      text-align:center;
-    }
-    .article-date{
-      position:absolute;
-      right:8px;
-      bottom:4px;
-      font-size:.8em;
-      color:#666;
-    }
-
-    .site-header .site-branding {
-      width: 100%;
-      text-align: center;
-    }
+    .article-list{list-style:none;margin:16px 0;padding:0}
+    .article-item{padding:10px 0}
+    .article-title{font-size:1.05em;font-weight:bold;color:black;margin:0;text-align:center}
+    .article-date{font-size:.8em;color:#666;text-align:right}
+    .site-header .site-branding{width:100%;text-align:center}
     .site-header .site-branding h1,
-    .site-header .site-branding h1 a {
-      display: inline-block;
-      margin: 0 auto;
-      text-align: center;
-    }
+    .site-header .site-branding h1 a{display:inline-block;margin:0 auto;text-align:center}
   </style>
 </head>
 <body>
@@ -66,33 +27,44 @@
     <div>
       {{ .Content -}}
     </div>
+
+    <!-- ヘッダー直下の線 -->
+    <div class="section-divider"></div>
+
     {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") -}}
     {{ $pages := where .Site.RegularPages "Section" "in" $sections -}}
     <ul class="article-list">
-      {{ range ($pages.ByPublishDate.Reverse) -}}
-      {{ $pub0 := .PublishDate }}
-      {{ if $pub0.IsZero }}
-        {{ $m := site.Data.publishdates }}
-        {{ $k1 := .File.Path }}
-        {{ $k2 := printf "content/%s" .File.Path }}
-        {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
-        {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
-          {{ $pub0 = time . }}
-        {{ else }}
-          {{ $pub0 = .Date }}
+      {{ range $i, $p := ($pages.ByPublishDate.Reverse) }}
+        {{ $pub0 := $p.PublishDate }}
+        {{ if $pub0.IsZero }}
+          {{ $m := site.Data.publishdates }}
+          {{ $k1 := $p.File.Path }}
+          {{ $k2 := printf "content/%s" $p.File.Path }}
+          {{ $k3 := printf "content/%s%s" $p.File.Dir $p.File.LogicalName }}
+          {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+            {{ $pub0 = time . }}
+          {{ else }}
+            {{ $pub0 = $p.Date }}
+          {{ end }}
         {{ end }}
-      {{ end }}
-      <li class="article-item">
-        <a href="{{ .RelPermalink }}" class="article-link">
-          <div class="article-title">{{ .Title }}</div>
+
+        <li class="article-item">
+          <!-- 2件目以降だけ区切り線 -->
+          {{ if gt $i 0 }}
+            <div class="section-divider"></div>
+          {{ end }}
+
+          <div class="article-title">{{ $p.Title }}</div>
           {{ if not $pub0.IsZero }}
             {{ $pub := time.In "Asia/Tokyo" $pub0 }}
             <div class="article-date">{{ time.Format "2006-01-02" $pub }}</div>
           {{ end }}
-        </a>
-      </li>
+        </li>
       {{ end -}}
     </ul>
+
+    <!-- フッター直前の線 -->
+    <div class="section-divider"></div>
   </main>
   {{- partial "footer.html" . }}
   {{- template "_internal/google_analytics.html" . }}
