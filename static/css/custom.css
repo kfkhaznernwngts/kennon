@@ -115,3 +115,16 @@ footer {
 #comments {
   border-top: none !important;
 }
+
+/* simple-style テーマが出すヘッダー直下の線を完全に無効化 */
+.site-header {
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* テーマが疑似要素 (::after など) で線を描画している場合も殺す */
+.site-header::after,
+.site-header::before {
+  content: none !important;
+  border: none !important;
+}
