@@ -148,3 +148,24 @@ header + .layout-one-col .section-divider:first-of-type {
   margin-top: 1.2em;   /* 一覧ページと同じ高さに */
   margin-bottom: 1.2em;
 }
+
+/* デフォルト設定：本文と同じ幅・左右余白 */
+.section-divider {
+  border-top: 1px solid #ddd;
+  margin: 1.2em auto;   /* 一覧ページと同じ余白 */
+  max-width: 660px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ヘッダー直下の最初の線も強制的に揃える */
+.layout-one-col .content-main > .section-divider:first-of-type {
+  margin-top: 1.2em !important;
+  margin-bottom: 1.2em !important;
+}
+
+/* フッター直前の線も同じ */
+.layout-one-col .content-main > .section-divider:last-of-type {
+  margin-top: 1.2em !important;
+  margin-bottom: 1.2em !important;
+}
