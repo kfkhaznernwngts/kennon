@@ -104,3 +104,12 @@ body.page {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
+
+body.page {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 750px !important;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
