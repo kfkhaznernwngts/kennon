@@ -1,91 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <base href="{{ .Site.BaseURL }}">
-  {{- partial "html-meta.html" . }}
-  <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
-  {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
-  <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
-  <link rel="stylesheet" type="text/css" href="{{ "css/custom.css" | absURL }}">
-  <style>
-    .article-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    .article-item {
-      padding: 1.2em 0;
-      border-top: 1px solid #ddd;
-      max-width: 660px;
-      margin: 0 auto;
-    }
-    .article-item:last-child {
-      border-bottom: 1px solid #ddd;
-    }
-    .article-title {
-      font-size: 1.4em;
-      font-weight: bold;
-      margin: 0 0 0.3em 0;
-    }
-    .article-title a {
-      color: #000;
-      text-decoration: none;
-    }
-    .article-title a:hover {
-      text-decoration: underline;
-    }
-    .article-caption {
-      font-size: 1em;
-      color: #444;
-      margin: 0 0 0.3em 0;
-    }
-    .article-date {
-      font-size: 0.85em;
-      color: #666;
-    }
-  </style>
-</head>
-<body>
-  {{ partial "header.html" . -}}
-  <main>
-    <div>
-      {{ .Content }}
-    </div>
-    <ul class="article-list">
-      {{ range (.Pages.ByPublishDate.Reverse) }}
-      {{ $pub0 := .PublishDate }}
-      {{ if $pub0.IsZero }}
-        {{ $m := site.Data.publishdates }}
-        {{ $k1 := .File.Path }}
-        {{ $k2 := printf "content/%s" .File.Path }}
-        {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
-        {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
-          {{ $pub0 = time . }}
-        {{ else }}
-          {{ $pub0 = .Date }}
-        {{ end }}
+{{ define "main" }}
+<ul class="article-list">
+  {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") }}
+  {{ $pages := where .Site.RegularPages "Section" "in" $sections }}
+  {{ range ($pages.ByPublishDate.Reverse) }}
+    {{ $pub0 := .PublishDate }}
+    {{ if $pub0.IsZero }}
+      {{ $m := site.Data.publishdates }}
+      {{ $k1 := .File.Path }}
+      {{ $k2 := printf "content/%s" .File.Path }}
+      {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+      {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+        {{ $pub0 = time . }}
+      {{ else }}
+        {{ $pub0 = .Date }}
       {{ end }}
-      <li class="article-item">
-        <div class="article-title">
-          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        </div>
-        {{ with .Params.caption }}
-          <div class="article-caption">{{ . }}</div>
-        {{ end }}
-        {{ if not $pub0.IsZero }}
-          {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-          <div class="article-date">公開日: {{ time.Format "2006-01-02" $pub }}</div>
-        {{ end }}
-      </li>
+    {{ end }}
+
+    <li class="article-item">
+      <div class="article-title">
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </div>
+      {{ with .Params.caption }}
+        <div class="article-caption">{{ . }}</div>
       {{ end }}
-    </ul>
-    {{ template "_internal/pagination.html" . }}
-  </main>
-  {{- partial "footer.html" . }}
-  {{- template "_internal/google_analytics.html" . }}
-  {{- partial "external-links.html" . }}
-</body>
-{{- partial "google-tag-manager-body.html" . }}
-</html>
+      {{ if not $pub0.IsZero }}
+        {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+        <div class="article-date">公開日: {{ time.Format "2006-01-02" $pub }}</div>
+      {{ end }}
+    </li>
+  {{ end }}
+</ul>
+{{ template "_internal/pagination.html" . }}
+{{ end }}
