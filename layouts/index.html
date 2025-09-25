@@ -2,7 +2,9 @@
 <ul class="article-list">
   {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") }}
   {{ $pages := where .Site.RegularPages "Section" "in" $sections }}
-  {{ range ($pages.ByPublishDate.Reverse) }}
+  {{ $paginator := .Paginate ($pages.ByPublishDate.Reverse) 5 }} <!-- 1ページ5件 -->
+
+  {{ range $paginator.Pages }}
     {{ $pub0 := .PublishDate }}
     {{ if $pub0.IsZero }}
       {{ $m := site.Data.publishdates }}
@@ -30,5 +32,7 @@
     </li>
   {{ end }}
 </ul>
+
+<!-- ページネーション -->
 {{ template "_internal/pagination.html" . }}
 {{ end }}
