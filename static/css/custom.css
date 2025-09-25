@@ -63,7 +63,8 @@ a:focus,
    レイアウト幅
 ================================= */
 .layout-one-col .content-main,
-.article-item {
+.article-item,
+.single-page {
   max-width: 660px;
   margin: 0 auto;
   padding: 1.2em 0;
@@ -75,21 +76,10 @@ a:focus,
 ================================= */
 .section-divider {
   border-top: 1px solid #ddd;
-  margin: 1.2em auto;   /* 一覧ページ基準 */
+  margin: 1.2em auto;
   max-width: 660px;
   padding: 0;
   box-sizing: border-box;
-}
-/* ヘッダー直下の線 */
-header + .layout-one-col .section-divider:first-of-type,
-.layout-one-col .content-main > .section-divider:first-of-type {
-  margin-top: 1.2em !important;
-  margin-bottom: 1.2em !important;
-}
-/* フッター直前の線 */
-.layout-one-col .content-main > .section-divider:last-of-type {
-  margin-top: 1.2em !important;
-  margin-bottom: 1.2em !important;
 }
 
 /* ===============================
@@ -102,8 +92,10 @@ header + .layout-one-col .section-divider:first-of-type,
 }
 .article-item {
   border: none !important;
-  padding: 1.2em 0;
-  box-sizing: border-box;
+  border-top: 1px solid #ddd !important;
+}
+.article-item:last-child {
+  border-bottom: 1px solid #ddd !important;
 }
 .article-title {
   font-size: 1.6em;
@@ -131,5 +123,12 @@ header + .layout-one-col .section-divider:first-of-type,
 /* ===============================
    記事ページ
 ================================= */
-.single-page {
+.single-page h1 {
+  color: #000 !important;
+}
+.post-meta {
+  color: #666;
+  font-size: 0.9em;
+  margin: 0 0 0.5em 0;
+  text-align: right;
 }
