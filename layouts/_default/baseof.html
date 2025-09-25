@@ -14,11 +14,27 @@
 </head>
 <body class="{{ .Kind }}">
   {{ partial "header.html" . -}}
+
   <main class="layout-one-col">
     <div class="content-main">
+
+      <!-- ヘッダー直下の線 -->
+      <div class="section-divider"></div>
+
       {{ block "main" . }}{{- end }}
+
+      <!-- コメント欄を持つのは記事ページ(single)だけ -->
+      {{ if eq .Kind "page" }}
+        <div class="section-divider"></div>
+        {{ partial "comments.html" . }}
+      {{ end }}
+
+      <!-- フッター直前の線 -->
+      <div class="section-divider"></div>
+
     </div>
   </main>
+
   {{- partial "footer.html" . }}
   {{- template "_internal/google_analytics.html" . }}
   {{- partial "external-links.html" . }}
