@@ -89,28 +89,13 @@
   text-align: right;
 }
 
-body.page .single-page {
-  max-width: 660px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-/* ===== 記事ページ body の余白をリセット ===== */
-body.page {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
+/* ===== 記事ページ body の余白調整 ===== */
 body.page {
   margin-left: auto !important;
   margin-right: auto !important;
-  max-width: 750px !important;
-  padding-left: 16px;
-  padding-right: 16px;
+  max-width: 660px !important; /* 一覧と統一 */
+  padding-left: 0;
+  padding-right: 0;
   box-sizing: border-box;
 }
 
