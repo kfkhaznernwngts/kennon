@@ -163,3 +163,11 @@ body.single .single-page {
   padding: 1.5em 0; /* 少し余白を追加して窮屈に見えないように */
   box-shadow: none !important; /* 念のため影も消す */
 }
+
+.single-page {
+  border: none !important;
+  border-top: 1px solid #ddd !important;
+  border-bottom: 1px solid #ddd !important;
+  padding: 1.5em 0;
+  box-shadow: none !important;
+}
