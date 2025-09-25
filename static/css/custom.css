@@ -143,3 +143,8 @@ header + .layout-one-col .section-divider:first-of-type {
   margin-top: 1.2em;   /* 上の余白 */
   margin-bottom: 1.2em;/* 下の余白 */
 }
+
+.layout-one-col .content-main > .section-divider:first-of-type {
+  margin-top: 1.2em;   /* 一覧ページと同じ高さに */
+  margin-bottom: 1.2em;
+}
