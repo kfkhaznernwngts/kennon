@@ -68,7 +68,7 @@
 
 /* ===== 記事ページ ===== */
 .single-page {
-  padding: 0.4em 0 1.2em 0; /* ← 上を減らしてタイトルを上に */
+  padding: 0.4em 0 1.2em 0; /* 上余白は控えめ、下はそのまま */
   box-sizing: border-box;
   border: none !important;
   box-shadow: none !important;
@@ -77,7 +77,11 @@
 
 .single-page h1 {
   color: #000 !important;
-  margin-top: 0.2em; /* ← タイトル自体の余白をさらに調整 */
+  margin: 0 0 1em 0; /* ← タイトルの下に余白を追加 */
+}
+
+.single-page .content {
+  margin-top: 0.5em; /* ← 本文全体の余白を少し増やす */
 }
 
 .post-meta {
