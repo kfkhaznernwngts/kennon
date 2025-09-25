@@ -56,9 +56,9 @@ a:focus,
   text-decoration: underline !important;
 }
 
-/* ===== レイアウト幅調整 ===== */
+/* レイアウト幅調整 */
 .layout-one-col .content-main {
-  max-width: 660px;   /* PC時の幅 */
+  max-width: 660px;
   margin: 0 auto;
   padding: 0 20px;
   box-sizing: border-box;
@@ -67,25 +67,30 @@ a:focus,
 @media (max-width: 768px) {
   .layout-one-col .content-main {
     max-width: 100%;
-    padding: 0 16px; /* スマホは左右余白16px */
+    padding: 0 16px;
   }
 }
 
+/* 共通の区切り線 */
 .section-divider {
   border-top: 1px solid #ddd;
-  margin: 0 auto;         /* 中央寄せ */
-  max-width: 1100px;      /* 本文と同じ幅 */
-  padding: 0 16px;        /* 本文と同じ左右余白 */
-  box-sizing: border-box; /* 幅計算を統一 */
+  margin: 0 auto;
+  max-width: 660px;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
-/* 既存の border を無効化 */
-.site-header {
+/* テーマ側の線を確実に無効化 */
+header.site-header {
   border-bottom: none !important;
+  box-shadow: none !important;
 }
+
 #comments {
   border-top: none !important;
 }
+
 footer {
   border-top: none !important;
+  box-shadow: none !important;
 }
