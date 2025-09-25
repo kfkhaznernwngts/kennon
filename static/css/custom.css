@@ -169,3 +169,56 @@ header + .layout-one-col .section-divider:first-of-type {
   margin-top: 1.2em !important;
   margin-bottom: 1.2em !important;
 }
+
+/* 共通の区切り線 */
+.section-divider {
+  border-top: 1px solid #ddd;
+  margin: 1.2em auto;
+  max-width: 660px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 記事リストや本文のブロック幅を統一 */
+.article-item,
+.layout-one-col .content-main {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 1.2em 0;
+  box-sizing: border-box;
+}
+
+/* ヘッダー直下の線だけ特別扱い（上下余白を同じに） */
+header + .layout-one-col .section-divider:first-of-type,
+.layout-one-col .content-main > .section-divider:first-of-type {
+  margin-top: 1.2em;
+  margin-bottom: 1.2em;
+}
+
+/* 記事タイトル・キャプション・日付 */
+.article-title {
+  font-size: 1.6em;
+  font-weight: bold;
+  margin: 0 0 0.3em 0;
+}
+
+.article-title a {
+  color: #000;
+  text-decoration: none;
+}
+
+.article-title a:hover {
+  text-decoration: underline;
+}
+
+.article-caption {
+  font-size: 1em;
+  color: #444;
+  margin: 0 0 0.3em 0;
+}
+
+.article-date {
+  font-size: 0.85em;
+  color: #666;
+  text-align: right;
+}
