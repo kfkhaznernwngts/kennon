@@ -128,3 +128,18 @@ footer {
   content: none !important;
   border: none !important;
 }
+
+/* 共通の区切り線 */
+.section-divider {
+  border-top: 1px solid #ddd;
+  margin: 1.2em auto;     /* 一覧ページに合わせた適度な高さ */
+  max-width: 660px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ヘッダー直下の線だけ特別に余白を少なくする */
+header + .layout-one-col .section-divider:first-of-type {
+  margin-top: 1.2em;   /* 上の余白 */
+  margin-bottom: 1.2em;/* 下の余白 */
+}
