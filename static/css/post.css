@@ -105,3 +105,13 @@ body.page .single-page {
   padding: 1.2em 0;
   box-sizing: border-box;
 }
+
+body.page {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 660px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box;
+}
+
