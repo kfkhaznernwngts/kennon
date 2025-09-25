@@ -63,7 +63,6 @@ a:focus,
    レイアウト幅
 ================================= */
 .layout-one-col .content-main,
-.article-item,
 .single-page {
   max-width: 660px;
   margin: 0 auto;
@@ -72,7 +71,7 @@ a:focus,
 }
 
 /* ===============================
-   区切り線（共通）
+   区切り線（記事ページ・Aboutページ用）
 ================================= */
 .section-divider {
   border-top: 1px solid #ddd;
@@ -83,7 +82,7 @@ a:focus,
 }
 
 /* ===============================
-   記事リスト
+   記事リスト（一覧ページ）
 ================================= */
 .article-list {
   list-style: none;
@@ -91,11 +90,11 @@ a:focus,
   padding: 0;
 }
 .article-item {
-  border: none !important;
-  border-top: 1px solid #ddd !important;
+  padding: 1.2em 0;
+  border-top: 1px solid #ddd;
 }
 .article-item:last-child {
-  border-bottom: 1px solid #ddd !important;
+  border-bottom: 1px solid #ddd;
 }
 .article-title {
   font-size: 1.6em;
