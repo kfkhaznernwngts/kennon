@@ -17,16 +17,12 @@
     }
     .article-item {
       padding: 1.2em 0 2em 0;
-      border-top: 1px solid #ddd;
       max-width: 660px;
       margin: 0 auto;
       position: relative;
     }
-    .article-item:last-child {
-      border-bottom: 1px solid #ddd;
-    }
     .article-title {
-      font-size: 1.6em; /* タイトルを少し大きく */
+      font-size: 1.6em;
       font-weight: bold;
       margin: 0 0 0.3em 0;
     }
@@ -53,40 +49,50 @@
 </head>
 <body>
   {{ partial "header.html" . -}}
-  <main>
-    <div>
-      {{ .Content }}
+  <main class="layout-one-col">
+    <div class="content-main">
+
+      <!-- ヘッダー直下の線（共通化） -->
+      <div class="section-divider"></div>
+
+      <div>
+        {{ .Content }}
+      </div>
+      <ul class="article-list">
+        {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") }}
+        {{ $pages := where .Site.RegularPages "Section" "in" $sections }}
+        {{ range ($pages.ByPublishDate.Reverse) }}
+        {{ $pub0 := .PublishDate }}
+        {{ if $pub0.IsZero }}
+          {{ $m := site.Data.publishdates }}
+          {{ $k1 := .File.Path }}
+          {{ $k2 := printf "content/%s" .File.Path }}
+          {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+          {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+            {{ $pub0 = time . }}
+          {{ else }}
+            {{ $pub0 = .Date }}
+          {{ end }}
+        {{ end }}
+        <li class="article-item">
+          <div class="article-title">
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+          </div>
+          {{ with .Params.caption }}
+            <div class="article-caption">{{ . }}</div>
+          {{ end }}
+          {{ if not $pub0.IsZero }}
+            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+            <div class="article-date">公開日: {{ time.Format "2006-01-02" $pub }}</div>
+          {{ end }}
+        </li>
+        {{ end }}
+      </ul>
+
+      <!-- フッター直前の線（共通化） -->
+      <div class="section-divider"></div>
+
     </div>
-    <ul class="article-list">
-      {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") }}
-      {{ $pages := where .Site.RegularPages "Section" "in" $sections }}
-      {{ range ($pages.ByPublishDate.Reverse) }}
-      {{ $pub0 := .PublishDate }}
-      {{ if $pub0.IsZero }}
-        {{ $m := site.Data.publishdates }}
-        {{ $k1 := .File.Path }}
-        {{ $k2 := printf "content/%s" .File.Path }}
-        {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
-        {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
-          {{ $pub0 = time . }}
-        {{ else }}
-          {{ $pub0 = .Date }}
-        {{ end }}
-      {{ end }}
-      <li class="article-item">
-        <div class="article-title">
-          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        </div>
-        {{ with .Params.caption }}
-          <div class="article-caption">{{ . }}</div>
-        {{ end }}
-        {{ if not $pub0.IsZero }}
-          {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-          <div class="article-date">公開日: {{ time.Format "2006-01-02" $pub }}</div>
-        {{ end }}
-      </li>
-      {{ end }}
-    </ul>
   </main>
   {{- partial "footer.html" . }}
   {{- template "_internal/google_analytics.html" . }}
