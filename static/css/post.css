@@ -68,6 +68,8 @@
 
 /* ===== 記事ページ ===== */
 .single-page {
+  width: 100%; 
+  max-width: 660px; 
   margin: 0 auto !important;  /* ← トップページと同じ中央揃えに強制 */
   padding: 1.2em 0;           /* ← 上下余白も一覧に合わせる */
   box-sizing: border-box;
