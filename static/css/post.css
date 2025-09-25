@@ -69,7 +69,6 @@
 /* ===== 記事ページ ===== */
 .single-page {
   border: none !important;
-  border-top: 1px solid #ddd !important;
   padding: 1.5em 0;
   box-shadow: none !important;
   overflow-x: hidden;
