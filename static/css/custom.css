@@ -102,10 +102,8 @@ header + .layout-one-col .section-divider:first-of-type,
 }
 .article-item {
   border: none !important;
-  border-top: 1px solid #ddd !important;
-}
-.article-item:last-child {
-  border-bottom: 1px solid #ddd !important;
+  padding: 1.2em 0;
+  box-sizing: border-box;
 }
 .article-title {
   font-size: 1.6em;
@@ -134,3 +132,4 @@ header + .layout-one-col .section-divider:first-of-type,
    記事ページ
 ================================= */
 .single-page {
+}
