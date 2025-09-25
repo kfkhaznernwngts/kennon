@@ -1,20 +1,17 @@
-<div class="section-divider"></div>
 {{ $cfg := site.Params.comments }}
 {{ if and $cfg $cfg.enabled }}
+<div class="section-divider"></div>
 <section id="comments">
   <button id="toggle-comments" onclick="toggleComments()" style="margin:0 0 0.5em 0; font-size:0.9em; padding:0.3em 0.6em; cursor:pointer;">
     コメントを表示
   </button>
   <div id="comments-body" style="display:none;">
-
     {{ $csvUrl := $cfg.csvUrl }}
     {{ $res := resources.GetRemote $csvUrl }}
     {{ $slug := .File.BaseFileName }}
-
     {{ if $res }}
       {{ $csv := $res | transform.Unmarshal (dict "delimiter" ",") }}
       {{ $count := 0 }}
-
       <div class="comment-list" style="margin:0; padding:0;">
         {{ range $i, $row := $csv }}
           {{ if gt $i 0 }}
@@ -32,7 +29,6 @@
             {{ end }}
           {{ end }}
         {{ end }}
-
         {{ if eq $count 0 }}
           <p style="margin:0.5em 0; color:#666;">コメントはありません。</p>
         {{ end }}
@@ -40,30 +36,24 @@
     {{ else }}
       <p>コメントを取得できませんでした。</p>
     {{ end }}
-
     <form action="https://docs.google.com/forms/d/e/{{ $cfg.form.id }}/formResponse"
           method="POST" target="_blank" class="comment-form" style="margin-top:1em;">
       <input type="hidden" name="entry.{{ $cfg.form.slugEntry }}" value="{{ .File.BaseFileName }}">
-
       <p style="margin:0.5em 0;">
         <input type="text" name="entry.{{ $cfg.form.nameEntry }}"
                placeholder="名前" required style="width:100%; padding:0.4em;">
       </p>
-
       <p style="margin:0.5em 0;">
         <textarea name="entry.{{ $cfg.form.bodyEntry }}"
                   placeholder="本文" rows="4" required
                   style="width:100%; padding:0.4em;"></textarea>
       </p>
-
       <p style="margin:0.5em 0;">
         <button type="submit" style="padding:0.5em 1em;">送信</button>
       </p>
     </form>
-
   </div>
 </section>
-
 <script>
 function toggleComments() {
   const body = document.getElementById("comments-body");
