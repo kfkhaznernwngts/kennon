@@ -31,13 +31,6 @@
 }
 
 /* ===== コメント欄 ===== */
-#comments {
-  margin-top: 2em;
-  font-size: 0.9em;
-  border-top: 1px solid #ddd;  /* 境界線 */
-  padding-top: 1em;
-}
-
 #toggle-comments {
   background: #f5f5f5;
   border: 1px solid #ccc;
