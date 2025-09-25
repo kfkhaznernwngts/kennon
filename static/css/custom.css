@@ -282,3 +282,18 @@ a:focus,
   width: 100% !important;
   padding: 0 16px; /* 左右にだけ少し余白を残す */
 }
+
+  .layout-one-col .content-main {
+  max-width: 660px;   /* h6i.org と同じ幅感 */
+  margin: 0 auto;     /* 中央寄せ */
+  padding: 0 20px;    /* 左右に余白 */
+  box-sizing: border-box;
+}
+
+/* スマホ: 幅いっぱいに広げつつ余白を最小限 */
+@media (max-width: 768px) {
+  .layout-one-col .content-main {
+    max-width: 100%;
+    padding: 0 16px;  /* スマホ時は左右16pxだけ */
+  }
+}
