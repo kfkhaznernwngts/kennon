@@ -60,10 +60,11 @@ a:focus,
 }
 
 /* ===============================
-   レイアウト幅
+   レイアウト幅（全ページ統一）
 ================================= */
 .layout-one-col .content-main,
-.single-page {
+.single-page,
+.article-list {
   max-width: 660px;
   margin: 0 auto;
   padding: 1.2em 0;
@@ -71,7 +72,7 @@ a:focus,
 }
 
 /* ===============================
-   区切り線（記事ページ・Aboutページ用）
+   区切り線（共通）
 ================================= */
 .section-divider {
   border-top: 1px solid #ddd;
