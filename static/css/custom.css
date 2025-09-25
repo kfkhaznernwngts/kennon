@@ -133,3 +133,7 @@ a:focus,
   margin: 0 0 0.5em 0;
   text-align: right;
 }
+
+body.home .section-divider:last-of-type {
+  display: none;
+}
