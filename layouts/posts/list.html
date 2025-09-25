@@ -9,60 +9,53 @@
   {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
   <link rel="stylesheet" type="text/css" href="{{ "css/custom.css" | absURL }}">
+  <link rel="stylesheet" type="text/css" href="{{ "css/post.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
-
-  <style>
-    header nav a[href="/kennon/"]{display:none}
-    .article-list{list-style:none;margin:0;padding:0}
-    .article-item{padding:10px 0}
-    .article-title a{font-size:1.15em;text-decoration:none}
-    .article-date{font-size:.95em;color:#666;margin-top:2px}
-  </style>
 </head>
 <body>
   {{ partial "header.html" . -}}
-  <main>
-    <div>
-      {{ .Content }}
-    </div>
+  <main class="layout-one-col">
+    <div class="content-main">
 
-    <!-- ヘッダー直下の線 -->
-    <div class="section-divider"></div>
+      <!-- ヘッダー直下の線 -->
+      <div class="section-divider"></div>
 
-    <ul class="article-list">
-      {{ range $i, $p := (.Pages.ByPublishDate.Reverse) }}
-        {{ $pub0 := $p.PublishDate }}
-        {{ if $pub0.IsZero }}
-          {{ $m := site.Data.publishdates }}
-          {{ $k1 := $p.File.Path }}
-          {{ $k2 := printf "content/%s" $p.File.Path }}
-          {{ $k3 := printf "content/%s%s" $p.File.Dir $p.File.LogicalName }}
-          {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
-            {{ $pub0 = time . }}
-          {{ else }}
-            {{ $pub0 = $p.Date }}
+      <ul class="article-list">
+        {{ range $i, $p := (.Pages.ByPublishDate.Reverse) }}
+          {{ $pub0 := $p.PublishDate }}
+          {{ if $pub0.IsZero }}
+            {{ $m := site.Data.publishdates }}
+            {{ $k1 := $p.File.Path }}
+            {{ $k2 := printf "content/%s" $p.File.Path }}
+            {{ $k3 := printf "content/%s%s" $p.File.Dir $p.File.LogicalName }}
+            {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+              {{ $pub0 = time . }}
+            {{ else }}
+              {{ $pub0 = $p.Date }}
+            {{ end }}
           {{ end }}
+
+          <li class="article-item">
+            <!-- 2件目以降だけ区切り線 -->
+            {{ if gt $i 0 }}
+              <div class="section-divider"></div>
+            {{ end }}
+
+            <a href="{{ $p.RelPermalink }}" class="article-link">
+              <div class="article-title">{{ $p.Title }}</div>
+              {{ if not $pub0.IsZero }}
+                {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+                <div class="article-date">{{ time.Format "2006-01-02" $pub }}</div>
+              {{ end }}
+            </a>
+          </li>
         {{ end }}
+      </ul>
 
-        <li class="article-item">
-          <!-- 2件目以降だけ区切り線 -->
-          {{ if gt $i 0 }}
-            <div class="section-divider"></div>
-          {{ end }}
+      <!-- フッター直前の線 -->
+      <div class="section-divider"></div>
 
-          <div class="article-title"><a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a></div>
-          {{ if not $pub0.IsZero }}
-            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-            <div class="article-date">{{ time.Format "2006-01-02" $pub }}</div>
-          {{ end }}
-        </li>
-      {{ end }}
-    </ul>
-
-    <!-- フッター直前の線 -->
-    <div class="section-divider"></div>
-
-    {{ template "_internal/pagination.html" . }}
+    </div>
   </main>
   {{- partial "footer.html" . }}
   {{- template "_internal/google_analytics.html" . }}
