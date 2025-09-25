@@ -58,6 +58,8 @@
 #comments input[type="text"],
 #comments textarea {
   font-size: 0.9em;
+  width: 100%;
+  box-sizing: border-box; /* ← はみ出し防止 */
   padding: 0.3em 0.5em;
 }
 
@@ -68,7 +70,7 @@
 
 /* ===== 記事ページ ===== */
 .single-page {
-  padding: 0.4em 0 1.2em 0; /* 上余白は控えめ、下はそのまま */
+  padding: 0.4em 0 1.2em 0;
   box-sizing: border-box;
   border: none !important;
   box-shadow: none !important;
@@ -77,11 +79,11 @@
 
 .single-page h1 {
   color: #000 !important;
-  margin: 0 0 1em 0; /* ← タイトルの下に余白を追加 */
+  margin: 0 0 1em 0;
 }
 
 .single-page .content {
-  margin-top: 0.5em; /* ← 本文全体の余白を少し増やす */
+  margin-top: 0.5em;
 }
 
 .post-meta {
