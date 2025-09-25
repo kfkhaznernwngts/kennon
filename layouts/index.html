@@ -9,59 +9,80 @@
   {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
   <link rel="stylesheet" type="text/css" href="{{ "css/custom.css" | absURL }}">
-  <link rel="stylesheet" type="text/css" href="{{ "css/post.css" | absURL }}">
-  {{- partial "google-tag-manager-head.html" . }}
+  <style>
+    .article-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .article-item {
+      padding: 1.2em 0;
+      border-top: 1px solid #ddd;
+      max-width: 660px;
+      margin: 0 auto;
+    }
+    .article-item:last-child {
+      border-bottom: 1px solid #ddd;
+    }
+    .article-title {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin: 0 0 0.3em 0;
+    }
+    .article-title a {
+      color: #000;
+      text-decoration: none;
+    }
+    .article-title a:hover {
+      text-decoration: underline;
+    }
+    .article-caption {
+      font-size: 1em;
+      color: #444;
+      margin: 0 0 0.3em 0;
+    }
+    .article-date {
+      font-size: 0.85em;
+      color: #666;
+    }
+  </style>
 </head>
 <body>
   {{ partial "header.html" . -}}
-  <main class="layout-one-col">
-    <div class="content-main">
-
-      <div>
-        {{ .Content -}}
-      </div>
-
-      <!-- ヘッダー直下の線 -->
-      <div class="section-divider"></div>
-
-      {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") -}}
-      {{ $pages := where .Site.RegularPages "Section" "in" $sections -}}
-      <ul class="article-list">
-        {{ range $i, $p := ($pages.ByPublishDate.Reverse) }}
-          {{ $pub0 := $p.PublishDate }}
-          {{ if $pub0.IsZero }}
-            {{ $m := site.Data.publishdates }}
-            {{ $k1 := $p.File.Path }}
-            {{ $k2 := printf "content/%s" $p.File.Path }}
-            {{ $k3 := printf "content/%s%s" $p.File.Dir $p.File.LogicalName }}
-            {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
-              {{ $pub0 = time . }}
-            {{ else }}
-              {{ $pub0 = $p.Date }}
-            {{ end }}
-          {{ end }}
-
-          <li class="article-item">
-            <!-- 2件目以降だけ区切り線 -->
-            {{ if gt $i 0 }}
-              <div class="section-divider"></div>
-            {{ end }}
-
-            <a href="{{ $p.RelPermalink }}" class="article-link">
-              <div class="article-title">{{ $p.Title }}</div>
-              {{ if not $pub0.IsZero }}
-                {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-                <div class="article-date">{{ time.Format "2006-01-02" $pub }}</div>
-              {{ end }}
-            </a>
-          </li>
-        {{ end -}}
-      </ul>
-
-      <!-- フッター直前の線 -->
-      <div class="section-divider"></div>
-
+  <main>
+    <div>
+      {{ .Content }}
     </div>
+    <ul class="article-list">
+      {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") }}
+      {{ $pages := where .Site.RegularPages "Section" "in" $sections }}
+      {{ range ($pages.ByPublishDate.Reverse) }}
+      {{ $pub0 := .PublishDate }}
+      {{ if $pub0.IsZero }}
+        {{ $m := site.Data.publishdates }}
+        {{ $k1 := .File.Path }}
+        {{ $k2 := printf "content/%s" .File.Path }}
+        {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+        {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+          {{ $pub0 = time . }}
+        {{ else }}
+          {{ $pub0 = .Date }}
+        {{ end }}
+      {{ end }}
+      <li class="article-item">
+        <div class="article-title">
+          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        </div>
+        {{ with .Params.caption }}
+          <div class="article-caption">{{ . }}</div>
+        {{ end }}
+        {{ if not $pub0.IsZero }}
+          {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+          <div class="article-date">公開日: {{ time.Format "2006-01-02" $pub }}</div>
+        {{ end }}
+      </li>
+      {{ end }}
+    </ul>
   </main>
   {{- partial "footer.html" . }}
   {{- template "_internal/google_analytics.html" . }}
