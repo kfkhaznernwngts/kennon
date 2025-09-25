@@ -90,6 +90,13 @@ a:focus,
 }
 .article-item {
   padding: 1.2em 0;
+  border-top: 1px solid #ddd;
+}
+.article-item:first-child {
+  border-top: none; /* ← 最初の1件だけ線を消す */
+}
+.article-item:last-child {
+  border-bottom: 1px solid #ddd;
 }
 .article-title {
   font-size: 1.6em;
