@@ -23,12 +23,6 @@
 
       {{ block "main" . }}{{- end }}
 
-      <!-- コメント欄を持つのは記事ページ(single)だけ -->
-      {{ if eq .Kind "page" }}
-        <div class="section-divider"></div>
-        {{ partial "comments.html" . }}
-      {{ end }}
-
       <!-- フッター直前の線 -->
       <div class="section-divider"></div>
 
