@@ -8,6 +8,7 @@
   <title>{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
   {{- with .Site.Params.favicon }}<link rel="shortcut icon" href="{{ . }}" type="image/x-icon">{{ end }}
   <link rel="stylesheet" type="text/css" href="{{ "css/main.css" | absURL }}">
+  <link rel="stylesheet" type="text/css" href="{{ "css/custom.css" | absURL }}">
   {{- partial "google-tag-manager-head.html" . }}
 
   <style>
@@ -24,29 +25,43 @@
     <div>
       {{ .Content }}
     </div>
+
+    <!-- ヘッダー直下の線 -->
+    <div class="section-divider"></div>
+
     <ul class="article-list">
-      {{ range (.Pages.ByPublishDate.Reverse) }}
-      {{ $pub0 := .PublishDate }}
-      {{ if $pub0.IsZero }}
-        {{ $m := site.Data.publishdates }}
-        {{ $k1 := .File.Path }}
-        {{ $k2 := printf "content/%s" .File.Path }}
-        {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
-        {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
-          {{ $pub0 = time . }}
-        {{ else }}
-          {{ $pub0 = .Date }}
+      {{ range $i, $p := (.Pages.ByPublishDate.Reverse) }}
+        {{ $pub0 := $p.PublishDate }}
+        {{ if $pub0.IsZero }}
+          {{ $m := site.Data.publishdates }}
+          {{ $k1 := $p.File.Path }}
+          {{ $k2 := printf "content/%s" $p.File.Path }}
+          {{ $k3 := printf "content/%s%s" $p.File.Dir $p.File.LogicalName }}
+          {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+            {{ $pub0 = time . }}
+          {{ else }}
+            {{ $pub0 = $p.Date }}
+          {{ end }}
         {{ end }}
-      {{ end }}
-      <li class="article-item">
-        <div class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
-        {{ if not $pub0.IsZero }}
-        {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-        <div class="article-date">{{ time.Format "2006-01-02" $pub }}</div>
-        {{ end }}
-      </li>
+
+        <li class="article-item">
+          <!-- 2件目以降だけ区切り線 -->
+          {{ if gt $i 0 }}
+            <div class="section-divider"></div>
+          {{ end }}
+
+          <div class="article-title"><a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a></div>
+          {{ if not $pub0.IsZero }}
+            {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+            <div class="article-date">{{ time.Format "2006-01-02" $pub }}</div>
+          {{ end }}
+        </li>
       {{ end }}
     </ul>
+
+    <!-- フッター直前の線 -->
+    <div class="section-divider"></div>
+
     {{ template "_internal/pagination.html" . }}
   </main>
   {{- partial "footer.html" . }}
