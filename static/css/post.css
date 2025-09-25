@@ -192,3 +192,39 @@
 .article-item:last-child {
   border: none !important;
 }
+
+/* ===== 記事一覧 ===== */
+.article-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.article-item {
+  border: none !important;
+  padding: 1em 0;
+}
+
+.article-item:last-child {
+  border: none !important;
+}
+
+.article-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.5em 0;
+}
+
+.article-title {
+  font-size: 1.05em;
+  font-weight: bold;
+  color: black;
+  margin: 0;
+}
+
+.article-date {
+  font-size: 0.9em;
+  color: #666;
+  text-align: right;
+}
