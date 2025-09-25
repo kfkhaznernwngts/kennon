@@ -16,16 +16,17 @@
       padding: 0;
     }
     .article-item {
-      padding: 1.2em 0;
+      padding: 1.2em 0 2em 0;
       border-top: 1px solid #ddd;
       max-width: 660px;
       margin: 0 auto;
+      position: relative;
     }
     .article-item:last-child {
       border-bottom: 1px solid #ddd;
     }
     .article-title {
-      font-size: 1.4em;
+      font-size: 1.6em; /* タイトルを少し大きく */
       font-weight: bold;
       margin: 0 0 0.3em 0;
     }
@@ -44,6 +45,9 @@
     .article-date {
       font-size: 0.85em;
       color: #666;
+      position: absolute;
+      right: 0;
+      bottom: 0.5em;
     }
   </style>
 </head>
