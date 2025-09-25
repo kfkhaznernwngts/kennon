@@ -60,7 +60,7 @@ a:focus,
 .layout-one-col .content-main {
   max-width: 660px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 20px;       /* 本文と同じ左右余白 */
   box-sizing: border-box;
 }
 
@@ -75,8 +75,8 @@ a:focus,
 .section-divider {
   border-top: 1px solid #ddd;
   margin: 0 auto;
-  max-width: 660px;
-  padding: 0 20px;
+  max-width: 660px;      /* 本文と同じ幅 */
+  padding: 0 20px;       /* 本文と同じ左右余白 */
   box-sizing: border-box;
 }
 
