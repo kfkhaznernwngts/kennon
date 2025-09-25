@@ -124,11 +124,6 @@ a:focus,
 /* ===============================
    記事ページ / Aboutページ
 ================================= */
-.single-page {
-  margin: 0 auto;
-  padding: 1.2em 0;
-  box-sizing: border-box;
-}
 .single-page h1 {
   color: #000 !important;
 }
