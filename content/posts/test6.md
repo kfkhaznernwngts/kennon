@@ -1,6 +1,6 @@
 ---
 title: "six"
-caotion: "pack"
+caption: "pack"
 ---
 
 oo
