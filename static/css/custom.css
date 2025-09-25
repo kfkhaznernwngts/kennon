@@ -99,3 +99,19 @@ footer {
   border-top: 1px solid #ddd;
   margin: 2em 0;
 }
+
+/* ヘッダー・フッターのデフォルト線を完全に無効化 */
+header.site-header {
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+footer {
+  border-top: none !important;
+  box-shadow: none !important;
+}
+
+/* コメントセクション直上の線は baseof + comments.html による */
+#comments {
+  border-top: none !important;
+}
