@@ -34,9 +34,10 @@
 #comments {
   margin-top: 2em;
   font-size: 0.9em;
+  border-top: 1px solid #ddd;  /* 境界線 */
+  padding-top: 1em;
 }
 
-/* 折り畳みボタン */
 #toggle-comments {
   background: #f5f5f5;
   border: 1px solid #ccc;
@@ -48,51 +49,38 @@
   background: #eaeaea;
 }
 
-/* コメント本体 */
 #comments .comment {
-  border: 1px solid #ddd;
+  border: none !important;
+  border-top: 1px solid #ddd;
   background-color: #fff;
   padding: 0.4em 0.6em;
   margin: 0;
-  border-radius: 0;
-  border-top: none;
 }
 
-#comments .comment:first-child {
-  border-top: 1px solid #ddd;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-}
-#comments .comment:last-child {
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-}
-
-/* コメント内の段落の余白を詰める */
 #comments .comment p {
   margin: 0.2em 0;
   line-height: 1.4;
 }
 
-/* 入力欄の文字サイズを小さく */
 #comments input[type="text"],
 #comments textarea {
   font-size: 0.9em;
   padding: 0.3em 0.5em;
 }
 
-/* 送信ボタンのサイズを調整 */
 #comments button {
   font-size: 0.9em;
   padding: 0.4em 0.8em;
 }
 
-/* コメント欄の上に境界線を追加 */
-#comments {
-  margin-top: 2em;
-  font-size: 0.9em;
-  border-top: 1px solid #ddd;  /* ← ここで線を追加 */
-  padding-top: 1em;            /* 線と内容の間に余白を確保 */
+/* ===== 記事ページ ===== */
+.single-page {
+  border: none !important;
+  border-top: 1px solid #ddd !important;
+  border-bottom: 1px solid #ddd !important;
+  padding: 1.5em 0;
+  box-shadow: none !important;
+  overflow-x: hidden;
 }
 
 .single-page h1 {
@@ -102,80 +90,17 @@
 .post-meta {
   color: #666;
   font-size: 0.9em;
-  margin: 0.5em 0 1.2em 0;
-}
-
-.post-meta {
-  color: #666;
-  font-size: 0.9em;
   margin: 0 0 0.5em 0;
-  text-align: right; 
+  text-align: right;
 }
 
-/* 記事ページだけ横スクロール禁止 */
-.single-page {
-  overflow-x: hidden;
-}
-
-/* 内部要素のはみ出し防止 */
-.single-page .content,
-.single-page .post-meta,
-.single-page .post-pager,
-#comments {
-  max-width: 100% !important;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-
-/* 記事ページでの横スクロール防止 */
-body {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  overflow-x: hidden !important;
-}
-
-/* 記事ページのレイアウト要素を画面幅に収める */
-.single-page,
-.single-page .content,
-.layout-one-col .content-main {
-  max-width: 100% !important;
-  box-sizing: border-box;
-  overflow-x: hidden;
-}
-
-body.single .layout-one-col,
-body.single .content-main,
-body.single .single-page {
-  max-width: 100% !important;
-  margin: 0 auto !important;
-  padding-left: 12px !important;
-  padding-right: 12px !important;
-  box-sizing: border-box;
-  overflow-x: hidden;
-}
-
-.single-page {
-  border: none !important;
-  border-top: 1px solid #ddd !important;
-  border-bottom: 1px solid #ddd !important;
-  padding: 1.5em 0; /* 少し余白を追加して窮屈に見えないように */
-  box-shadow: none !important; /* 念のため影も消す */
-}
-
-.single-page {
-  border: none !important;
-  border-top: 1px solid #ddd !important;
-  border-bottom: 1px solid #ddd !important;
-  padding: 1.5em 0;
-  box-shadow: none !important;
-}
-
+/* ===== 記事一覧 ===== */
 .article-item {
   border: none !important;
   border-top: 1px solid #ddd !important;
+  padding: 1em 0;
 }
+
 .article-item:last-child {
   border-bottom: 1px solid #ddd !important;
 }
