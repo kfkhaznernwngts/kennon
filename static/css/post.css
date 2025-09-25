@@ -88,3 +88,14 @@
   margin: 0 0 0.5em 0;
   text-align: right;
 }
+
+.single-page {
+  width: 100%;          /* ← これを追加 */
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 1.2em 0;
+  box-sizing: border-box;
+  border: none !important;
+  box-shadow: none !important;
+  overflow-x: hidden;
+}
