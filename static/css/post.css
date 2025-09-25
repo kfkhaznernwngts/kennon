@@ -88,3 +88,11 @@
   margin: 0 0 0.5em 0;
   text-align: right;
 }
+
+body.page .single-page {
+  max-width: 660px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
