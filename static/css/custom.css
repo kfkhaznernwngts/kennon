@@ -29,6 +29,22 @@
   content: none !important;
   border: none !important;
 }
+.header-nav {
+  position: absolute;
+  right: 16px;
+  bottom: 8px;
+}
+
+.header-nav a {
+  font-size: 0.9em;
+  color: #218bed;
+  text-decoration: none;
+}
+
+.header-nav a:hover {
+  text-decoration: underline;
+  color: #155a9c;
+}
 
 /* ===============================
    フッター
