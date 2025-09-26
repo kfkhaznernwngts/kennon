@@ -22,16 +22,32 @@
   {{ end }}
 
   {{ $sorted := sort $pagesWithDate "pub" "desc" }}
-  {{ $paginator := .Paginate $sorted 5 }}
+  {{ $sortedPages := slice }}
+  {{ range $sorted }}
+    {{ $sortedPages = $sortedPages | append .page }}
+  {{ end }}
 
-  {{ range $paginator }}
-    {{ $p := .page }}
-    {{ $pub := time.In "Asia/Tokyo" .pub }}
+  {{ $paginator := .Paginate $sortedPages 5 }}
+
+  {{ range $paginator.Pages }}
+    {{ $pub0 := .PublishDate }}
+    {{ if $pub0.IsZero }}
+      {{ $m := site.Data.publishdates }}
+      {{ $k1 := .File.Path }}
+      {{ $k2 := printf "content/%s" .File.Path }}
+      {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+      {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+        {{ $pub0 = time . }}
+      {{ else }}
+        {{ $pub0 = .Date }}
+      {{ end }}
+    {{ end }}
+    {{ $pub := time.In "Asia/Tokyo" $pub0 }}
     <li class="article-item">
       <div class="article-title">
-        <a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
       </div>
-      {{ with $p.Params.caption }}
+      {{ with .Params.caption }}
         <div class="article-caption">{{ . }}</div>
       {{ end }}
       <div class="article-date">公開日: {{ time.Format "2006-01-02" $pub }}</div>
