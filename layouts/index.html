@@ -2,9 +2,10 @@
 <ul class="article-list">
   {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") }}
   {{ $pages := where .Site.RegularPages "Section" "in" $sections }}
-  {{ $paginator := .Paginate ($pages.ByPublishDate.Reverse) 5 }} <!-- 1ページ5件 -->
 
-  {{ range $paginator.Pages }}
+  {{/* 公開日を独自に計算してソート */}}
+  {{ $pagesWithDate := slice }}
+  {{ range $pages }}
     {{ $pub0 := .PublishDate }}
     {{ if $pub0.IsZero }}
       {{ $m := site.Data.publishdates }}
@@ -17,18 +18,23 @@
         {{ $pub0 = .Date }}
       {{ end }}
     {{ end }}
+    {{ $pagesWithDate = $pagesWithDate | append (dict "page" . "pub" $pub0) }}
+  {{ end }}
 
+  {{ $sorted := sort $pagesWithDate "pub" "desc" }}
+  {{ $paginator := .Paginate $sorted 5 }}
+
+  {{ range $paginator }}
+    {{ $p := .page }}
+    {{ $pub := time.In "Asia/Tokyo" .pub }}
     <li class="article-item">
       <div class="article-title">
-        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        <a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
       </div>
-      {{ with .Params.caption }}
+      {{ with $p.Params.caption }}
         <div class="article-caption">{{ . }}</div>
       {{ end }}
-      {{ if not $pub0.IsZero }}
-        {{ $pub := time.In "Asia/Tokyo" $pub0 }}
-        <div class="article-date">公開日: {{ time.Format "2006-01-02" $pub }}</div>
-      {{ end }}
+      <div class="article-date">公開日: {{ time.Format "2006-01-02" $pub }}</div>
     </li>
   {{ end }}
 </ul>
@@ -37,7 +43,7 @@
 {{ if gt $paginator.TotalPages 1 }}
 <ul class="pagination">
   {{ if $paginator.HasPrev }}
-    <li><a href="{{ $paginator.Prev.URL }}">← Next</a></li>
+    <li><a href="{{ $paginator.Prev.URL }}">← 前のページ</a></li>
   {{ end }}
 
   {{ range $paginator.Pagers }}
@@ -47,7 +53,7 @@
   {{ end }}
 
   {{ if $paginator.HasNext }}
-    <li><a href="{{ $paginator.Next.URL }}">Prev →</a></li>
+    <li><a href="{{ $paginator.Next.URL }}">次のページ →</a></li>
   {{ end }}
 </ul>
 {{ end }}
