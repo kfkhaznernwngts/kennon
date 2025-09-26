@@ -18,10 +18,15 @@
   <main class="layout-one-col">
     <div class="content-main">
       <!-- ヘッダー直下の線 -->
-      <div class="section-divider"></div>
+      <div class="section-divider">
+        {{ if or .IsHome (eq .Kind "section") }}
+          <span class="about-link">
+            <a href="{{ "page/about/" | absURL }}">About</a>
+          </span>
+        {{ end }}
+      </div>
 
       {{ block "main" . }}{{- end }}
-
 
       <!-- フッター直前の線 -->
       <div class="section-divider"></div>
