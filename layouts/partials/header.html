@@ -5,10 +5,4 @@
       <h2><a href="{{ .Site.BaseURL }}">{{ .Site.Params.subtitle }}</a></h2>
     {{- end }}
   </div>
-
-  {{ if or .IsHome (eq .Kind "section") }}
-    <div class="header-nav">
-      <a href="{{ "page/about/" | absURL }}">About</a>
-    </div>
-  {{ end }}
 </header>
