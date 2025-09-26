@@ -37,7 +37,7 @@
 {{ if gt $paginator.TotalPages 1 }}
 <ul class="pagination">
   {{ if $paginator.HasPrev }}
-    <li><a href="{{ $paginator.Prev.URL }}">← 前のページ</a></li>
+    <li><a href="{{ $paginator.Prev.URL }}">← Next</a></li>
   {{ end }}
 
   {{ range $paginator.Pagers }}
@@ -47,7 +47,7 @@
   {{ end }}
 
   {{ if $paginator.HasNext }}
-    <li><a href="{{ $paginator.Next.URL }}">次のページ →</a></li>
+    <li><a href="{{ $paginator.Next.URL }}">Prev →</a></li>
   {{ end }}
 </ul>
 {{ end }}
