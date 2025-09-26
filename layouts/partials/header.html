@@ -7,8 +7,8 @@
   </div>
 
   {{ if or .IsHome (eq .Kind "section") }}
-    <nav class="header-nav" style="position:absolute; right:16px; bottom:8px;">
+    <div class="header-nav">
       <a href="{{ "page/about/" | absURL }}">About</a>
-    </nav>
+    </div>
   {{ end }}
 </header>
