@@ -1,5 +1,5 @@
 ---
-tite: "sorosoro"
+title: "sorosoro"
 caption: "iine"
 ---
 
