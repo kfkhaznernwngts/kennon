@@ -2,6 +2,7 @@
    ヘッダー
 ================================= */
 .site-header {
+  position: relative; /* ← 追加して基準を作る */
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -13,9 +14,6 @@
   padding: 24px 0 1px 0;
 }
 .site-header .site-branding {
-  flex: 1 1 auto;
-  min-width: 0;
-  width: 100%;
   text-align: center;
 }
 .site-header .site-branding h1,
@@ -32,7 +30,7 @@
 .header-nav {
   position: absolute;
   right: 16px;
-  bottom: 8px;
+  bottom: -12px; /* 区切り線の高さに揃える（必要に応じて調整） */
 }
 
 .header-nav a {
