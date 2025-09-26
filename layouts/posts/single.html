@@ -31,16 +31,50 @@
   {{ partial "comments.html" . }}
 
   <nav class="post-pager">
+    {{/* 一覧ページと同じ公開日順でソート */}}
+    {{ $sections := site.Params.mainSections | default (slice "posts" "post") }}
+    {{ $pages := where site.RegularPages "Section" "in" $sections }}
+    {{ $pagesWithDate := slice }}
+    {{ range $pages }}
+      {{ $pubx := .PublishDate }}
+      {{ if $pubx.IsZero }}
+        {{ $m := site.Data.publishdates }}
+        {{ $k1 := .File.Path }}
+        {{ $k2 := printf "content/%s" .File.Path }}
+        {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+        {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+          {{ $pubx = time . }}
+        {{ else }}
+          {{ $pubx = .Date }}
+        {{ end }}
+      {{ end }}
+      {{ $pagesWithDate = $pagesWithDate | append (dict "page" . "pub" $pubx) }}
+    {{ end }}
+    {{ $sorted := sort $pagesWithDate "pub" "desc" }}
+    {{ $sortedPages := slice }}
+    {{ range $sorted }}
+      {{ $sortedPages = $sortedPages | append .page }}
+    {{ end }}
+
+    {{/* 現在のページの位置を見つけて前後リンクを決定 */}}
+    {{ $current := . }}
+    {{ $index := -1 }}
+    {{ range $i, $p := $sortedPages }}
+      {{ if eq $p.File.Path $current.File.Path }}
+        {{ $index = $i }}
+      {{ end }}
+    {{ end }}
+
     <div class="prev-post">
-      {{ if .PrevInSection }}
-        <a href="{{ .PrevInSection.RelPermalink }}">←</a>
+      {{ if ge (sub $index 1) 0 }}
+        <a href="{{ (index $sortedPages (sub $index 1)).RelPermalink }}">←</a>
       {{ else }}
         <span class="placeholder"></span>
       {{ end }}
     </div>
     <div class="next-post">
-      {{ if .NextInSection }}
-        <a href="{{ .NextInSection.RelPermalink }}">→</a>
+      {{ if lt (add $index 1) (len $sortedPages) }}
+        <a href="{{ (index $sortedPages (add $index 1)).RelPermalink }}">→</a>
       {{ else }}
         <span class="placeholder"></span>
       {{ end }}
