@@ -2,23 +2,14 @@
    ヘッダー
 ================================= */
 .site-header {
-  position: relative; /* ← 追加して基準を作る */
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  width: 100%;
-  gap: 16px;
+  text-align: center;
   background: #fff;
   border-bottom: none !important;
   box-shadow: none !important;
   padding: 24px 0 1px 0;
 }
-.site-header .site-branding {
-  text-align: center;
-}
 .site-header .site-branding h1,
 .site-header .site-branding h1 a {
-  display: inline-block;
   margin: 0 auto;
   text-align: center;
 }
@@ -27,19 +18,27 @@
   content: none !important;
   border: none !important;
 }
-.header-nav {
-  position: absolute;
-  right: 16px;
-  bottom: -12px; /* 区切り線の高さに揃える（必要に応じて調整） */
-}
 
-.header-nav a {
+/* Aboutリンク（区切り線右端に配置） */
+.section-divider {
+  border-top: 1px solid #ddd;
+  margin: 1.2em auto;
+  max-width: 660px;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative; /* ←基準にする */
+}
+.section-divider .about-link {
+  position: absolute;
+  right: 0;
+  top: -1.2em; /* 線の直上に表示（必要なら微調整） */
+}
+.section-divider .about-link a {
   font-size: 0.9em;
   color: #218bed;
   text-decoration: none;
 }
-
-.header-nav a:hover {
+.section-divider .about-link a:hover {
   text-decoration: underline;
   color: #155a9c;
 }
@@ -81,17 +80,6 @@ a:focus,
   max-width: 660px;
   margin: 0 auto;
   padding: 0.5em 0;
-  box-sizing: border-box;
-}
-
-/* ===============================
-   区切り線（全ページ共通）
-================================= */
-.section-divider {
-  border-top: 1px solid #ddd;
-  margin: 1.2em auto;
-  max-width: 660px;
-  padding: 0;
   box-sizing: border-box;
 }
 
