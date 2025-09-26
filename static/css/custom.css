@@ -31,7 +31,7 @@
 .section-divider .about-link {
   position: absolute;
   right: 0;
-  top: -1.2em; /* 線の直上に表示（必要なら微調整） */
+  top: -10em; /* 線の直上に表示（必要なら微調整） */
 }
 .section-divider .about-link a {
   font-size: 0.9em;
