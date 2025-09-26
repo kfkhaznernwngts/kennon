@@ -1,0 +1,171 @@
+/* ===============================
+   ヘッダー
+================================= */
+.site-header {
+  text-align: center;
+  background: #fff;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  padding: 24px 0 1px 0;
+}
+.site-header .site-branding h1,
+.site-header .site-branding h1 a {
+  margin: 0 auto;
+  text-align: center;
+}
+.site-header::after,
+.site-header::before {
+  content: none !important;
+  border: none !important;
+}
+
+/* Aboutリンク（区切り線右端に配置） */
+.section-divider {
+  border-top: 1px solid #ddd;
+  margin: 1.2em auto;
+  max-width: 660px;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative; /* ←基準にする */
+}
+.section-divider .about-link {
+  position: absolute;
+  right: 0;
+  top: -2em; /* 線の直上に表示（必要なら微調整） */
+}
+.section-divider .about-link a {
+  font-size: 0.9em;
+  color: #218bed;
+  text-decoration: none;
+}
+.section-divider .about-link a:hover {
+  text-decoration: underline;
+  color: #155a9c;
+}
+
+/* ===============================
+   フッター
+================================= */
+footer {
+  border-top: none !important;
+  box-shadow: none !important;
+  text-align: center;
+  padding: 8px 0;
+}
+
+/* ===============================
+   リンク
+================================= */
+a,
+a:visited,
+.content a,
+.site-header a,
+.site-footer a {
+  color: #218bed !important;
+  text-decoration: none !important;
+}
+a:hover,
+a:focus,
+.content a:hover,
+.site-header a:hover,
+.site-footer a:hover {
+  color: #155a9c !important;
+  text-decoration: underline !important;
+}
+
+/* ===============================
+   レイアウト幅（全ページ統一）
+================================= */
+.layout-one-col .content-main {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 0.5em 0;
+  box-sizing: border-box;
+}
+
+/* ===============================
+   記事リスト（一覧ページ）
+================================= */
+.article-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.article-item {
+  position: relative;
+  padding: 1.2em 0 2.5em 0;
+  border-top: 1px solid #ddd;
+}
+.article-item:first-child {
+  border-top: none;
+}
+.article-item:last-child {
+  border-bottom: 1px solid #ddd;
+}
+.article-title {
+  font-size: 1.6em;
+  font-weight: bold;
+  margin: 0 0 0.3em 0;
+}
+.article-title a {
+  color: #000;
+  text-decoration: none;
+}
+.article-title a:hover {
+  text-decoration: underline;
+}
+.article-caption {
+  font-size: 1em;
+  color: #444;
+  margin: 0 0 0.3em 0;
+}
+.article-date {
+  font-size: 0.85em;
+  color: #666;
+  position: absolute;
+  right: 0;
+  bottom: 0.5em;
+}
+
+/* ===============================
+   記事ページ / Aboutページ
+================================= */
+.single-page h1 {
+  color: #000 !important;
+}
+.post-meta {
+  color: #666;
+  font-size: 0.9em;
+  margin: 0 0 0.5em 0;
+  text-align: right;
+}
+
+body.home .section-divider:last-of-type {
+  display: none;
+}
+
+/* ===============================
+   ページネーション
+================================= */
+.pagination {
+  display: flex;
+  justify-content: center; /* ←中央寄せ */
+  gap: 0.6em;
+  margin: 1.5em 0;
+  padding: 0;
+  list-style: none;
+}
+.pagination li {
+  display: inline-block;
+}
+.pagination a {
+  text-decoration: none;
+  color: #218bed;
+}
+.pagination .active a {
+  font-weight: bold;
+  color: #155a9c;
+}
+.pagination .disabled {
+  display: none; /* «« と »» を消す */
+}
