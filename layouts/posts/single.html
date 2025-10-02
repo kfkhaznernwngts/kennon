@@ -1,0 +1,66 @@
+{{ define "main" }}
+<article class="single-page">
+  <h1>{{ .Title }}</h1>
+
+  <div class="content">
+    {{ .Content }}
+  </div>
+
+  <div class="post-meta">
+    {{ with .Lastmod }}
+      更新日: {{ .Format "2006-01-02" }}
+    {{ end }}
+  </div>
+
+  {{ partial "comments.html" . }}
+
+  <nav class="post-pager">
+    {{ $sections := site.Params.mainSections | default (slice "posts" "post") }}
+    {{ $pages := where site.RegularPages "Section" "in" $sections }}
+    {{ $pagesWithDate := slice }}
+    {{ range $pages }}
+      {{ $pubx := .PublishDate }}
+      {{ if $pubx.IsZero }}
+        {{ $m := site.Data.publishdates }}
+        {{ $k1 := .File.Path }}
+        {{ $k2 := printf "content/%s" .File.Path }}
+        {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+        {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+          {{ $pubx = time . }}
+        {{ else }}
+          {{ $pubx = .Date }}
+        {{ end }}
+      {{ end }}
+      {{ $pagesWithDate = $pagesWithDate | append (dict "page" . "pub" $pubx) }}
+    {{ end }}
+    {{ $sorted := sort $pagesWithDate "pub" "desc" }}
+    {{ $sortedPages := slice }}
+    {{ range $sorted }}
+      {{ $sortedPages = $sortedPages | append .page }}
+    {{ end }}
+
+    {{ $current := . }}
+    {{ $index := -1 }}
+    {{ range $i, $p := $sortedPages }}
+      {{ if eq $p.File.Path $current.File.Path }}
+        {{ $index = $i }}
+      {{ end }}
+    {{ end }}
+
+    <div class="prev-post">
+      {{ if ge (sub $index 1) 0 }}
+        <a href="{{ (index $sortedPages (sub $index 1)).RelPermalink }}">←</a>
+      {{ else }}
+        <span class="placeholder"></span>
+      {{ end }}
+    </div>
+    <div class="next-post">
+      {{ if lt (add $index 1) (len $sortedPages) }}
+        <a href="{{ (index $sortedPages (add $index 1)).RelPermalink }}">→</a>
+      {{ else }}
+        <span class="placeholder"></span>
+      {{ end }}
+    </div>
+  </nav>
+</article>
+{{ end }}

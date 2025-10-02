@@ -1,0 +1,156 @@
+{{ $cfg := site.Params.comments }}
+{{ if and $cfg $cfg.enabled }}
+<section id="comments">
+  <div class="section-divider"></div>
+
+  <button id="toggle-comments" onclick="toggleComments()" style="margin:0 0 0.5em 0; font-size:0.9em; padding:0.3em 0.6em; cursor:pointer;">
+    コメントを表示
+  </button>
+
+  <div id="comments-body" style="display:none;">
+    <div id="comment-list" class="comment-list" style="margin:0; padding:0;"></div>
+    <p id="no-comments" style="margin:0.5em 0; color:#666; display:none;">コメントはありません。</p>
+
+    <form id="comment-form" action="{{ $cfg.postUrl }}" method="POST" target="hidden_iframe" style="margin-top:1em;">
+      <input type="hidden" name="entry.1045586876" value="{{ .File.BaseFileName }}" required>
+
+      <p style="margin:0.5em 0;">
+        <input type="text" name="entry.1910226784" placeholder="名前" required style="width:100%; padding:0.4em;">
+      </p>
+
+      <p style="margin:0.5em 0;">
+        <textarea name="entry.964539785" placeholder="本文" rows="4" required style="width:100%; padding:0.4em;"></textarea>
+      </p>
+
+      <p style="margin:0.5em 0;">
+        <button type="submit" style="padding:0.5em 1em;">送信</button>
+      </p>
+    </form>
+    <iframe name="hidden_iframe" style="display:none;"></iframe>
+    <div id="form-status" style="margin:0.5em 0; color:#218bed;"></div>
+  </div>
+</section>
+
+<script>
+const CSV_URL = "{{ $cfg.csvUrl }}";
+const THIS_SLUG = "{{ .File.BaseFileName }}";
+const POLL_AFTER_SUBMIT_MS = 3000;
+
+function toggleComments(){
+  const body = document.getElementById("comments-body");
+  const btn  = document.getElementById("toggle-comments");
+  if(body.style.display === "none"){
+    body.style.display = "block";
+    btn.textContent = "コメントを非表示";
+  } else {
+    body.style.display = "none";
+    btn.textContent = "コメントを表示";
+  }
+}
+
+function escapeHtml(s){
+  return (s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+}
+
+async function loadComments(){
+  const list = document.getElementById("comment-list");
+  const noComments = document.getElementById("no-comments");
+  list.innerHTML = "";
+  noComments.style.display = "none";
+
+  if(!CSV_URL){
+    noComments.textContent = "コメントを取得できませんでした。";
+    noComments.style.display = "block";
+    return;
+  }
+
+  try {
+    const res = await fetch(CSV_URL, {cache: "no-store"});
+    if(!res.ok) throw new Error("fetch failed");
+    const text = await res.text();
+    const rows = parseCSV(text);
+    if(rows.length <= 1){
+      noComments.style.display = "block";
+      return;
+    }
+
+    const header = rows[0].map(h => (h||"").trim().toLowerCase());
+    const idxDate = header.indexOf("date");
+    const idxSlug = header.indexOf("slug");
+    const idxName = header.indexOf("name");
+    const idxBody = header.indexOf("body");
+    const hasHeader = idxSlug !== -1 && idxName !== -1 && idxBody !== -1;
+
+    let count = 0;
+    for(let i=1;i<rows.length;i++){
+      const r = rows[i];
+      if(!r || r.length===0) continue;
+      const slug = hasHeader ? r[idxSlug] : r[1];
+      if(slug !== THIS_SLUG) continue;
+      const name = hasHeader ? r[idxName] : r[2] || "匿名";
+      const body = hasHeader ? r[idxBody] : r[3] || "";
+      const rawDate = hasHeader ? r[idxDate] : r[0] || "";
+      let date = rawDate;
+      if (date.match(/^\d{4}\/\d{2}\/\d{2}\s+\d{2}:\d{2}:\d{2}$/)) {
+        date = date.slice(0, 16);
+      }
+      const item = document.createElement("div");
+      item.className = "comment";
+      item.style.margin = "0";
+      item.innerHTML = `
+        <p class="comment-meta" style="margin:0; line-height:1.4;">
+          <strong>${escapeHtml(name)}</strong>
+          <span class="comment-date">(${escapeHtml(date)})</span>
+        </p>
+        <p class="comment-body" style="margin:0.2em 0 0; line-height:1.4;">
+          ${escapeHtml(body)}
+        </p>
+      `;
+      list.appendChild(item);
+      count++;
+    }
+    if(count===0) noComments.style.display = "block";
+  } catch(e){
+    console.error(e);
+    const noComments = document.getElementById("no-comments");
+    noComments.textContent = "コメントの読み込みに失敗しました。";
+    noComments.style.display = "block";
+  }
+}
+
+function parseCSV(text){
+  const rows = [];
+  let row = [], cell = "", inQuotes = false;
+  for(let i=0;i<text.length;i++){
+    const c = text[i], n = text[i+1];
+    if(inQuotes){
+      if(c === '"' && n === '"'){ cell += '"'; i++; }
+      else if(c === '"'){ inQuotes = false; }
+      else { cell += c; }
+    } else {
+      if(c === '"'){ inQuotes = true; }
+      else if(c === ','){ row.push(cell); cell = ""; }
+      else if(c === '\r'){ }
+      else if(c === '\n'){ row.push(cell); rows.push(row); row = []; cell = ""; }
+      else { cell += c; }
+    }
+  }
+  if(cell.length > 0 || row.length > 0){ row.push(cell); rows.push(row); }
+  return rows;
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  loadComments();
+  const form = document.getElementById("comment-form");
+  const status = document.getElementById("form-status");
+  form.addEventListener("submit", function(e){
+    status.style.color = "#218bed";
+    status.textContent = "送信しました";
+    setTimeout(function(){
+      loadComments();
+    }, POLL_AFTER_SUBMIT_MS);
+    setTimeout(()=>{ form.reset(); }, 100);
+  });
+});
+</script>
+{{ end }}

@@ -1,0 +1,94 @@
+{{ define "main" }}
+<ul class="article-list">
+  {{ $sections := .Site.Params.mainSections | default (slice "posts" "post") }}
+  {{ $pages := where .Site.RegularPages "Section" "in" $sections }}
+
+  {{ $pagesWithDate := slice }}
+  {{ range $pages }}
+    {{ $pub0 := .PublishDate }}
+    {{ if $pub0.IsZero }}
+      {{ $m := site.Data.publishdates }}
+      {{ $k1 := .File.Path }}
+      {{ $k2 := printf "content/%s" .File.Path }}
+      {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+      {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+        {{ $pub0 = time . }}
+      {{ else }}
+        {{ $pub0 = .Date }}
+      {{ end }}
+    {{ end }}
+    {{ $pagesWithDate = $pagesWithDate | append (dict "page" . "pub" $pub0) }}
+  {{ end }}
+
+  {{ $sorted := sort $pagesWithDate "pub" "desc" }}
+  {{ $sortedPages := slice }}
+  {{ range $sorted }}
+    {{ $sortedPages = $sortedPages | append .page }}
+  {{ end }}
+
+  {{ $paginator := .Paginate $sortedPages 5 }}
+
+  {{ range $paginator.Pages }}
+    {{ $pub0 := .PublishDate }}
+    {{ if $pub0.IsZero }}
+      {{ $m := site.Data.publishdates }}
+      {{ $k1 := .File.Path }}
+      {{ $k2 := printf "content/%s" .File.Path }}
+      {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+      {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+        {{ $pub0 = time . }}
+      {{ else }}
+        {{ $pub0 = .Date }}
+      {{ end }}
+    {{ end }}
+    {{ $pub := time.In "Asia/Tokyo" $pub0 }}
+    <li class="article-item">
+      <div class="article-title">
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </div>
+      {{ with .Params.caption }}
+        <div class="article-caption">{{ . }}</div>
+      {{ end }}
+      <div class="article-date">公開日: {{ time.Format "2006-01-02" $pub }}</div>
+    </li>
+  {{ end }}
+</ul>
+
+{{ if gt $paginator.TotalPages 1 }}
+<ul class="pagination">
+  <li class="prev">
+    {{ if $paginator.HasPrev }}
+      <a href="{{ $paginator.Prev.URL }}">← 前のページ</a>
+    {{ end }}
+  </li>
+
+  <li class="numbers">
+    {{ $current := $paginator.PageNumber }}
+    {{ $total := $paginator.TotalPages }}
+    {{ $slots := 5 }}
+
+    {{ $start := sub $current 2 }}
+    {{ if lt $start 1 }}{{ $start = 1 }}{{ end }}
+    {{ $end := add $start (sub $slots 1) }}
+    {{ if gt $end $total }}
+      {{ $end = $total }}
+      {{ $start = sub $end (sub $slots 1) }}
+      {{ if lt $start 1 }}{{ $start = 1 }}{{ end }}
+    {{ end }}
+
+    {{ range $i := seq $start $end }}
+      {{ $p := index $paginator.Pagers (sub $i 1) }}
+      <span class="{{ if eq $i $current }}active{{ end }}">
+        <a href="{{ $p.URL }}">{{ $i }}</a>
+      </span>
+    {{ end }}
+  </li>
+
+  <li class="next">
+    {{ if $paginator.HasNext }}
+      <a href="{{ $paginator.Next.URL }}">次のページ →</a>
+    {{ end }}
+  </li>
+</ul>
+{{ end }}
+{{ end }}

@@ -1,0 +1,97 @@
+name: Hugo with publishDate
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Tokyo
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup TZ
+        uses: szenius/set-timezone@v2.0
+        with:
+          timezoneLinux: Asia/Tokyo
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.149.0'
+          extended: true
+
+      - name: Generate data/publishdates.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          printf '{' > data/publishdates.json
+          first=1
+          while IFS= read -r -d '' f; do
+            raw=$(git log --diff-filter=A --follow --format='%aI' -- "$f" | tail -n1 || true)
+            if [ -n "${raw:-}" ]; then
+              ts=$(TZ=Asia/Tokyo date -d "$raw" -Iseconds)
+              if [ $first -eq 0 ]; then printf ',' >> data/publishdates.json; fi
+              printf '"%s":"%s"' "$f" "$ts" >> data/publishdates.json
+              first=0
+            fi
+          done < <(git ls-files -z 'content/**/*.md' || true)
+          printf '}\n' >> data/publishdates.json
+
+      - name: Add publishDate only for new posts
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=$(git ls-files 'content/post/**/*.md' 'content/posts/**/*.md' 2>/dev/null || true)
+          edited=0
+          for f in $files; do
+            if grep -Eqi '^[[:space:]]*publishdate[[:space:]]*(:|=)' "$f"; then
+              continue
+            fi
+            raw_ts=$(git log --diff-filter=A --follow --format='%aI' -- "$f" | tail -n1 || true)
+            if [ -n "${raw_ts:-}" ]; then
+              first_ts=$(TZ=Asia/Tokyo date -d "$raw_ts" -Iseconds)
+            else
+              first_ts=$(TZ=Asia/Tokyo date -Iseconds)
+            fi
+            if head -n1 "$f" | grep -q '^---$'; then
+              awk -v ts="$first_ts" 'NR==1{print;print "publishDate: \"" ts "\"";next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+            elif head -n1 "$f" | grep -q '^\+\+\+$'; then
+              awk -v ts="$first_ts" 'NR==1{print;print "publishDate = \"" ts "\"";next}1' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+            else
+              printf '---\npublishDate: "%s"\n---\n%s\n' "$first_ts" "$(cat "$f")" > "$f.tmp" && mv "$f.tmp" "$f"
+            fi
+            edited=1
+          done
+          if [ "$edited" -eq 1 ]; then
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add content/post/**/*.md content/posts/**/*.md || true
+            git commit -m "Add publishDate for new posts" || true
+            git push
+          fi
+
+      - name: Build
+        run: hugo --minify --enableGitInfo
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          force_orphan: true
+
+

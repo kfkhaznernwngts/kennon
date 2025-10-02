@@ -1,0 +1,42 @@
+baseURL = 'https://kfkhaznernwngts.github.io/kennon/'
+languageCode = 'ja'
+title = '剣呑'
+theme = "simple-style"
+enableGitInfo = true
+timeZone = "Asia/Tokyo"
+
+[frontmatter]
+publishDate = ["publishDate", "date", ":filename", ":default"]
+date        = ["date", "publishDate", ":filename", ":default"]
+lastmod     = ["lastmod", ":git", "date", ":default"]
+
+[params]
+mainSections = ["posts", "post"]
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url  = "/"
+    weight = 1
+
+  [[menu.main]]
+    name = "About"
+    url  = "/about/"
+    weight = 2
+
+[params.sidebar]
+about = """
+このサイトの簡単な紹介文をここに書きます。
+"""
+
+[params.comments]
+enabled = true
+csvUrl  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTezQCQmsPCEA2HDUpi8q93EY7zlI4NLWECnqGbEMKHhbHgiPpB75wjWlyCuAHx2j9wjcH9fy9DHyNM/pub?gid=1569097599&single=true&output=csv"
+postUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdiKM0LAOEdkJfLDVLo8dRK0a805uzq9dKoCO6a_L_SO922Nw/formResponse"
+
+
+[security]
+  [security.http]
+    methods = ['GET', 'POST', 'OPTIONS']
+    urls = ['https://docs.google.com/.*', 'https://docs.googleusercontent.com/.*', 'https://script.google.com/.*']
+
