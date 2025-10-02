@@ -1,4 +1,4 @@
-baseURL = 'https://kfkhaznernwngts.github.io/kennon/'
+baseURL = "https://kennon.jp/"
 languageCode = 'ja'
 title = '剣呑'
 theme = "simple-style"
