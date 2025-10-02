@@ -34,6 +34,9 @@ enabled = true
 csvUrl  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTezQCQmsPCEA2HDUpi8q93EY7zlI4NLWECnqGbEMKHhbHgiPpB75wjWlyCuAHx2j9wjcH9fy9DHyNM/pub?gid=1569097599&single=true&output=csv"
 postUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdiKM0LAOEdkJfLDVLo8dRK0a805uzq9dKoCO6a_L_SO922Nw/formResponse"
 
+[markup.tableOfContents]
+  startLevel = 0
+  endLevel = 0
 
 [security]
   [security.http]
