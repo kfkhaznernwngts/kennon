@@ -1,0 +1,163 @@
+/* ヘッダー */
+.site-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  padding: 24px 0 1px 0;
+  text-align: center;
+}
+.site-header .site-branding {
+  margin: 0;
+}
+.site-header .site-branding h1 {
+  margin: 0;
+}
+.site-header .site-branding h1 a {
+  display: inline-block;
+  text-align: center;
+  color: #000;
+  text-decoration: none;
+}
+
+/* Aboutリンク */
+.section-divider {
+  border-top: 1px solid #ddd;
+  margin: 1.2em auto;
+  max-width: 660px;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
+}
+.section-divider .about-link {
+  position: absolute;
+  right: 0;
+  top: -2em;
+}
+.section-divider .about-link a {
+  font-size: 0.9em;
+  color: #218bed;
+  text-decoration: none;
+}
+.section-divider .about-link a:hover {
+  text-decoration: underline;
+  color: #155a9c;
+}
+
+/* フッター */
+footer {
+  border-top: none !important;
+  box-shadow: none !important;
+  text-align: center;
+  padding: 8px 0;
+}
+
+/* リンク */
+a,
+a:visited,
+.content a,
+.site-header a,
+.site-footer a {
+  color: #218bed !important;
+  text-decoration: none !important;
+}
+a:hover,
+a:focus,
+.content a:hover,
+.site-header a:hover,
+.site-footer a:hover {
+  color: #155a9c !important;
+  text-decoration: underline !important;
+}
+
+/* レイアウト幅 */
+.layout-one-col .content-main {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 0.5em 0;
+  box-sizing: border-box;
+}
+
+/* 記事リスト */
+.article-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.article-item {
+  position: relative;
+  padding: 1.2em 0 2.5em 0;
+  border-top: 1px solid #ddd;
+}
+.article-item:first-child {
+  border-top: none;
+}
+.article-item:last-child {
+  border-bottom: 1px solid #ddd;
+}
+.article-title {
+  font-size: 1.6em;
+  font-weight: bold;
+  margin: 0 0 0.3em 0;
+}
+.article-title a {
+  color: #000;
+  text-decoration: none;
+}
+.article-title a:hover {
+  text-decoration: underline;
+}
+.article-caption {
+  font-size: 1em;
+  color: #444;
+  margin: 0 0 0.3em 0;
+}
+.article-date {
+  font-size: 0.85em;
+  color: #666;
+  position: absolute;
+  right: 0;
+  bottom: 0.5em;
+}
+
+/* ページネーション */
+.pagination {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin: 1.5em 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+.pagination li {
+  list-style: none;
+}
+.pagination li.prev {
+  justify-self: start;
+}
+.pagination li.numbers {
+  justify-self: center;
+  display: flex;
+  gap: 0.6em;
+}
+.pagination li.next {
+  justify-self: end;
+}
+.pagination a {
+  text-decoration: none;
+  color: #218bed;
+}
+.pagination .active a {
+  font-weight: bold;
+  color: #155a9c;
+}
+.pagination .disabled {
+  display: none;
+}
+.pagination li.disabled span {
+  color: #ccc;
+  cursor: default;
+}
