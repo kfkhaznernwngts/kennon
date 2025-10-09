@@ -1,3 +1,16 @@
+/* フォント設定 */
+html, body {
+  font-family:
+    "游ゴシック体", "Yu Gothic", "游ゴシック Medium", "YuGothic",
+    "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+    "メイリオ", Meiryo,
+    "ＭＳ ゴシック", "MS Gothic",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  color: #000;
+  background: #fff;
+}
+
 /* ヘッダー */
 .site-header {
   display: flex;
