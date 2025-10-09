@@ -1,4 +1,4 @@
-/* フォント設定、行間 */
+/* フォント設定  */
 html, body {
   font-family:
     "游ゴシック体", "Yu Gothic", "游ゴシック Medium", "YuGothic",
@@ -12,10 +12,11 @@ html, body {
   letter-spacing: 0.02em;
   word-break: break-word;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* 段落余白 */
-p {
+{
   margin: 1.35em 0;
 }
 
@@ -46,7 +47,7 @@ p {
 /* Aboutリンク */
 .section-divider {
   border-top: 1px solid #ddd;
-  margin: 1.4em auto;
+  margin: 1.6em auto;
   max-width: 660px;
   padding: 0;
   box-sizing: border-box;
@@ -97,8 +98,10 @@ a:focus,
 .layout-one-col .content-main {
   max-width: 660px;
   margin: 0 auto;
-  padding: 0.6em 0;
+  padding: 0.6em 1.6em;
   box-sizing: border-box;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* 記事リスト */
@@ -183,4 +186,11 @@ a:focus,
 .pagination li.disabled span {
   color: #ccc;
   cursor: default;
+}
+
+/* スマホ最適化 */
+@media (max-width: 600px) {
+  .layout-one-col .content-main {
+    padding: 0.5em 1.1em;
+  }
 }
