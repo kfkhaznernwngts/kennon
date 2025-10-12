@@ -1,31 +1,105 @@
-<div class="share-section" style="margin:1.5em 0; text-align:right;">
-  <button id="share-button"
-    style="background:#218bed; color:#fff; border:none; padding:0.6em 1.2em; border-radius:6px; cursor:pointer; font-size:0.95em; font-weight:500;">
-    共有
-  </button>
-</div>
+{{ define "main" }}
+<article class="single-page">
+  <h1>{{ .Title }}</h1>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("share-button");
-  btn.addEventListener("click", async () => {
-    const url = window.location.href;
-    const title = document.title;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, url });
-      } catch (e) {
-        console.warn("Share cancelled");
+  <div class="content">
+    {{ .Content }}
+  </div>
+
+  <div class="post-meta">
+    {{ with .Lastmod }}
+      更新日: {{ .Format "2006-01-02" }}
+    {{ end }}
+  </div>
+
+  <!-- ▼ 共有ボタン（修正版） ▼ -->
+  <div class="share-section" style="margin:1.5em 0; text-align:right;">
+    <button id="share-button"
+      style="background:#218bed; color:#fff; border:none; padding:0.6em 1.2em; border-radius:6px; cursor:pointer; font-size:0.95em; font-weight:500;">
+      共有
+    </button>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("share-button");
+    btn.addEventListener("click", async () => {
+      const url = window.location.href;
+      const title = document.title;
+      if (navigator.share) {
+        try {
+          await navigator.share({ title, url });
+        } catch (e) {
+          console.warn("共有がキャンセルされました");
+        }
+      } else {
+        try {
+          await navigator.clipboard.writeText(url);
+          btn.textContent = "コピーしました";
+          btn.style.background = "#4caf50";
+          setTimeout(() => {
+            btn.textContent = "共有";
+            btn.style.background = "#218bed";
+          }, 2000);
+        } catch (e) {
+          btn.textContent = "コピー失敗";
+          btn.style.background = "#f44336";
+        }
       }
-    } else {
-      await navigator.clipboard.writeText(url);
-      btn.textContent = "コピーしました";
-      btn.style.background = "#4caf50";
-      setTimeout(() => {
-        btn.textContent = "共有";
-        btn.style.background = "#218bed";
-      }, 2000);
-    }
+    });
   });
-});
-</script>
+  </script>
+  <!-- ▲ 共有ボタンここまで ▲ -->
+
+  {{ partial "comments.html" . }}
+
+  <nav class="post-pager">
+    {{ $sections := site.Params.mainSections | default (slice "posts" "post") }}
+    {{ $pages := where site.RegularPages "Section" "in" $sections }}
+    {{ $pagesWithDate := slice }}
+    {{ range $pages }}
+      {{ $pubx := .PublishDate }}
+      {{ if $pubx.IsZero }}
+        {{ $m := site.Data.publishdates }}
+        {{ $k1 := .File.Path }}
+        {{ $k2 := printf "content/%s" .File.Path }}
+        {{ $k3 := printf "content/%s%s" .File.Dir .File.LogicalName }}
+        {{ with or (index $m $k1) (index $m $k2) (index $m $k3) }}
+          {{ $pubx = time . }}
+        {{ else }}
+          {{ $pubx = .Date }}
+        {{ end }}
+      {{ end }}
+      {{ $pagesWithDate = $pagesWithDate | append (dict "page" . "pub" $pubx) }}
+    {{ end }}
+    {{ $sorted := sort $pagesWithDate "pub" "desc" }}
+    {{ $sortedPages := slice }}
+    {{ range $sorted }}
+      {{ $sortedPages = $sortedPages | append .page }}
+    {{ end }}
+
+    {{ $current := . }}
+    {{ $index := -1 }}
+    {{ range $i, $p := $sortedPages }}
+      {{ if eq $p.File.Path $current.File.Path }}
+        {{ $index = $i }}
+      {{ end }}
+    {{ end }}
+
+    <div class="prev-post">
+      {{ if ge (sub $index 1) 0 }}
+        <a href="{{ (index $sortedPages (sub $index 1)).RelPermalink }}">←</a>
+      {{ else }}
+        <span class="placeholder"></span>
+      {{ end }}
+    </div>
+    <div class="next-post">
+      {{ if lt (add $index 1) (len $sortedPages) }}
+        <a href="{{ (index $sortedPages (add $index 1)).RelPermalink }}">→</a>
+      {{ else }}
+        <span class="placeholder"></span>
+      {{ end }}
+    </div>
+  </nav>
+</article>
+{{ end }}
