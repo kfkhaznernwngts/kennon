@@ -3,8 +3,17 @@
 {{- $url := .Permalink -}}
 
 <meta name="description" content="{{ $desc }}">
+
+<!-- Open Graph (LINE, Facebook 等) -->
 <meta property="og:title" content="{{ $title }}">
 <meta property="og:description" content="{{ $desc }}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="{{ $url }}">
 <meta property="og:site_name" content="{{ .Site.Title }}">
+
+<!-- Twitterカード（X対応） -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $desc }}">
+<meta name="twitter:url" content="{{ $url }}">
+<meta name="twitter:domain" content="{{ .Site.BaseURL | replaceRE "^https?://" "" | replaceRE "/$" "" }}">
