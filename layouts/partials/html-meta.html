@@ -1,0 +1,10 @@
+{{- $title := printf "%s - %s" .Title .Site.Title -}}
+{{- $desc := .Summary | default .Site.Params.description | default .Site.Title -}}
+{{- $url := .Permalink -}}
+
+<meta name="description" content="{{ $desc }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ $url }}">
+<meta property="og:site_name" content="{{ .Site.Title }}">
