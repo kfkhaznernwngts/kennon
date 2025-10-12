@@ -3,7 +3,7 @@
 {{- $url := .Permalink -}}
 
 <!-- OGP画像：白背景に記事タイトルだけを表示 -->
-{{- $ogimage := printf "https://og-image.vercel.app/%s.png?theme=light&md=1&fontSize=70px&widths=auto&heights=auto" ($title | urlquery) -}}
+{{- $ogimage := printf "https://api.microlink.io/?url=https://og-playground.vercel.app/api/og?title=%s&theme=light&fontSize=80px&md=0&textColor=000000&bgColor=ffffff&format=png" ($title | urlquery) -}}
 
 <meta name="description" content="{{ $desc }}">
 
