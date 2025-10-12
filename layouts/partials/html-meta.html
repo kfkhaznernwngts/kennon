@@ -2,18 +2,21 @@
 {{- $desc := .Summary | default .Site.Params.description | default .Site.Title -}}
 {{- $url := .Permalink -}}
 
+<!-- OGP画像：白背景に記事タイトルだけを表示 -->
+{{- $ogimage := printf "https://og-image.vercel.app/%s.png?theme=light&md=1&fontSize=70px&widths=auto&heights=auto" ($title | urlquery) -}}
+
 <meta name="description" content="{{ $desc }}">
 
-<!-- Open Graph (LINE, Facebook 等) -->
+<!-- Open Graph（LINEやFacebookなど用） -->
 <meta property="og:title" content="{{ $title }}">
 <meta property="og:description" content="{{ $desc }}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="{{ $url }}">
 <meta property="og:site_name" content="{{ .Site.Title }}">
+<meta property="og:image" content="{{ $ogimage }}">
 
-<!-- Twitterカード（X対応） -->
-<meta name="twitter:card" content="summary">
+<!-- Twitterカード（X.com 用） -->
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ $title }}">
 <meta name="twitter:description" content="{{ $desc }}">
-<meta name="twitter:url" content="{{ $url }}">
-<meta name="twitter:domain" content="{{ .Site.BaseURL | replaceRE "^https?://" "" | replaceRE "/$" "" }}">
+<meta name="twitter:image" content="{{ $ogimage }}">
