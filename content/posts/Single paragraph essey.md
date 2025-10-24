@@ -1,7 +1,7 @@
 ---
 title: Single paragraph essay
 slug: Single paragraph essey
-caption: うまくいかないの あたしだけがそうなの
+caption: 弊弊
 ---
 
 対面で自分の意見を言う時、
