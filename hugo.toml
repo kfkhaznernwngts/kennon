@@ -38,6 +38,12 @@ postUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdiKM0LAOEdkJfLDVLo8dRK0a805
   startLevel = 0
   endLevel = 0
 
+[markup.goldmark.renderer]
+unsafe = true
+
+[markup.goldmark.parser]
+hardWraps = true
+
 [security]
   [security.http]
     methods = ['GET', 'POST', 'OPTIONS']
