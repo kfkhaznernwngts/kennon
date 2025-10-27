@@ -1,0 +1,146 @@
+/* 前後記事ナビゲーション */
+.post-pager {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2em;
+  font-size: 1.5em;
+}
+.post-pager .prev-post,
+.post-pager .next-post {
+  flex: 1;
+  min-width: 0;
+}
+.post-pager .prev-post {
+  text-align: left;
+}
+.post-pager .next-post {
+  text-align: right;
+}
+.post-pager a {
+  text-decoration: none;
+  color: #218bed;
+  font-weight: bold;
+}
+.post-pager a:hover {
+  color: #155a9c;
+}
+
+/* コメント欄（ボタン） */
+#toggle-comments {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+#toggle-comments:hover {
+  background: #eaeaea;
+}
+
+/* コメント欄全体 */
+#comments-body {
+  max-width: 500px;
+  margin: 0;
+  font-size: 0.9em;
+}
+
+/* コメントリスト */
+#comment-list {
+  max-width: 660px;
+  margin: 0 auto;
+}
+#comment-list .comment {
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: none;
+  background: #fff;
+  padding: 0.6em 0.8em;
+  margin: 0;
+}
+#comment-list .comment:first-child {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+#comment-list .comment:last-child {
+  border-bottom: 1px solid #ccc;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+/* コメント内テキスト */
+#comments .comment-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85em;
+  color: #555;
+  margin-bottom: 0.3em;
+}
+#comments .comment-meta strong {
+  font-weight: bold;
+}
+#comments .comment-date {
+  color: #888;
+  white-space: nowrap;
+}
+#comments .comment-body {
+  line-height: 1.4;
+  color: #222;
+}
+
+/* コメントフォーム */
+#comments input[type="text"],
+#comments textarea {
+  font-size: 0.9em;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.3em 0.5em;
+}
+#comments button {
+  font-size: 0.9em;
+  padding: 0.4em 0.8em;
+}
+
+/* 記事ページ */
+.single-page {
+  padding: 0.4em 0 1.2em 0;
+  box-sizing: border-box;
+  border: none !important;
+  box-shadow: none !important;
+  overflow-x: hidden;
+}
+.single-page h1 {
+  color: #000 !important;
+  margin: 0 0 1em 0;
+}
+.single-page .content {
+  margin-top: 0.5em;
+}
+.post-meta {
+  color: #666;
+  font-size: 0.9em;
+  margin: 0 0 0.5em 0;
+  text-align: right;
+}
+
+/* Markdownスタイル */
+.single-page .content h1 {
+  font-size: 1.6em;
+  font-weight: bold;
+  margin: 1em 0 0.6em 0;
+}
+.single-page .content h2 {
+  font-size: 1.4em;
+  margin: 1em 0 0.5em 0;
+}
+.single-page .content p {
+  margin: 0.5em 0;
+}
+.single-page .content ul {
+  margin: 0.5em 0 0.5em 1.2em;
+  padding: 0;
+}
+.single-page .content li {
+  list-style: disc;
+  margin: 0.2em 0;
+}
